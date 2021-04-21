@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.SysFileInfoMapper">
+
+    <resultMap type="SysFileInfo" id="FileInfoResult">
+        <result property="fileId"    column="file_id"    />
+        <result property="fileName"    column="file_name"    />
+        <result property="filePath"    column="file_path"    />
+        <result property="fileType"       column="file_type"      />
+        <result property="workId"     column="work_id"    />
+        <result property="fileTime"         column="file_time"         />
+        <result property="userId"         column="user_id"         />
+        <result property="createBy"       column="create_by"      />
+        <result property="createTime"     column="create_time"    />
+        <result property="updateTime"     column="update_time"    />
+        <result property="updateBy"       column="update_by"      />
+        <result property="remark"         column="remark"         />
+        <result property="userName"         column="user_name"    />
+    </resultMap>
+
+    <sql id="selectFileInfoVo">
+        SELECT
+            f.file_id,f.file_name,f.file_path,f.file_type,f.work_id,f.file_time,f.`user_id`,u.`user_name`
+        FROM
+            sys_user AS u
+        LEFT JOIN
+            sys_file_info AS f
+        ON
+            u.`user_id`=f.`user_id`
+    </sql>
+
+
+    <select id="selectFileInfoList" parameterType="SysFileInfo" resultMap="FileInfoResult">
+        <include refid="selectFileInfoVo"/>
+        <where>
+            <if test="fileName != null  and fileName != ''"> and file_name like concat('%', #{fileName}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectFileInfoById" parameterType="Long" resultMap="FileInfoResult">
+        <include refid="selectFileInfoVo"/>
+        where file_id = #{fileId}
+    </select>
+        
+    <insert id="insertFileInfo" parameterType="SysFileInfo" useGeneratedKeys="true" keyProperty="fileId">
+        insert into sys_file_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">file_name,</if>
+            <if test="filePath != null  and filePath != ''">file_path,</if>
+            <if test="fileType != null  and fileType != ''">file_type,</if>
+            <if test="workId != null  and workId != ''">work_id,</if>
+            <if test="fileTime != null">file_time,</if>
+            <if test="userId != null">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">#{fileName},</if>
+            <if test="filePath != null  and filePath != ''">#{filePath},</if>
+            <if test="fileType != null  and fileType != ''">#{fileType},</if>
+            <if test="workId != null  and workId != ''">#{workId},</if>
+            <if test="fileTime != null">#{fileTime},</if>
+            <if test="userId != null">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateFileInfo" parameterType="SysFileInfo">
+        update sys_file_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="fileName != null  and fileName != ''">file_name = #{fileName},</if>
+            <if test="filePath != null  and filePath != ''">file_path = #{filePath},</if>
+            <if test="fileType != null">file_type=#{fileType},</if>
+            <if test="workId != null  and workId != ''">work_id=#{workId},</if>
+        </trim>
+        where file_id = #{fileId}
+    </update>
+
+    <delete id="deleteFileInfoById" parameterType="Long">
+        delete from sys_file_info where file_id = #{fileId}
+    </delete>
+
+    <delete id="deleteFileInfoByIds" parameterType="String">
+        delete from sys_file_info where file_id in
+        <foreach item="fileId" collection="array" open="(" separator="," close=")">
+            #{fileId}
+        </foreach>
+    </delete>
+    
+    <update id="updateFileInfoByUserId" parameterType="Long">
+        update sys_file_info
+        set file_type = null,work_id=null 
+        where file_type="2" and work_id in 
+        <foreach collection="array" item="userId" open="(" separator="," close=")">
+ 			#{userId}
+        </foreach>
+    </update>
+
+    <select id="selectAllFileInfo" resultMap="FileInfoResult">
+        <include refid="selectFileInfoVo"/>
+        <where>
+            file_type IN (0,1,3)
+        </where>
+    </select>
+
+    <select id="selectMyAllFileInfoByUserId" parameterType="Long" resultMap="FileInfoResult">
+        <include refid="selectFileInfoVo"/>
+        <where>
+            file_type IN (0,1,3) AND
+            user_id=#{userId}
+        </where>
+    </select>
+
+    <select id="selectAllShareFileInfo" resultMap="FileInfoResult">
+        <include refid="selectFileInfoVo"/>
+        <where>
+            file_type IN (3,4)
+        </where>
+    </select>
+
+    <select id="selectAllFileInfoCount" resultType="Integer">
+        SELECT COUNT(*) FROM sys_file_info WHERE file_type IN (0,1,3,4)
+    </select>
+
+    <select id="selectMyAllFileInfoByUserIdCount" parameterType="Long" resultType="Integer" >
+        SELECT COUNT(*) FROM sys_file_info WHERE file_type IN (0,1,3,4) and  user_id=#{userId}
+    </select>
+
+    <select id="selectFileInfoListByName" parameterType="String" resultMap="FileInfoResult">
+        <include refid="selectFileInfoVo"/>
+        <where>
+            file_type IN (0,1,3,4)
+            and file_name like concat('%', #{fileName}, '%')
+        </where>
+    </select>
+
+    <select id="selectFileInfoListByNameCount" parameterType="String" resultType="Integer">
+        SELECT COUNT(*) FROM sys_file_info
+        <where>
+            file_type IN (0,1,3,4)
+            and file_name like concat('%', #{fileName}, '%')
+        </where>
+    </select>
+
+    <select id="selectFileInfoByTaskId" parameterType="Integer" resultMap="FileInfoResult">
+        <include refid="selectFileInfoVo"/>
+        <where>
+            file_type in (0,3,4)
+            and work_id=#{tid}
+        </where>
+    </select>
+
+    <select id="selectFileInfoByProjectId" parameterType="Integer" resultMap="FileInfoResult">
+        <include refid="selectFileInfoVo"/>
+        <where>
+            file_type in (1,3,4)
+            and work_id=#{pid}
+        </where>
+    </select>
+</mapper>

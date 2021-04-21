@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.ProjectMarkStageMapper">
+
+
+    <resultMap type="ProjectMarketStageTable" id="ProjectMarketStageResult">
+        <id property="id" column="id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="stageType" column="stage_type"/>
+        <result property="chargePeople" column="charge_people"/>
+        <result property="participantsPeople" column="participants_people"/>
+        <result property="workPeriod" column="work_period"/>
+        <result property="stageTimeNode" column="stage_time_node"/>
+        <result property="deviceList" column="device_list"/>
+        <result property="toolList" column="tool_list"/>
+        <result property="isCar" column="is_car"/>
+        <result property="place" column="place"/>
+        <result property="partner" column="partner"/>
+        <result property="remindState" column="remind_state"/>
+        <result property="warnState" column="warn_state"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+    <sql id="selectAllContext">
+        SELECT id,project_id,stage_type,charge_people,participants_people,work_period,stage_time_node,device_list,
+        tool_list,is_car,place,partner,remind_state,warn_state,update_by,update_time FROM project_market_stagetable
+    </sql>
+    <select id="selectById" parameterType="Integer" resultMap="ProjectMarketStageResult">
+        <include refid="selectAllContext"/>
+        where
+        project_id=#{projectId}
+    </select>
+    <select id="selectStageByProjectId" parameterType="ProjectMarketStageTable" resultMap="ProjectMarketStageResult">
+        <include refid="selectAllContext"/>
+        <where>
+            <if test="projectId !=null">and project_id=#{projectId}</if>
+            <if test="chargePeople !=null">and charge_people=#{chargePeople}</if>
+            <if test="stageType !=null">and stage_type=#{stageType}</if>
+        </where>
+    </select>
+    <insert id="addInfo" parameterType="ProjectMarketStageTable">
+        INSERT INTO project_market_stagetable(project_id,stage_type,charge_people,participants_people,work_period,stage_time_node,device_list,tool_list,is_car,place,
+        partner,remind_state,warn_state)
+        VALUES (#{projectId},#{stageType},#{chargepeople},#{participantsPeople},#{workPeriod},#{deviceList},
+        #{toolList},#{isCar},#{place},#{partner},#{remindState},#{warnState})
+    </insert>
+
+    <select id="selectAll" parameterType="ProjectMarketStageTable" resultMap="ProjectMarketStageResult">
+        <include refid="selectAllContext"/>
+    </select>
+
+    <select id="selectStage" parameterType="ProjectMarketStageTable" resultMap="ProjectMarketStageResult">
+        <include refid="selectAllContext"/>
+        WHERE project_id=#{projectId} and stage_type is not null
+        order by stage_type
+    </select>
+
+    <select id="selectAllStage" parameterType="ProjectMarketStageTable" resultMap="ProjectMarketStageResult">
+        <include refid="selectAllContext"/>
+        <where>
+            <if test="remindState != null ">and remind_state = #{remindState}</if>
+            <if test="warnState != null ">and warn_state = #{warnState}</if>
+        </where>
+    </select>
+    <select id="selectStageById" parameterType="ProjectMarketStageTable" resultMap="ProjectMarketStageResult">
+        <include refid="selectAllContext"/>
+        WHERE id=#{id}
+    </select>
+    <select id="selectProjects" resultMap="ProjectMarketStageResult">
+        <include refid="selectAllContext"/>
+    </select>
+    <insert id="insertStage" parameterType="ProjectMarketStageTable" useGeneratedKeys="true" keyProperty="id">
+        insert into project_market_stagetable
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null">project_id,</if>
+            <if test="stageType != null ">stage_type,</if>
+            <if test="chargePeople != null ">charge_people,</if>
+            <if test="participantsPeople != null">participants_people,</if>
+            <if test="workPeriod != null ">work_period,</if>
+            <if test="stageTimeNode != null ">stage_time_node,</if>
+            <if test="deviceList != null ">device_list,</if>
+            <if test="toolList != null ">tool_list,</if>
+            <if test="isCar != null ">is_car,</if>
+            <if test="place != null ">place,</if>
+            <if test="partner != null ">partner,</if>
+            <if test="remindState != null ">remind_state,</if>
+            <if test="warnState != null ">warn_state</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="stageType != null">#{stageType},</if>
+            <if test="chargePeople != null ">#{chargePeople},</if>
+            <if test="participantsPeople != null ">#{participantsPeople},</if>
+            <if test="workPeriod != null">#{workPeriod},</if>
+            <if test="stageTimeNode != null ">#{stageTimeNode},</if>
+            <if test="deviceList != null ">#{deviceList},</if>
+            <if test="toolList != null ">#{toolList},</if>
+            <if test="isCar != null  ">#{isCar},</if>
+            <if test="place != null  ">#{place},</if>
+            <if test="partner != null  ">#{partner},</if>
+            <if test="remindState != null ">#{remindState},</if>
+            <if test="warnState != null ">#{warnState}</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteStage" parameterType="ProjectMarketStageTable">
+        delete from project_market_stagetable
+        <where>
+            <if test="projectId != null ">and  project_id=#{projectId}</if>
+            <if test="stageType != null">and  stage_type=#{stageType}</if>
+        </where>
+    </delete>
+
+        <update id="updateStage" parameterType="ProjectMarketStageTable">
+            update project_market_stagetable
+            <trim prefix="SET" suffixOverrides=",">
+                <if test="projectId != null ">project_id=#{projectId},</if>
+                <if test="stageType != null">stage_type=#{stageType},</if>
+                <if test="chargePeople != null ">charge_people=#{chargePeople},</if>
+                <if test="participantsPeople != null ">participants_people=#{participantsPeople},</if>
+                <if test="workPeriod != null">work_period=#{workPeriod},</if>
+                <if test="stageTimeNode != null">stage_time_node=#{stageTimeNode},</if>
+                <if test="deviceList != null ">device_list=#{deviceList},</if>
+                <if test="toolList != null ">tool_list=#{toolList},</if>
+                <if test="isCar != null  ">is_car=#{isCar},</if>
+                <if test="place != null  ">place=#{place},</if>
+                <if test="partner != null  ">partner=#{partner},</if>
+                <if test="remindState != null ">remind_state=#{remindState},</if>
+                <if test="warnState != null ">warn_state=#{warnState},</if>
+                <if test="updateBy != null  ">update_by=#{updateBy},</if>
+                <if test="updateTime != null  ">update_time=#{updateTime}</if>
+            </trim>
+            <where>
+                <if test="projectId != null ">and project_id=#{projectId}</if>
+                <if test="stageType != null">and  stage_type=#{stageType}</if>
+            </where>
+        </update>
+
+    <update id="updateStageById" parameterType="ProjectMarketStageTable">
+        update project_market_stagetable
+        <trim prefix="SET" suffixOverrides=",">
+             <if test="projectId != null ">project_id=#{projectId},</if>
+             <if test="remindState != null ">remind_state=#{remindState},</if>
+             <if test="warnState != null ">warn_state=#{warnState},</if>
+             <if test="updateBy != null  ">update_by=#{updateBy},</if>
+             <if test="updateTime != null  ">update_time=#{updateTime}</if>
+        </trim>
+       where id=#{id}
+    </update>
+
+</mapper>

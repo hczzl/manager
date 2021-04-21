@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.audit.AuditFlowOperRecordMapper">
+
+    <resultMap type="AuditFlowOperRecord" id="AuditFlowOperRecordResult">
+        <result property="recordId" column="record_id"/>
+        <result property="currentId" column="current_id"/>
+        <result property="currentNodeId" column="current_node_id"/>
+        <result property="operUserId" column="oper_user_id"/>
+        <result property="operType" column="oper_type"/>
+        <result property="operMemo" column="oper_memo"/>
+        <result property="addTime" column="add_time"/>
+        <result property="pushUsers" column="push_users"/>
+        <result property="state" column="state"/>
+    </resultMap>
+
+    <sql id="selectAuditFlowOperRecordVo">
+        select record_id, current_id, current_node_id, oper_user_id, oper_type, oper_memo, add_time, state,push_users from audit_flow_oper_record
+    </sql>
+
+    <select id="selectAuditFlowOperRecordList" parameterType="AuditFlowOperRecord"
+            resultMap="AuditFlowOperRecordResult">
+        <include refid="selectAuditFlowOperRecordVo"/>
+        <where>
+            <if test="recordId != null ">and record_id = #{recordId}</if>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+            <if test="currentNodeId != null ">and current_node_id = #{currentNodeId}</if>
+            <if test="operUserId != null ">and oper_user_id = #{operUserId}</if>
+            <if test="operType != null ">and oper_type = #{operType}</if>
+            <if test="operMemo != null  and operMemo != '' ">and oper_memo = #{operMemo}</if>
+            <if test="addTime != null ">and add_time = #{addTime}</if>
+            <if test="state != null ">and state = #{state}</if>
+        </where>
+    </select>
+    <select id="selectAuditFlowOperRecordListCount" parameterType="AuditFlowOperRecord" resultType="java.lang.Integer">
+        select count(*) from audit_flow_oper_record
+        <where>
+            <if test="recordId != null ">and record_id = #{recordId}</if>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+            <if test="currentNodeId != null ">and current_node_id = #{currentNodeId}</if>
+            <if test="operUserId != null ">and oper_user_id = #{operUserId}</if>
+            <if test="operType != null ">and oper_type = #{operType}</if>
+            <if test="operMemo != null  and operMemo != '' ">and oper_memo = #{operMemo}</if>
+            <if test="addTime != null ">and add_time = #{addTime}</if>
+            <if test="state != null ">and state = #{state}</if>
+        </where>
+    </select>
+    <select id="selectAuditFlowOperRecordSum" parameterType="AuditFlowOperRecord" resultType="java.lang.Integer">
+        select count(current_node_id) from audit_flow_oper_record
+        where current_id = #{currentId}
+        and current_node_id = #{currentNodeId}
+    </select>
+
+    <select id="selectAuditFlowOperRecordById" parameterType="Integer" resultMap="AuditFlowOperRecordResult">
+        <include refid="selectAuditFlowOperRecordVo"/>
+        where record_id = #{recordId}
+    </select>
+
+    <insert id="insertAuditFlowOperRecord" parameterType="AuditFlowOperRecord" useGeneratedKeys="true"
+            keyProperty="recordId">
+        insert into audit_flow_oper_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="currentId != null  ">current_id,</if>
+            <if test="currentNodeId != null  ">current_node_id,</if>
+            <if test="operUserId != null  ">oper_user_id,</if>
+            <if test="operType != null  ">oper_type,</if>
+            <if test="operMemo != null  and operMemo != ''  ">oper_memo,</if>
+            <if test="addTime != null  ">add_time,</if>
+            <if test="state != null  ">state,</if>
+            <if test="pushUsers != null  ">push_users</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="currentId != null  ">#{currentId},</if>
+            <if test="currentNodeId != null  ">#{currentNodeId},</if>
+            <if test="operUserId != null  ">#{operUserId},</if>
+            <if test="operType != null  ">#{operType},</if>
+            <if test="operMemo != null  and operMemo != ''  ">#{operMemo},</if>
+            <if test="addTime != null  ">#{addTime},</if>
+            <if test="state != null  ">#{state},</if>
+            <if test="pushUsers != null  ">#{pushUsers}</if>
+        </trim>
+    </insert>
+
+    <update id="updateAuditFlowOperRecord" parameterType="AuditFlowOperRecord">
+        update audit_flow_oper_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="currentId != null  ">current_id = #{currentId},</if>
+            <if test="currentNodeId != null  ">current_node_id = #{currentNodeId},</if>
+            <if test="operUserId != null  ">oper_user_id = #{operUserId},</if>
+            <if test="operType != null  ">oper_type = #{operType},</if>
+            <if test="operMemo != null  and operMemo != ''  ">oper_memo = #{operMemo},</if>
+            <if test="addTime != null  ">add_time = #{addTime},</if>
+            <if test="state != null  ">state = #{state},</if>
+            <if test="pushUsers != null  ">push_users=#{pushUsers}</if>
+        </trim>
+        <where>
+            <if test="recordId !=null and recordId !=''">and record_id = #{recordId}</if>
+            <if test="currentId !=null and currentId !=''">and current_id=#{currentId}</if>
+            <if test="currentNodeId !=null and currentNodeId !=''">and current_node_id=#{currentNodeId}</if>
+            <if test="operUserId !=null and operUserId !=''">and oper_user_id=#{operUserId}</if>
+        </where>
+
+    </update>
+
+    <delete id="deleteAuditFlowOperRecordById" parameterType="Integer">
+        delete from audit_flow_oper_record where record_id = #{recordId}
+    </delete>
+    <delete id="deleteOperRecordByCurrentId" parameterType="AuditFlowOperRecord">
+        delete from audit_flow_oper_record where current_id=#{currentId}
+    </delete>
+
+    <delete id="deleteAuditFlowOperRecordByIds" parameterType="String">
+        delete from audit_flow_oper_record where record_id IN
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+    <select id="getAllAuditFlowOperRecord" parameterType="AuditFlowOperRecord" resultMap="AuditFlowOperRecordResult">
+        <include refid="selectAuditFlowOperRecordVo"/>
+        where current_id=#{currentId} and current_node_id=#{currentNodeId} and oper_user_id=#{operUserId}
+    </select>
+    <select id="selectOperTypeInfo" parameterType="AuditFlowOperRecord" resultMap="AuditFlowOperRecordResult">
+        <include refid="selectAuditFlowOperRecordVo"/>
+        <where>
+            oper_type != 2
+            <if test="currentId !=null">and current_id=#{currentId}</if>
+            <if test="currentNodeId !=null">and current_node_id=#{currentNodeId</if>
+            <if test="operUserId !=null">and oper_user_id=#{operUserId}</if>
+        </where>
+    </select>
+    <select id="selectAuditOperRecord" parameterType="AuditFlowOperRecord" resultMap="AuditFlowOperRecordResult">
+        <include refid="selectAuditFlowOperRecordVo"/>
+        <where>
+            <if test="currentId !=null and currentId !=''">and current_id=#{currentId}</if>
+            <if test="currentNodeId !=null and currentNodeId !=''">and current_node_id=#{currentNodeId}</if>
+            <if test="operUserId !=null and operUserId !=''">and oper_user_id=#{operUserId}</if>
+            <if test="operType !=null ">and oper_type=#{operType}</if>
+        </where>
+        order by record_id, current_id
+    </select>
+    <select id="selectAuditOperRecordCount" parameterType="AuditFlowOperRecord" resultType="java.lang.Integer">
+        select count(*) from audit_flow_oper_record
+        <where>
+            <if test="currentId !=null and currentId !=''">and current_id=#{currentId}</if>
+            <if test="currentNodeId !=null and currentNodeId !=''">and current_node_id=#{currentNodeId}</if>
+            <if test="operUserId !=null and operUserId !=''">and oper_user_id=#{operUserId}</if>
+            <if test="operType !=null ">and oper_type=#{operType}</if>
+        </where>
+    </select>
+    <select id="selectAuditOperRecordByProjectId" parameterType="Integer" resultMap="AuditFlowOperRecordResult">
+        <include refid="selectAuditFlowOperRecordVo"/>
+        WHERE current_id = (SELECT current_id FROM audit_flow_current WHERE apply_id=#{pid} AND audit_id=3 ORDER BY
+        current_id DESC LIMIT 0,1);
+    </select>
+    <select id="selectOperType" parameterType="AuditFlowOperRecord" resultMap="AuditFlowOperRecordResult">
+        select oper_type from audit_flow_oper_record where oper_user_id=#{operUserId}
+    </select>
+
+    <select id="selectInfoByOperType" parameterType="AuditFlowOperRecord" resultMap="AuditFlowOperRecordResult">
+        <include refid="selectAuditFlowOperRecordVo"/>
+        where
+        current_id=#{currentId}
+        and oper_user_id=#{operUserId}
+        and (oper_type = 0 or oper_type = 1)
+    </select>
+    <select id="selectMemo" parameterType="java.util.HashMap" resultType="java.lang.String">
+        select oper_memo from audit_flow_oper_record
+        where
+        current_id in (select current_id from audit_flow_current where apply_id = #{applyId} and audit_id = 9)
+        and oper_user_id=#{userId}
+        and oper_type = 1
+    </select>
+    <select id="selectOperaRecord" parameterType="AuditFlowOperRecord" resultType="Map">
+        select current_id as currentId, current_node_id as currentNodeId
+        from audit_flow_oper_record
+        <where>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+            <if test="currentNodeId != null ">and current_node_id = #{currentNodeId}</if>
+            <if test="operUserId != null ">and oper_user_id = #{operUserId}</if>
+            <if test="operType != null ">and oper_type = #{operType}</if>
+        </where>
+    </select>
+    <select id="selectApprovalTime" resultType="java.util.Date">
+        select add_time  from audit_flow_oper_record
+        where current_id=#{currentId}
+        and oper_user_id=#{operUserId}
+        order by add_time desc
+        limit 1
+    </select>
+    <select id="selectApprovalMemo" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select afo.oper_memo
+        from audit_flow_oper_record afo
+        left join audit_flow_current afc on afo.current_id = afc.current_id
+        where afc.current_id=#{currentId}
+        and afc.current_state = 5
+        and afo.oper_type = 1
+        order by afo.add_time desc
+        limit 1
+    </select>
+</mapper>

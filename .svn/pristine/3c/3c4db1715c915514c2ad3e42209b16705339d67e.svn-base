@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.ProjectTaskTableMapper">
+
+    <resultMap type="ProjectTaskTable" id="ProjectTaskResult">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="eventId" column="event_id"/>
+        <result property="typeId" column="type_id"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+    <insert id="insertProjectTask" parameterType="ProjectTaskTable" useGeneratedKeys="true" keyProperty="id">
+        insert into project_task_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">user_id,</if>
+            <if test="eventId != null and eventId != ''">event_id,</if>
+            <if test="typeId != null">type_id,</if>
+            <if test="createTime != null ">create_time</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null and userId != ''">#{userId},</if>
+            <if test="eventId != null and eventId != ''">#{eventId},</if>
+            <if test="typeId != null">#{typeId},</if>
+            <if test="createTime != null ">#{createTime}</if>
+        </trim>
+    </insert>
+    <select id="selectInfos" parameterType="ProjectTaskTable" resultMap="ProjectTaskResult">
+        select user_id,event_id,type_id,create_time,update_time
+        from project_task_table
+        <where>
+            <if test="typeId !=null">and type_id=#{typeId}</if>
+            <if test="userId != null and userId != ''">and user_id=#{userId}</if>
+            <if test="eventId != null and eventId != ''">and event_id=#{eventId}</if>
+        </where>
+    </select>
+    <update id="updateProjectTask" parameterType="ProjectTaskTable">
+        update project_task_table
+        <set>
+            <if test="userId != null and userId != ''">user_id=#{userId},</if>
+            <if test="eventId != null and eventId != ''">event_id=#{eventId},</if>
+            <if test="typeId != null ">type_id=#{typeId},</if>
+            <if test="updateTime !=null ">update_time =#{updateTime}</if>
+        </set>
+        <where>
+            <if test="userId != null and userId != ''">and user_id=#{userId}</if>
+            <if test="eventId != null and eventId != ''">and event_id=#{eventId}</if>
+            <if test="typeId != null ">and type_id=#{typeId}</if>
+        </where>
+    </update>
+    <delete id="deleteInfos" parameterType="ProjectTaskTable">
+        delete from project_task_table
+        <where>
+            <if test="userId != null and userId != ''">and user_id=#{userId}</if>
+            <if test="eventId != null and eventId != ''">and event_id=#{eventId}</if>
+            <if test="typeId != null">and type_id=#{typeId}</if>
+        </where>
+    </delete>
+</mapper>

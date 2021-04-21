@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pms.mapper.audit.AuditFlowNodeMapper">
+    
+    <resultMap type="AuditFlowNode" id="AuditFlowNodeResult">
+        <result property="nodeId"    column="node_id"    />
+        <result property="flowId"    column="flow_id"    />
+        <result property="nodeName"    column="node_name"    />
+        <result property="prevNode"    column="prev_node"    />
+        <result property="nextNode"    column="next_node"    />
+        <result property="nodeType"    column="node_type"    />
+        <result property="nodeSeqno"    column="node_seqno"    />
+        <result property="addTime"    column="add_time"    />
+        <result property="state"    column="state"    />
+    </resultMap>
+	
+	<sql id="selectAuditFlowNodeVo">
+        select node_id, flow_id, node_name, prev_node, next_node, node_type, node_seqno, add_time, state from audit_flow_node
+    </sql>
+	
+    <select id="selectAuditFlowNodeList" parameterType="AuditFlowNode" resultMap="AuditFlowNodeResult">
+        <include refid="selectAuditFlowNodeVo"/>
+        <where>  
+            <if test="nodeId != null "> and node_id = #{nodeId}</if>
+             <if test="flowId != null "> and flow_id = #{flowId}</if>
+             <if test="nodeName != null  and nodeName != '' "> and node_name = #{nodeName}</if>
+             <if test="prevNode != null "> and prev_node = #{prevNode}</if>
+             <if test="nextNode != null "> and next_node = #{nextNode}</if>
+             <if test="nodeType != null "> and node_type = #{nodeType}</if>
+             <if test="nodeSeqno != null "> and node_seqno = #{nodeSeqno}</if>
+             <if test="addTime != null "> and add_time = #{addTime}</if>
+             <if test="state != null "> and state = #{state}</if>
+         </where>
+    </select>
+    
+    <select id="selectAuditFlowNodeById" parameterType="Integer" resultMap="AuditFlowNodeResult">
+        <include refid="selectAuditFlowNodeVo"/>
+        where node_id = #{nodeId}
+    </select>
+        
+    <insert id="insertAuditFlowNode" parameterType="AuditFlowNode" useGeneratedKeys="true" keyProperty="nodeId">
+        insert into audit_flow_node
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="flowId != null  ">flow_id,</if>
+			<if test="nodeName != null  and nodeName != ''  ">node_name,</if>
+			<if test="prevNode != null  ">prev_node,</if>
+			<if test="nextNode != null  ">next_node,</if>
+			<if test="nodeType != null  ">node_type,</if>
+			<if test="nodeSeqno != null  ">node_seqno,</if>
+			<if test="addTime != null  ">add_time,</if>
+			<if test="state != null  ">state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="flowId != null  ">#{flowId},</if>
+			<if test="nodeName != null  and nodeName != ''  ">#{nodeName},</if>
+			<if test="prevNode != null  ">#{prevNode},</if>
+			<if test="nextNode != null  ">#{nextNode},</if>
+			<if test="nodeType != null  ">#{nodeType},</if>
+			<if test="nodeSeqno != null  ">#{nodeSeqno},</if>
+			<if test="addTime != null  ">#{addTime},</if>
+			<if test="state != null  ">#{state},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAuditFlowNode" parameterType="AuditFlowNode">
+        update audit_flow_node
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="flowId != null  ">flow_id = #{flowId},</if>
+            <if test="nodeName != null  and nodeName != ''  ">node_name = #{nodeName},</if>
+            <if test="prevNode != null  ">prev_node = #{prevNode},</if>
+            <if test="nextNode != null  ">next_node = #{nextNode},</if>
+            <if test="nodeType != null  ">node_type = #{nodeType},</if>
+            <if test="nodeSeqno != null  ">node_seqno = #{nodeSeqno},</if>
+            <if test="addTime != null  ">add_time = #{addTime},</if>
+            <if test="state != null  ">state = #{state},</if>
+        </trim>
+        where node_id = #{nodeId}
+    </update>
+
+	<delete id="deleteAuditFlowNodeById" parameterType="Integer">
+        delete from audit_flow_node where node_id = #{nodeId}
+    </delete>
+	
+    <delete id="deleteAuditFlowNodeByIds" parameterType="String">
+        delete from audit_flow_node where node_id in 
+        <foreach item="nodeId" collection="array" open="(" separator="," close=")">
+            #{nodeId}
+        </foreach>
+    </delete>
+    
+</mapper>

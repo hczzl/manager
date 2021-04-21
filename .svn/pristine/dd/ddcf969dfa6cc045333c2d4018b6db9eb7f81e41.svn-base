@@ -1,0 +1,34 @@
+package com.ruoyi.web.service.item;
+
+import com.ruoyi.web.domain.SysUserWorks;
+import java.util.List;
+
+
+
+public interface SysUserWorksService {
+    /**
+     * @param sysUserWorks
+     * @return
+     */
+    int insertUserWorks(SysUserWorks sysUserWorks);
+
+    /**
+     * @param sysUserWorks
+     * @return
+     */
+    int updateUserWorks(SysUserWorks sysUserWorks);
+
+    /**
+     * @param sysUserWorks
+     * @return
+     */
+    List<SysUserWorks> selectUserWorks(SysUserWorks sysUserWorks);
+
+    /**
+     * 获取每个月实际的工作天数
+     *
+     * @param startTime
+     * @return
+     */
+    Integer selectWorkDays(Long startTime,Long userId);
+}

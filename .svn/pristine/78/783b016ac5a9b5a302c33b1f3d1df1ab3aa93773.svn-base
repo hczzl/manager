@@ -1,0 +1,40 @@
+package com.ruoyi.web.mapper.item;
+
+
+import com.ruoyi.web.domain.ParticipantsTable;
+
+import java.util.List;
+import java.util.Map;
+
+/**
+ * mapper接口
+ *
+ * @author zhongzhilong
+ * @date 2019/8/10
+ */
+public interface ParticipantsMapper {
+
+    int insertparticipants(ParticipantsTable participantsTable);
+
+    List<ParticipantsTable> selectParticients(ParticipantsTable participantsTable);
+
+    List<ParticipantsTable> selectUserJoin(ParticipantsTable participantsTable);
+
+    int getAlltimes(int id);
+
+    List<ParticipantsTable> selectAllUserId(ParticipantsTable participantsTable);
+
+    List<ParticipantsTable> getProjectByProjectId(ParticipantsTable participantsTable);
+
+    List<ParticipantsTable> getUserIdByPid(int projectId);
+
+    List<ParticipantsTable> selectInfo(ParticipantsTable participantsTable);
+
+    int deletePeople(ParticipantsTable participantsTable);
+
+    List<ParticipantsTable> selectInfo1(ParticipantsTable p);
+
+    List<Integer> querypIdByUserId(Integer userId);
+
+    List<Map<String, Object>> selectUserName(Integer pId);
+}

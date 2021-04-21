@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" xmlns:shiro="http://www.pollix.at/thymeleaf/shiro">
+<head>
+	<th:block th:include="include :: header('审批创建记录列表')" />
+</head>
+<body class="gray-bg">
+    
+     <div class="container-div">
+		<div class="row">
+			<div class="col-sm-12 search-collapse">
+				<form id="formId">
+					<div class="select-list">
+						<ul>
+							<li>
+								具体流程申请单id，如请假申请单：<input type="text" name="applyId"/>
+							</li>
+
+							<li>
+								所属审批流程id：<input type="text" name="auditId"/>
+							</li>
+
+							<li>
+								当前节点id：<input type="text" name="currentNodeId"/>
+							</li>
+
+							<li>
+								当前状态：1已提交,2审批中,3审批不通过，4审批通过：<input type="text" name="currentState"/>
+							</li>
+
+							<li>
+								第一个审批人Id：<input type="text" name="firstUserId"/>
+							</li>
+
+							<li>
+								添加时间：<input type="text" name="addTime"/>
+							</li>
+
+							<li>
+								状态：1有效，0无效，-1删除：<input type="text" name="state"/>
+							</li>
+
+							<li>
+								<a class="btn btn-primary btn-rounded btn-sm" onclick="$.table.search()"><i class="fa fa-search"></i>&nbsp;搜索</a>
+								<a class="btn btn-warning btn-rounded btn-sm" onclick="$.form.reset()"><i class="fa fa-refresh"></i>&nbsp;重置</a>
+							</li>
+						</ul>
+					</div>
+				</form>
+			</div>
+			
+	        <div class="btn-group-sm" id="toolbar" role="group">
+				<a class="btn btn-success" onclick="$.operate.add()" shiro:hasPermission="system:auditFlowCurrent:add">
+					<i class="fa fa-plus"></i> 添加
+				</a>
+				<a class="btn btn-primary btn-edit disabled" onclick="$.operate.edit()" shiro:hasPermission="system:auditFlowCurrent:edit">
+					<i class="fa fa-edit"></i> 修改
+				</a>
+				<a class="btn btn-danger btn-del btn-del disabled" onclick="$.operate.removeAll()" shiro:hasPermission="system:auditFlowCurrent:remove">
+					<i class="fa fa-remove"></i> 删除
+				</a>
+				<a class="btn btn-warning" onclick="$.table.exportExcel()" shiro:hasPermission="system:auditFlowCurrent:export">
+						<i class="fa fa-download"></i> 导出
+				 </a>
+			</div>
+			<div class="col-sm-12 select-table table-striped">
+				<table id="bootstrap-table" data-mobile-responsive="true"></table>
+			</div>
+		</div>
+	</div>
+    <div th:include="include :: footer"></div>
+    <script th:inline="javascript">
+        var editFlag = [[${@permission.hasPermi('system:auditFlowCurrent:edit')}]];
+        var removeFlag = [[${@permission.hasPermi('system:auditFlowCurrent:remove')}]];
+        var prefix = ctx + "system/auditFlowCurrent";
+
+        $(function() {
+            var options = {
+                url: prefix + "/list",
+                createUrl: prefix + "/add",
+                updateUrl: prefix + "/edit/{id}",
+                removeUrl: prefix + "/remove",
+				exportUrl: prefix + "/export",
+                modalName: "审批创建记录",
+		        showExport: true,
+                columns: [{
+		            checkbox: true
+		        },
+				{
+					field : 'currentId', 
+					title : '审批流程当前id',
+					visible: false
+				},
+				{
+					field : 'applyId', 
+					title : '具体流程申请单id，如请假申请单',
+					sortable: true
+				},
+				{
+					field : 'auditId', 
+					title : '所属审批流程id',
+					sortable: true
+				},
+				{
+					field : 'currentNodeId', 
+					title : '当前节点id',
+					sortable: true
+				},
+				{
+					field : 'currentState', 
+					title : '当前状态：1已提交,2审批中,3审批不通过，4审批通过',
+					sortable: true
+				},
+				{
+					field : 'firstUserId', 
+					title : '第一个审批人Id',
+					sortable: true
+				},
+				{
+					field : 'addTime', 
+					title : '添加时间',
+					sortable: true
+				},
+				{
+					field : 'state', 
+					title : '状态：1有效，0无效，-1删除',
+					sortable: true
+				},
+		        {
+		            title: '操作',
+		            align: 'center',
+		            formatter: function(value, row, index) {
+		            	var actions = [];
+		            	actions.push('<a class="btn btn-success btn-xs ' + editFlag + '" href="#" onclick="$.operate.edit(\'' + row.currentId + '\')"><i class="fa fa-edit"></i>编辑</a> ');
+                        actions.push('<a class="btn btn-danger btn-xs ' + removeFlag + '" href="#" onclick="$.operate.remove(\'' + row.currentId + '\')"><i class="fa fa-remove"></i>删除</a>');
+						return actions.join('');
+		            }
+		        }]
+            };
+            $.table.init(options);
+        });
+    </script>
+</body>
+</html>

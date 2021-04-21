@@ -1,0 +1,15 @@
+package com.ruoyi.web.service.item;
+
+
+import com.ruoyi.web.domain.SysYearMonth;
+
+import java.util.List;
+
+
+public interface SysYearMonthService {
+
+    List<SysYearMonth> selectInfos(SysYearMonth sysYearMonth);
+
+    int insertDate(SysYearMonth sysYearMonth);
+
+}

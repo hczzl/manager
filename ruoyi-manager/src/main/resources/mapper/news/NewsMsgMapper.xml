@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.news.NewsMsgMapper">
+
+    <insert id="insertNewsMsg" parameterType="com.ruoyi.web.domain.news.NewsMsg" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into t_news_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null and id !='' ">id,</if>
+            <if test="typeId != null  ">type_id,</if>
+            <if test="title != null and title !=''  ">title,</if>
+            <if test="newUrl != null and  newUrl !='' ">new_url,</if>
+            <if test="picturesUrl != null  and picturesUrl != ''  ">pictures_url,</if>
+            <if test="createTime != null  ">create_time</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null and id !='' ">#{id},</if>
+            <if test="typeId != null  ">#{typeId},</if>
+            <if test="title != null and title !=''  ">#{title},</if>
+            <if test="newUrl != null and  newUrl !='' ">#{newUrl},</if>
+            <if test="picturesUrl != null  and picturesUrl != ''  ">#{picturesUrl},</if>
+            <if test="createTime != null  ">#{createTime}</if>
+        </trim>
+    </insert>
+    <select id="selectNewsMsgList" parameterType="com.ruoyi.web.domain.news.vo.NewsMsgVo" resultType="Map">
+        select t.id,t.type_id as typeId,t2.type_name as typeName,t.title,t.new_url as newUrl,
+        t.pictures_url as picturesUrl,t.create_time as createTime
+        from t_news_msg t
+        left join t_type_msg t2 on t2.id = t.type_id
+        where 1 = 1
+        <if test="typeId !=null">and type_id = #{typeId}</if>
+        <if test="title !=null and title !=''">and title = #{title}</if>
+        order by create_time desc
+    </select>
+
+    <select id="selectTypeList" resultType="Map">
+        select id,type_name as typeName  from t_type_msg
+    </select>
+    <update id="modifyNewsMsg" parameterType="com.ruoyi.web.domain.news.NewsMsg">
+        update t_news_msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="id != null and id !='' ">id = #{id},</if>
+            <if test="typeId != null  ">type_id = #{typeId},</if>
+            <if test="title != null and title !=''  ">title =#{title},</if>
+            <if test="newUrl != null and  newUrl !='' ">new_url = #{newUrl},</if>
+            <if test="picturesUrl != null  and picturesUrl != ''  ">pictures_url = #{picturesUrl}</if>
+        </trim>
+        where id = #{id}
+    </update>
+    <delete id="deleteNewsMsg" parameterType="com.ruoyi.web.domain.news.NewsMsg">
+        delete from t_news_msg
+        where 1 = 1
+        <if test="id !=null and id !=''">and id = #{id}</if>
+        <if test="idsList !=null and idsList.size>0">
+            and id in
+            <foreach collection="idsList" index="index" item="item" open="(" separator="," close=")">
+                #{item}
+            </foreach>
+        </if>
+
+    </delete>
+</mapper>

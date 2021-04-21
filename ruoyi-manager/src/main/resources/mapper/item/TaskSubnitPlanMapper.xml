@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.TaskSubnitPlanMapper">
+
+    <resultMap type="TaskSubnitPlan" id="TaskSubnitPlanResult">
+        <id property="id" column="id"/>
+        <result property="tId"    column="t_id"    />
+        <result property="scheduleRate"    column="schedule_rate"    />
+        <result property="taskSubmittime"    column="task_submittime"    />
+        <result property="memo"    column="memo"    />
+        <result property="createBy"    column="create_by"    />
+    </resultMap>
+
+    <sql id="selectTaskSubnitPlanVo">
+        select id,t_id, schedule_rate, task_submittime, memo from task_subnit_plan
+    </sql>
+
+    <select id="selectTaskSubnitPlanList" parameterType="TaskSubnitPlan" resultMap="TaskSubnitPlanResult">
+        <include refid="selectTaskSubnitPlanVo"/>
+        <where>
+            1=1
+            <if test="tId != null "> AND t_id=#{tId}</if>
+        </where>
+        ORDER BY task_submittime DESC
+    </select>
+    
+    <select id="selectTaskSubnitPlanById" parameterType="TaskSubnitPlan" resultMap="TaskSubnitPlanResult">
+        <include refid="selectTaskSubnitPlanVo"/>
+        where t_id = #{tId}
+        ORDER BY task_submittime DESC
+    </select>
+    <!--获得最新的进度说明对应的id-->
+    <select id="selectMaxId" parameterType="TaskSubnitPlan" resultType="Integer">
+       select max(id) from  task_subnit_plan
+        where t_id = #{tId}
+    </select>
+    <!--获得最新的进度说明-->
+    <select id="selectMaxMemo" parameterType="TaskSubnitPlan" resultType="String">
+       select memo from  task_subnit_plan
+        where id = #{id}
+    </select>
+    <insert id="insertTaskSubnitPlan" parameterType="TaskSubnitPlan">
+        insert into task_subnit_plan
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tId != null ">t_id,</if>
+            <if test="scheduleRate != null ">schedule_rate,</if>
+            <if test="taskSubmittime != null ">task_submittime,</if>
+            <if test="memo != null  and memo != ''">memo,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tId != null ">#{tId},</if>
+            <if test="scheduleRate != null">#{scheduleRate},</if>
+            <if test="taskSubmittime != null ">#{taskSubmittime},</if>
+            <if test="memo != null  and memo != ''">#{memo},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaskSubnitPlan" parameterType="TaskSubnitPlan">
+        update task_subnit_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="scheduleRate != null ">schedule_rate = #{scheduleRate},</if>
+            <if test="taskSubmittime != null ">task_submittime = #{taskSubmittime},</if>
+            <if test="memo != null  and memo != ''">memo = #{memo},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+        </trim>
+        where t_id = #{tId}
+    </update>
+
+    <delete id="deleteTaskSubnitPlanById" parameterType="Long">
+        delete from task_subnit_plan where t_id = #{tId}
+    </delete>
+
+    <delete id="deleteTaskSubnitPlanByIds" parameterType="String">
+        delete from task_subnit_plan where t_id in 
+        <foreach item="tId" collection="array" open="(" separator="," close=")">
+            #{tId}
+        </foreach>
+    </delete>
+
+    <update id="updateTaskSubnitPlanByIds" parameterType="TaskSubnitPlan">
+        update task_subnit_plan
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="memo != null  and memo != ''">memo = #{memo},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            task_submittime = SYSDATE(),
+        </trim>
+        <where>
+            <trim suffixOverrides="and">
+                <if test="tId != null ">t_id=#{tId} and </if>
+                <if test="scheduleRate != null">schedule_rate = #{scheduleRate} and</if>
+            </trim>
+        </where>
+    </update>
+    
+</mapper>

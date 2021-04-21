@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.audit.AuditCopyMsgMapper">
+
+    <resultMap type="AuditCopyMsg" id="AuditCopyMsgResult">
+        <id property="id" column="id"/>
+        <result property="currentId" column="current_id"/>
+        <result property="userId" column="user_id"/>
+    </resultMap>
+
+    <select id="selectInfos" parameterType="AuditCopyMsg" resultMap="AuditCopyMsgResult">
+        select id,current_id,user_id from audit_copy_msg
+        <where>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+            <if test="userId != null  and userId != '' ">and user_id = #{userId}</if>
+        </where>
+    </select>
+    <select id="selectUseIds" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select user_id from audit_copy_msg  where current_id = #{currentId}
+    </select>
+    <insert id="insertCopys" parameterType="AuditCopyMsg" useGeneratedKeys="true" keyProperty="id">
+        insert into audit_copy_msg
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="currentId != null">current_id,</if>
+            <if test="userId != null ">user_id</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="currentId != null">#{currentId},</if>
+            <if test="userId != null  ">#{userId}</if>
+        </trim>
+    </insert>
+
+    <update id="updateInfos" parameterType="AuditCopyMsg">
+        update audit_copy_msg
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="currentId != null ">current_id = #{currentId},</if>
+            <if test="userId != null ">user_id = #{userId}</if>
+        </trim>
+        <where>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+        </where>
+    </update>
+
+    <delete id="deleteInfos" parameterType="AuditCopyMsg">
+        delete from audit_copy_msg
+        <where>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+            <if test="userId != null  and userId != '' ">and user_id = #{userId}</if>
+        </where>
+    </delete>
+    <delete id="deleteCopyMsg" parameterType="java.lang.Integer">
+        delete from audit_copy_msg where current_id = #{currentId}
+    </delete>
+</mapper>

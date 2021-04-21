@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.SysYearMonthMapper">
+    <resultMap type="SysYearMonth" id="SysYearMonthResult">
+        <id property="id" column="id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+    </resultMap>
+
+    <select id="selectInfos" parameterType="SysYearMonth" resultMap="SysYearMonthResult">
+        select start_time,end_time from sys_year_month
+        <where>
+            <if test="startTime != null">and start_time=#{startTime}</if>
+            <if test="endTime != null ">and end_time=#{endTime}</if>
+        </where>
+    </select>
+    <insert id="insertDate" parameterType="SysYearMonth" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_year_month(
+        <if test="startTime != null ">start_time,</if>
+        <if test="endTime != null">end_time</if>
+        )values(
+        <if test="startTime != null">#{startTime},</if>
+        <if test="endTime != null ">#{endTime}</if>
+        )
+    </insert>
+
+    <select id="selectYearList" resultType="java.lang.Integer">
+        select distinct(year) from(select date_format(start_time, '%Y') as year from sys_year_month)t
+    </select>
+
+    <select id="selectMonthCount" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from sys_year_month where start_time like concat('%',#{year},'%')
+    </select>
+    <select id="selectMinDate" parameterType="java.lang.String" resultType="java.lang.String">
+        select min(start_time) from sys_year_month where start_time like concat('%',#{year},'%')
+    </select>
+    <select id="selectMaxDate" parameterType="java.lang.String" resultType="java.lang.String">
+        select max(end_time) from sys_year_month where start_time like concat('%',#{year},'%')
+    </select>
+    <select id="selectMonthList" parameterType="Map" resultType="java.lang.String">
+    select date_format(start_time, '%c') as month
+    from sys_year_month
+    where start_time &gt;= #{startTime} and start_time &lt;= #{endTime}
+    </select>
+</mapper>

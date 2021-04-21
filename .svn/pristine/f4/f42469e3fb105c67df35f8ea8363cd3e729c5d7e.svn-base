@@ -1,0 +1,533 @@
+package com.ruoyi.web.controller.item;
+
+import com.alibaba.fastjson.JSON;
+import com.ruoyi.common.annotation.Log;
+import com.ruoyi.common.core.controller.BaseController;
+import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.common.utils.MyUtils;
+import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.system.domain.SysDept;
+import com.ruoyi.system.domain.SysUser;
+import com.ruoyi.system.domain.TaskUserFree;
+import com.ruoyi.system.mapper.SysDeptMapper;
+import com.ruoyi.system.service.ISysUserService;
+import com.ruoyi.web.mapper.audit.AuditFlowNodeRoleMapper;
+import com.ruoyi.web.service.item.TaskUserFreeService;
+import com.ruoyi.system.service.impl.SysDeptServiceImpl;
+import com.ruoyi.web.domain.*;
+import com.ruoyi.web.util.pageutils.PageEntity;
+import com.ruoyi.web.service.item.*;
+import com.ruoyi.web.util.ConstantUtil;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
+import org.apache.commons.collections.map.HashedMap;
+import org.apache.shiro.authz.annotation.RequiresPermissions;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.*;
+
+import java.text.ParseException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * 发起任务Controller
+ *
+ * @author zhongzhilong
+ * @date 2019-08-14
+ */
+@Controller
+@RequestMapping("/tasktable")
+@Api(value = "TaskTableController", tags = "任务模块相关接口")
+public class TaskTableController extends BaseController {
+
+    @Autowired
+    private TaskTableService taskTableService;
+    @Autowired
+    private TaskSubnitPlanService taskSubnitPlanService;
+    @Autowired
+    private TaskPostponeService taskPostponeService;
+    @Autowired
+    private SysDeptMapper deptMapper;
+    @Autowired
+    private ISysUserService userService;
+    @Autowired
+    private TaskUserService taskUserService;
+    @Autowired
+    private TaskUserFreeService taskUserFreeService;
+    @Autowired
+    private RedisTemplate redisTemplate;
+    @Autowired
+    private AuditFlowNodeRoleMapper auditFlowNodeRoleMapper;
+
+
+    private String prefix = "system/table";
+
+    @RequiresPermissions("system:table:view")
+    @GetMapping()
+    public String table() {
+        return prefix + "/table";
+    }
+
+    @ApiOperation("全部任务、紧急任务、逾期任务")
+    @PostMapping("/list")
+    @ResponseBody
+    public PageEntity lists(TaskTable taskTable) {
+        return taskTableService.lists(taskTable);
+    }
+
+    /**
+     * 获得用户关注的状态
+     *
+     * @param u
+     * @return
+     */
+    @ResponseBody
+    @PostMapping("/selectUserAttention")
+    public Integer selectUserAttention(UserTaskAttention u) {
+        u.setUserId(ShiroUtils.getUserId());
+        Integer userAttention = taskTableService.selectUserAttention(u);
+        return userAttention;
+    }
+
+    @ApiOperation("根据任务id和是否延期状态来获取对应的任务信息")
+    @PostMapping("/selectTaksChange")
+    @ResponseBody
+    public List<TaskPostpone> selectTaksChange(TaskPostpone taskPostpone) {
+        List<Integer> typeList = new ArrayList<>();
+        typeList.add(1);
+        typeList.add(2);
+        taskPostpone.setTypeList(typeList);
+        List<TaskPostpone> list = taskPostponeService.selectTaskChange(taskPostpone);
+        for (TaskPostpone t : list) {
+            Integer chargeId = t.getChargeId();
+            if (chargeId == null) {
+                chargeId = 0;
+            }
+            t.setChargeName(userService.getName(chargeId));
+            String particiants = t.getParticiants();
+            if (particiants != null && particiants.length() > 0) {
+                String[] arr = particiants.split(",");
+                String particiantsName = "";
+                for (int i = 0; i < arr.length; i++) {
+                    particiantsName = particiantsName + userService.getName(Integer.parseInt(arr[i])) + ",";
+                }
+                if (particiantsName.length() > 0) {
+                    particiantsName = particiantsName.substring(0, particiantsName.length() - 1);
+                }
+                t.setParticiantsName(particiantsName);
+            }
+        }
+        //增加原数据的变更类型并将原数据的变更时间置为空，并过滤状态无效的数据
+        list = list.stream()
+                .filter(item -> !item.getState().equals(0))
+                .sorted(Comparator.comparing(TaskPostpone::getId).reversed())
+                .collect(Collectors.toList());
+        if (list != null && list.size() > 0 && list.get(list.size() - 1).getType() == null) {
+            list.get(list.size() - 1).setType("原数据");
+            list.get(list.size() - 1).setCreateTime(null);
+        }
+        return list;
+    }
+
+    @ApiOperation("获取我的下属")
+    @PostMapping("/getLowerTask")
+    @ResponseBody
+    public TaskTable[] getLowerTask(TaskTable taskTable) {
+        long userId = ShiroUtils.getUserId();
+        SysUser user = new SysUser();
+        TaskUser taskUser = new TaskUser();
+        List<Integer> listInt = new ArrayList<>();
+        List<Integer> listUserId1 = new ArrayList<>();
+        List<Integer> listTid1 = new ArrayList<>();
+        Map<Integer, String> maptId = new HashedMap();
+        List<TaskUser> listUser1 = taskUserService.selectAllUser(taskUser);
+        for (int i = 0; i < listUser1.size(); i++) {
+            listInt.add(listUser1.get(i).getUserId().intValue());
+        }
+        List<TaskTable> listTask = taskTableService.selectAllChargePeople(taskTable);
+        for (int i = 0; i < listTask.size(); i++) {
+            listInt.add(listTask.get(i).getChargepeopleId().intValue());
+        }
+        user.setUserId(userId);
+        List<SysUser> list1 = userService.selectDetptIdAndPostId(user);
+        for (int i = 0; i < list1.size(); i++) {
+            long deptId = list1.get(i).getDeptId().intValue();
+            user.setDeptId(deptId);
+            List<SysUser> listUser = userService.selectAllDetptUser(user);
+            for (int y = 0; y < listInt.size(); y++) {
+                for (int x = 0; x < listUser.size(); x++) {
+                    if (listInt.get(y) == listUser.get(x).getUserId().intValue()) {
+                        listUserId1.add(listInt.get(y));
+                    }
+                }
+            }
+        }
+        for (Integer key : listUserId1) {
+            taskTable.setChargepeopleId(key.longValue());
+            List<TaskTable> list3 = taskTableService.selectAllTid(taskTable);
+            for (int i = 0; i < list3.size(); i++) {
+                listTid1.add(list3.get(i).gettId().intValue());
+            }
+            taskUser.setUserId(key.longValue());
+            List<TaskUser> list4 = taskUserService.selectAllTid(taskUser);
+            for (int i = 0; i < list4.size(); i++) {
+                listTid1.add(list4.get(i).gettId().intValue());
+            }
+        }
+        for (int i = 0; i < listTid1.size(); i++) {
+            maptId.put(listTid1.get(i), "tId");
+        }
+        int f = 0;
+        TaskTable[] taskTables = new TaskTable[maptId.size()];
+        for (Integer key : maptId.keySet()) {
+            taskTables[f] = taskTableService.getLowerTask(key);
+            f++;
+        }
+        return taskTables;
+    }
+
+    @PostMapping("/taskList")
+    @ResponseBody
+    @ApiOperation("测试无分页情况下的所有审批流程")
+    public List<TaskTable> getAllTaskTable(TaskTable taskTable) {
+        List<TaskTable> list = taskTableService.getAllTaskTable(taskTable);
+        return list;
+    }
+
+    @PostMapping("/selectTemporary")
+    @ResponseBody
+    @ApiOperation("临时任务接口方法")
+    public List<TaskTable> selectTemporaryTask(TaskTable taskTable) {
+        List<TaskTable> list = taskTableService.selectTemporaryTask(taskTable);
+        for (int i = 0; i < list.size(); i++) {
+        }
+        return list;
+    }
+
+    @PostMapping("/mylist")
+    @ResponseBody
+    @ApiOperation("获得我的任务的接口")
+    public PageEntity mylists(TaskTable taskTable) {
+        if (taskTable.getUuId() == null) {
+            taskTable.setPeopleString(ShiroUtils.getUserId().toString());
+        } else {
+            taskTable.setPeopleString(taskTable.getUuId().toString());
+        }
+        return lists(taskTable);
+    }
+
+    /**
+     * 分页的代码
+     *
+     * @param taskTable
+     * @param list
+     * @return
+     */
+    public List<TaskTable> paging(TaskTable taskTable, List<TaskTable> list) {
+        list = list.stream()
+                .skip(taskTable.getTotal() * (taskTable.getPageNumber() - 1))
+                .limit(taskTable.getTotal())
+                .collect(Collectors.toList());
+        return list;
+    }
+
+    @ApiOperation("根据任务id获取任务信息")
+    @ResponseBody
+    @PostMapping("/selectTaskByTid")
+    public List<TaskTable> selectTaskByTid(TaskTable taskTable) {
+        List<TaskTable> list = taskTableService.selectTaskByTid2(taskTable);
+        return list;
+    }
+
+    @ApiOperation("导出发起任务列表")
+    @Log(title = "任务模块:导出发起任务列表", businessType = BusinessType.EXPORT)
+    @RequiresPermissions("system:table:export")
+    @PostMapping("/export")
+    @ResponseBody
+    public AjaxResult export(TaskTable taskTable) {
+        List<TaskTable> list = taskTableService.selectTaskTableList(taskTable);
+        ExcelUtil<TaskTable> util = new ExcelUtil<TaskTable>(TaskTable.class);
+        return util.exportExcel(list, "table");
+    }
+
+    @GetMapping("/add")
+    public String add() {
+        return prefix + "/add";
+    }
+
+    @ApiOperation("发起任务")
+    @Log(title = "发起任务", businessType = BusinessType.INSERT)
+    @PostMapping("/add")
+    @ResponseBody
+    public AjaxResult saveTask(TaskTable taskTable) {
+        return toAjax(taskTableService.saveTask(taskTable));
+    }
+
+    @ApiOperation("里程碑添加任务")
+    @PostMapping("/addTaskForPlan")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public AjaxResult addTaskForPlan(TaskTable taskTable) {
+        int a = 0;
+        try {
+            taskTable.setCreateTime(new Date());
+            taskTable.setTaskFinishflag("0");
+            a = taskTableService.insertTaskTableForPlan(taskTable);
+            long chargePeopleId = taskTable.getChargepeopleId();
+            taskUserService.insertTaskUsers(taskTable, chargePeopleId);
+            if (a == 1) {
+                redisTemplate.delete("holidaysList");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return toAjax(a);
+    }
+
+    @ApiOperation("修改任务")
+    @GetMapping("/edit/{tId}")
+    public String edit(@PathVariable("tId") Long tId, ModelMap mmap) {
+        TaskTable taskTable = taskTableService.selectTaskTableById(tId);
+        mmap.put("taskTable", taskTable);
+        return prefix + "/edit";
+    }
+
+
+    @ApiOperation("任务中止")
+    @Log(title = "任务中止", businessType = BusinessType.UPDATE)
+    @PostMapping("/stoptask")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public AjaxResult editTask(TaskTable taskTable) {
+        List<TaskTable> tables = taskTableService.selectTaskByTid2(taskTable);
+        MyUtils.putMapCache(ShiroUtils.getUserId() + "LogObject", JSON.toJSONString(tables));
+        return toAjax(taskTableService.editTask(taskTable));
+    }
+
+    @ApiOperation("任务完成")
+    @Log(title = "任务完成", businessType = BusinessType.UPDATE)
+    @PostMapping("/accomplish")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public AjaxResult accomplish(TaskTable taskTable, SysFileInfo sysFileInfo1) {
+        MyUtils.putMapCache(ShiroUtils.getUserId() + "LogObject", JSON.toJSONString(taskTableService.selectTaskByTid2(taskTable)));
+        return toAjax(taskTableService.accomplish(taskTable, sysFileInfo1));
+    }
+
+    @ApiOperation("修改保存发起任务")
+    @Log(title = "任务修改", businessType = BusinessType.UPDATE)
+    @PostMapping("/info/save")
+    @ResponseBody
+    public AjaxResult editSave(TaskTable taskTable, TaskSubnitPlan taskSubnitPlan) {
+        MyUtils.putMapCache(ShiroUtils.getUserId() + "LogObject", JSON.toJSONString(taskTableService.selectTaskByTid2(taskTable)));
+        int a = taskSubnitPlanService.insertTaskSubnitPlan(taskSubnitPlan);
+        taskTable.setUpdateTime(new Date());
+        int b = taskTableService.updateTaskTable(taskTable);
+        return toAjax(b);
+    }
+
+
+    @ApiOperation("顺延、时间变更、执行人变更")
+    @Log(title = "变更任务", businessType = BusinessType.UPDATE)
+    @PostMapping("/changePeriod")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public AjaxResult changePeriod(TaskTable taskTable, TaskPostpone taskPostpone) {
+        MyUtils.putMapCache(ShiroUtils.getUserId() + "LogObject", JSON.toJSONString(taskTableService.selectTaskByTid2(taskTable)));
+        List<TaskTable> tables = taskTableService.selectTaskByTid2(taskTable);
+        MyUtils.putMapCache(ShiroUtils.getUserId() + "LogObject", JSON.toJSONString(tables));
+        return toAjax(taskTableService.changePeriod(taskTable, taskPostpone));
+    }
+
+    @ApiOperation("删除发起任务")
+    @RequiresPermissions("system:table:remove")
+    @Log(title = "删除任务", businessType = BusinessType.DELETE)
+    @PostMapping("/remove")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public AjaxResult remove(@RequestParam String ids) {
+        return toAjax(taskTableService.deleteTaskTableByIds(ids));
+    }
+
+    @ApiOperation("撤回发起任务")
+    @Log(title = "撤回任务", businessType = BusinessType.UPDATE)
+    @PostMapping("/quash")
+    @ResponseBody
+    @ApiImplicitParams({
+            @ApiImplicitParam(name = "ids", value = "任务id", required = true),
+            @ApiImplicitParam(name = "currentId", value = "审批流id", required = true)
+    })
+    public AjaxResult quash(@RequestParam String ids, @RequestParam Integer currentId) {
+        List<Integer> stateList = auditFlowNodeRoleMapper.selectApplyState(currentId);
+        if (stateList.contains(0)) {
+            return AjaxResult.error("撤销失败,该审批已被办理,正在为您刷新列表");
+        }
+        return toAjax(taskTableService.quashTaskByIds(ids, currentId));
+    }
+
+    @PostMapping("/findAll")
+    @ResponseBody
+    @ApiOperation("查询里程碑任务")
+    public PageEntity listTask(TaskTable taskTable) {
+        if (taskTable.getTotal() == 0) {
+            taskTable.setTotal(ConstantUtil.TOTAL);
+        }
+        if (taskTable.getPageNumber() != 0) {
+            taskTable.setPageNumber((taskTable.getPageNumber() - 1) * taskTable.getTotal());
+        }
+        if (taskTable.getPages() == 0) {
+            List<TaskTable> list1 = taskTableService.selectAllTask(taskTable);
+            taskTable.setPages(list1.size());
+        }
+        List<TaskTable> list = taskTableService.selectAllTask(taskTable);
+        return new PageEntity(list.size(), taskTable.getPages(), (taskTable.getPageNumber() / taskTable.getTotal() + 1), list);
+    }
+
+    @GetMapping("getAllTitle")
+    @ResponseBody
+    @ApiOperation("计算任务总数")
+    public int getAllTitle(TaskTable taskTable) {
+        return taskTableService.getAllTitle(taskTable);
+    }
+
+    @PostMapping("/getTaskTitle")
+    @ResponseBody
+    public String[][] getTaskTitle(TaskTable taskTable) {
+        List<TaskTable> list1 = taskTableService.selectAllTask(taskTable);
+        int maxParentId = list1.get(0).getParentId();
+        for (int k = 1; k < list1.size(); k++) {
+            if (maxParentId < list1.get(k).getParentId()) {
+                maxParentId = list1.get(k).getParentId();
+            }
+        }
+        int taskNumber = taskTableService.getAllTitle(taskTable);
+        //构建hashmap集合
+        HashMap<String, List<String>> hm = new HashMap<String, List<String>>();
+        int size = list1.size();
+        String[][] title = new String[size][size];
+
+        int id = list1.get(0).getParentId();
+        //System.out.println("parentId=" + id);
+        for (int i = 0; i < list1.size(); i++) {
+            for (int j = 0; j < list1.size(); j++) {
+                if (id == list1.get(j).getParentId()) {
+                    title[i][0] =
+                            title[i][j] = list1.get(j).getTaskTitle();
+                }
+            }
+            id++;
+            if (id <= maxParentId) {
+                System.out.println("parentId=" + id);
+            }
+        }
+        //redisTemplate.delete("taskList");
+        return title;
+    }
+
+
+    @ApiOperation("查询该时间段无工作的日期")
+    @PostMapping("/getBusy")
+    @ResponseBody
+    public AjaxResult getBusy(String startTime, String endTime) {
+        return AjaxResult.success("", taskTableService.getBusy(startTime, endTime));
+
+    }
+
+    @ApiOperation("获得两个时间段内得工作日，以小时为单位")
+    @PostMapping("/getworkday")
+    @ResponseBody
+    public Integer getworkday(String startTime, String endTime) {
+        return taskTableService.getworkday(startTime, endTime);
+    }
+
+
+    @ApiOperation("根据起始日期和周期获得结束日期")
+    @PostMapping("/getFinallyDate")
+    @ResponseBody
+    public AjaxResult getFinallyDate(String startTime, String period) throws ParseException {
+        String startTimes = DateUtils.date2TimeStamp(startTime, "yyyy-MM-dd");
+        return AjaxResult.success("", taskTableService.getFinallyDate(startTimes, period));
+    }
+
+    @ApiOperation("计算员工每个月的工作情况")
+    @PostMapping("/saturation")
+    @ResponseBody
+    @Transactional(rollbackFor = Exception.class)
+    public Map saturation(TaskTable taskTable) {
+        return taskTableService.saturation(taskTable);
+    }
+
+    @PostMapping("/dept/list")
+    @ResponseBody
+    public List<SysDept> selectDeptList(SysDept dept) {
+        List<SysDept> deptList = deptMapper.selectDeptList(dept);
+        Map<String, List<String>> listMap = (Map<String, List<String>>) taskTableService.getBusy("2017-05-06", "2019-06-05");
+        for (SysDept sysDept : deptList) {
+            for (SysUser sysUser : sysDept.getUsers()) {
+                for (Map.Entry<String, List<String>> entry : listMap.entrySet()) {
+                    if (sysUser.getUserId().equals(Long.valueOf(entry.getKey()))) {
+                        sysUser.setNotbusyList(entry.getValue());
+                    } else {
+                        sysUser.setNotbusyList(DateUtils.getBetweenDate("2017-05-06", "2019-06-05"));
+                    }
+
+                }
+            }
+        }
+        List<SysDept> sysDeptList = new SysDeptServiceImpl().getChildPerms(deptList);
+        return sysDeptList;
+    }
+
+    @ResponseBody
+    @PostMapping("/selectAllInfo")
+    public List<TaskUserFree> selectAllInfo(TaskUserFree taskUserFree) {
+        List<TaskUserFree> listAll = taskUserFreeService.selectUserFreeTime(taskUserFree);
+        return listAll;
+    }
+
+
+    @ApiOperation("更新任务的接口")
+    @PostMapping("/updateTaskById")
+    @ResponseBody
+    public AjaxResult updateTaskTable(TaskTable taskTable) {
+        taskTable.setUpdateTime(new Date());
+        int a = taskTableService.updateTaskTable(taskTable);
+        return toAjax(a);
+    }
+
+
+    @GetMapping("/selectTaskChanges/{currentId}")
+    @ResponseBody
+    public List<TaskChange> selectTaskChanes(@PathVariable("currentId") Integer currentId) {
+
+        return taskTableService.selectTaskChanes(currentId);
+    }
+
+    @PostMapping("/attentionlist")
+    @ResponseBody
+    public PageEntity selectAttentionlist(TaskTable taskTable) {
+        taskTable.setUserId(ShiroUtils.getUserId());
+
+        List<TaskTable> resultList = taskTableService.selectAttentionlist(taskTable);
+        List<TaskTable> list = paging(taskTable, resultList);
+        for (int i = 0; i < list.size(); i++) {
+            long tId = list.get(i).gettId().intValue();
+            Integer state = taskTableService.isAttention(tId);
+            list.get(i).setUserAttention(state);
+        }
+        return new PageEntity(list.size(), resultList.size(), (taskTable.getPageNumber() / taskTable.getTotal()), list);
+    }
+
+
+}

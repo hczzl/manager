@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.pms.mapper.audit.AuditFlowCurrentMapper">
+    
+    <resultMap type="AuditFlowCurrent" id="AuditFlowCurrentResult">
+        <result property="currentId"    column="current_id"    />
+        <result property="applyId"    column="apply_id"    />
+        <result property="auditId"    column="audit_id"    />
+        <result property="currentNodeId"    column="current_node_id"    />
+        <result property="currentState"    column="current_state"    />
+        <result property="firstUserId"    column="first_user_id"    />
+        <result property="addTime"    column="add_time"    />
+        <result property="state"    column="state"    />
+    </resultMap>
+	
+	<sql id="selectAuditFlowCurrentVo">
+        select current_id, apply_id, audit_id, current_node_id, current_state, first_user_id, add_time, state from audit_flow_current
+    </sql>
+	
+    <select id="selectAuditFlowCurrentList" parameterType="AuditFlowCurrent" resultMap="AuditFlowCurrentResult">
+        <include refid="selectAuditFlowCurrentVo"/>
+        <where>  
+            <if test="currentId != null "> and current_id = #{currentId}</if>
+             <if test="applyId != null "> and apply_id = #{applyId}</if>
+             <if test="auditId != null "> and audit_id = #{auditId}</if>
+             <if test="currentNodeId != null "> and current_node_id = #{currentNodeId}</if>
+             <if test="currentState != null "> and current_state = #{currentState}</if>
+             <if test="firstUserId != null "> and first_user_id = #{firstUserId}</if>
+             <if test="addTime != null "> and add_time = #{addTime}</if>
+             <if test="state != null "> and state = #{state}</if>
+         </where>
+    </select>
+    
+    <select id="selectAuditFlowCurrentById" parameterType="Integer" resultMap="AuditFlowCurrentResult">
+        <include refid="selectAuditFlowCurrentVo"/>
+        where current_id = #{currentId}
+    </select>
+        
+    <insert id="insertAuditFlowCurrent" parameterType="AuditFlowCurrent" useGeneratedKeys="true" keyProperty="currentId">
+        insert into audit_flow_current
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="applyId != null  ">apply_id,</if>
+			<if test="auditId != null  ">audit_id,</if>
+			<if test="currentNodeId != null  ">current_node_id,</if>
+			<if test="currentState != null  ">current_state,</if>
+			<if test="firstUserId != null  ">first_user_id,</if>
+			<if test="addTime != null  ">add_time,</if>
+			<if test="state != null  ">state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="applyId != null  ">#{applyId},</if>
+			<if test="auditId != null  ">#{auditId},</if>
+			<if test="currentNodeId != null  ">#{currentNodeId},</if>
+			<if test="currentState != null  ">#{currentState},</if>
+			<if test="firstUserId != null  ">#{firstUserId},</if>
+			<if test="addTime != null  ">#{addTime},</if>
+			<if test="state != null  ">#{state},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAuditFlowCurrent" parameterType="AuditFlowCurrent">
+        update audit_flow_current
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyId != null  ">apply_id = #{applyId},</if>
+            <if test="auditId != null  ">audit_id = #{auditId},</if>
+            <if test="currentNodeId != null  ">current_node_id = #{currentNodeId},</if>
+            <if test="currentState != null  ">current_state = #{currentState},</if>
+            <if test="firstUserId != null  ">first_user_id = #{firstUserId},</if>
+            <if test="addTime != null  ">add_time = #{addTime},</if>
+            <if test="state != null  ">state = #{state},</if>
+        </trim>
+        where current_id = #{currentId}
+    </update>
+
+	<delete id="deleteAuditFlowCurrentById" parameterType="Integer">
+        delete from audit_flow_current where current_id = #{currentId}
+    </delete>
+	
+    <delete id="deleteAuditFlowCurrentByIds" parameterType="String">
+        delete from audit_flow_current where current_id in 
+        <foreach item="currentId" collection="array" open="(" separator="," close=")">
+            #{currentId}
+        </foreach>
+    </delete>
+    
+</mapper>

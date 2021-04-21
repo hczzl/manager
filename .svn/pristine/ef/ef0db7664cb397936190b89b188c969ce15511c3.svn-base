@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.audit.AuditFlowNodeRoleMapper">
+
+    <resultMap type="AuditFlowNodeRole" id="AuditFlowNodeRoleResult">
+        <result property="nodeRoleId" column="node_role_id"/>
+        <result property="nodeId" column="node_id"/>
+        <result property="roleId" column="role_id"/>
+        <result property="addTime" column="add_time"/>
+        <result property="state" column="state"/>
+        <result property="currentId" column="current_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <collection property="userList" ofType="com.ruoyi.system.domain.SysUser"
+                    resultMap="com.ruoyi.system.mapper.SysUserMapper.SysUserResult">
+        </collection>
+    </resultMap>
+
+    <sql id="selectAuditFlowNodeRoleVo">
+        select a.node_role_id, a.node_id, a.role_id, a.add_time, a.state,a.current_id,a.user_id ,b.* from audit_flow_node_role a
+        LEFT JOIN sys_user_role c ON  a.role_id=c.role_id
+        LEFT JOIN  sys_user b ON c.user_id=b.user_id
+    </sql>
+    <sql id="flowNodeRoleVo">
+            select node_role_id,node_id,role_id,add_time,state,current_id,user_id from audit_flow_node_role
+    </sql>
+    <select id="selectAuditFlowNodeRoleList" parameterType="AuditFlowNodeRole" resultMap="AuditFlowNodeRoleResult">
+        <include refid="selectAuditFlowNodeRoleVo"/>
+        <where>
+            <if test="nodeRoleId != null ">and node_role_id = #{nodeRoleId}</if>
+            <if test="nodeId != null ">and node_id = #{nodeId}</if>
+            <if test="roleId != null ">and role_id = #{roleId}</if>
+            <if test="addTime != null ">and add_time = #{addTime}</if>
+            <if test="state != null ">and state = #{state}</if>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+            <if test="userId != null ">and a.user_id = #{userId}</if>
+        </where>
+    </select>
+    <select id="selectApplyUserId" parameterType="AuditFlowNodeRole" resultType="java.lang.Integer">
+        select user_id from audit_flow_node_role
+        <where>
+            <if test="nodeRoleId != null ">and node_role_id = #{nodeRoleId}</if>
+            <if test="nodeId != null ">and node_id = #{nodeId}</if>
+            <if test="roleId != null ">and role_id = #{roleId}</if>
+            <if test="addTime != null ">and add_time = #{addTime}</if>
+            <if test="state != null ">and state = #{state}</if>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+        </where>
+    </select>
+    <select id="selectState" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+            select state from audit_flow_node_role
+            where current_id = #{currentId}
+    </select>
+    <select id="selectAuditFlowNodeRoleListSum" parameterType="AuditFlowNodeRole" resultType="Integer">
+        select count(node_id) from audit_flow_node_role
+        <where>
+            <if test="nodeRoleId != null ">and node_role_id = #{nodeRoleId}</if>
+            <if test="nodeId != null ">and node_id = #{nodeId}</if>
+            <if test="roleId != null ">and role_id = #{roleId}</if>
+            <if test="addTime != null ">and add_time = #{addTime}</if>
+            <if test="state != null ">and state = #{state}</if>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+        </where>
+    </select>
+    <select id="selectAuditFlowNodeRoleLists" parameterType="AuditFlowNodeRole" resultMap="AuditFlowNodeRoleResult">
+        <include refid="selectAuditFlowNodeRoleVo"/>
+        WHERE a.role_id IS NOT NULL
+    </select>
+    <select id="selectFlowNodeRoleList" parameterType="AuditFlowNodeRole" resultMap="AuditFlowNodeRoleResult">
+        SELECT * FROM audit_flow_node_role a
+        LEFT JOIN audit_flow_node b ON a.node_id=b.node_id
+        LEFT JOIN audit_flow c ON b.flow_id=c.flow_id
+        <where>
+            <if test="nodeRoleId != null ">and a.node_role_id = #{nodeRoleId}</if>
+            <if test="nodeId != null ">and a.node_id = #{nodeId}</if>
+            <if test="roleId != null ">and a.role_id = #{roleId}</if>
+            <if test="addTime != null ">and a.add_time = #{addTime}</if>
+            <if test="state != null ">and a.state = #{state}</if>
+            <if test="searchFlowId  != null ">and c.flow_id = #{searchFlowId }</if>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+            <if test="userId != null ">and user_id = #{userId}</if>
+        </where>
+    </select>
+
+    <select id="selectAuditFlowNodeRoleById" parameterType="Integer" resultMap="AuditFlowNodeRoleResult">
+        <include refid="selectAuditFlowNodeRoleVo"/>
+        where node_role_id = #{nodeRoleId}
+    </select>
+
+    <insert id="insertAuditFlowNodeRole" parameterType="AuditFlowNodeRole" useGeneratedKeys="true"
+            keyProperty="nodeRoleId">
+        insert into audit_flow_node_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="nodeId != null  ">node_id,</if>
+            <if test="roleId != null  ">role_id,</if>
+            <if test="addTime != null  ">add_time,</if>
+            <if test="state != null  ">state,</if>
+            <if test="currentId != null ">current_id ,</if>
+            <if test="userId != null ">user_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="nodeId != null  ">#{nodeId},</if>
+            <if test="roleId != null  ">#{roleId},</if>
+            <if test="addTime != null  ">#{addTime},</if>
+            <if test="state != null  ">#{state},</if>
+            <if test="currentId != null ">#{currentId},</if>
+            <if test="userId != null ">#{userId},</if>
+        </trim>
+    </insert>
+
+    <update id="updateAuditFlowNodeRole" parameterType="AuditFlowNodeRole">
+        update audit_flow_node_role
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="nodeId != null  ">node_id = #{nodeId},</if>
+            <if test="roleId != null  ">role_id = #{roleId},</if>
+            <if test="addTime != null  ">add_time = #{addTime},</if>
+            <if test="state != null  ">state = #{state},</if>
+            <if test="currentId != null ">current_id = #{currentId},</if>
+            <if test="userId != null ">user_id = #{userId},</if>
+        </trim>
+        where node_role_id = #{nodeRoleId}
+    </update>
+
+    <update id="updateAuditFlowNodeRoleByNodeId" parameterType="AuditFlowNodeRole">
+        update audit_flow_node_role SET state = #{state}
+        <where>
+            <if test="nodeId !=null">and node_id = #{nodeId}</if>
+            <if test="currentId !=null">and current_id = #{currentId}</if>
+            <if test="userId !=null">and user_id = #{userId}</if>
+        </where>
+    </update>
+
+    <delete id="deleteAuditFlowNodeRoleById" parameterType="Integer">
+        delete from audit_flow_node_role where node_role_id = #{nodeRoleId}
+    </delete>
+    <delete id="deleteFlowNodeRoleByCurrentId" parameterType="AuditFlowNodeRole">
+        delete from audit_flow_node_role
+        <where>
+            <if test="currentId !=null">and current_id = #{currentId}</if>
+        </where>
+    </delete>
+
+    <delete id="deleteAuditFlowNodeRoleByIds" parameterType="String">
+        delete from audit_flow_node_role where node_role_id in
+        <foreach item="nodeRoleId" collection="array" open="(" separator="," close=")">
+            #{nodeRoleId}
+        </foreach>
+    </delete>
+
+    <select id="getAllAuditFlowNodeRole" parameterType="AuditFlowNodeRole" resultMap="AuditFlowNodeRoleResult">
+            select node_role_id, node_id, role_id, add_time, state,current_id,user_id  from audit_flow_node_role where current_id=#{currentId}
+    </select>
+    <select id="getAllCurrentId" parameterType="AuditFlowNodeRole" resultMap="AuditFlowNodeRoleResult">
+            select DISTINCT current_id from audit_flow_node_role order by current_id
+    </select>
+    <select id="getSumApproval" parameterType="java.lang.Integer" resultType="Integer">
+            select count(current_id) from audit_flow_node_role where current_id=#{currentId}
+    </select>
+    <select id="getSumNodeId" parameterType="AuditFlowNodeRole" resultType="Integer">
+            select count(node_id) from audit_flow_node_role where node_id=#{nodeId} AND current_id=#{currentId} AND state=#{state}
+    </select>
+    <select id="getUserIdByNodeId" parameterType="AuditFlowNodeRole" resultMap="AuditFlowNodeRoleResult">
+            select user_id from audit_flow_node_role where node_id=#{nodeId} and state=#{state} and current_id=#{currentId}
+    </select>
+    <select id="getStateByUserId" parameterType="AuditFlowNodeRole" resultMap="AuditFlowNodeRoleResult">
+        select state from audit_flow_node_role
+        <where>
+            <if test="currentId !=null">and current_id=#{currentId}</if>
+            <if test="userId !=null">and user_id=#{userId}</if>
+        </where>
+
+    </select>
+
+    <select id="getAllUserByCurretnId" parameterType="AuditFlowNodeRole" resultMap="AuditFlowNodeRoleResult">
+            select user_id,node_id from audit_flow_node_role where current_id=#{currentId} order by node_id
+    </select>
+    <select id="selectUserNodeBycId" parameterType="java.lang.Integer" resultType="Map">
+            select user_id as userId,node_id as nodeId from audit_flow_node_role where current_id=#{currentId} order by node_id
+    </select>
+    <select id="selectByNodeIdAndCurrentId" parameterType="AuditFlowNodeRole" resultMap="AuditFlowNodeRoleResult">
+        <include refid="flowNodeRoleVo"/>
+        <where>
+            <if test="currentId !=null">and current_id=#{currentId}</if>
+            <if test="userId !=null">and user_id=#{userId}</if>
+            <if test="nodeId !=null">and node_id=#{nodeId}</if>
+        </where>
+        order by node_id
+    </select>
+    <select id="selectNodeRoleUserId" parameterType="Map" resultType="java.lang.String">
+        select user_id from audit_flow_node_role
+        where current_id=#{currentId}
+        and  node_id=#{nodeId}
+        and  state = #{state}
+    </select>
+    <select id="selectFlowNodeRoleCount" parameterType="AuditFlowNodeRole" resultType="java.lang.Integer">
+        select count(*) from audit_flow_node_role
+        <where>
+            <if test="currentId !=null">and current_id=#{currentId}</if>
+            <if test="userId !=null">and user_id=#{userId}</if>
+            <if test="nodeId !=null">and node_id=#{nodeId}</if>
+        </where>
+        order by node_id
+    </select>
+    <select id="selectSumCurrentNodeId" parameterType="AuditFlowNodeRole" resultType="Integer">
+            select count(node_id) from audit_flow_node_role
+            where current_id=#{currentId} AND node_id=#{nodeId}
+    </select>
+
+    <select id="getUserIdByProjectId" parameterType="Integer" resultType="Integer">
+            SELECT user_id FROM audit_flow_node_role WHERE current_id=(SELECT current_id FROM audit_flow_current WHERE apply_id=#{pid} AND audit_id=3 ORDER BY current_id DESC LIMIT 0,1);
+    </select>
+
+    <select id="selectUsers" parameterType="AuditFlowNodeRole" resultMap="AuditFlowNodeRoleResult">
+        <include refid="flowNodeRoleVo"/>
+        where current_id=#{currentId}
+        and node_id > #{nodeId}
+    </select>
+
+    <select id="selectAuditInfoStateInOneByProjectId" parameterType="Integer" resultMap="AuditFlowNodeRoleResult">
+            SELECT
+                ar.`node_role_id`,ar.`node_id`,ar.`role_id`,ar.`add_time`,ar.`state`,ar.`current_id`,ar.`user_id`
+            FROM
+                `audit_flow_node_role` ar
+            WHERE
+                state=1 AND current_id=(SELECT current_id FROM `audit_flow_current` WHERE apply_id = #{pid} AND audit_id=3 ORDER BY current_id DESC LIMIT 0,1)
+    </select>
+    <select id="selectUserIds" parameterType="java.lang.Integer" resultMap="AuditFlowNodeRoleResult">
+        select user_id,current_id,node_id from audit_flow_node_role
+        where current_id in (select current_id from audit_flow_current where audit_id=3 and apply_id=#{applyId})
+    </select>
+    <select id="selectApplyState" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        select state from audit_flow_node_role
+        where current_id  = #{currentId}
+    </select>
+</mapper>

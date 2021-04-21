@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.ProjectMarkTypeMapper">
+
+    <resultMap type="ProjectMarkTypeInfoTable" id="ProjectMarkTypeInfoResult">
+        <id property="id" column="id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="hardwareName" column="hardware_name"/>
+        <result property="isType" column="is_type"/>
+        <result property="isShiyong" column="is_shiyong"/>
+        <result property="shiyongAllCount" column="shiyong_all_count"/>
+        <result property="shiyongCount" column="shiyong_count"/>
+
+    </resultMap>
+    <insert id="insertMarkType" parameterType="ProjectMarkTypeInfoTable" useGeneratedKeys="true" keyProperty="id">
+        insert into project_marktype_infotable
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null ">project_id,</if>
+            <if test="hardwareName != null  ">hardware_name,</if>
+            <if test="isType != null  ">is_type,</if>
+            <if test="isShiyong != null  ">is_shiyong,</if>
+            <if test="shiyongAllCount != null  ">shiyong_all_count,</if>
+            <if test="shiyongCount != null  ">shiyong_count</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null  ">#{projectId},</if>
+            <if test="hardwareName != null  ">#{hardwareName},</if>
+            <if test="isType != null  ">#{isType},</if>
+            <if test="isShiyong != null  ">#{isShiyong},</if>
+            <if test="shiyongAllCount != null  ">#{shiyongAllCount},</if>
+            <if test="shiyongCount != null  ">#{shiyongCount}</if>
+        </trim>
+    </insert>
+
+    <delete id="deleteType" parameterType="java.lang.Integer">
+        delete from project_marktype_infotable where project_id = #{id}
+    </delete>
+    <select id="selectAll" parameterType="ProjectMarkTypeInfoTable" resultMap="ProjectMarkTypeInfoResult">
+      select * from project_marktype_infotable where project_id=#{projectId}
+    </select>
+    <!--更新资源表信息-->
+    <update id="updateMarkInfo" parameterType="ProjectMarkTypeInfoTable">
+        update project_marktype_infotable
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null  ">project_id=#{projectId},</if>
+            <if test="hardwareName != null  ">hardware_name=#{hardwareName},</if>
+            <if test="isType != null  ">is_type=#{isType},</if>
+            <if test="isShiyong != null  ">is_shiyong=#{isShiyong},</if>
+            <if test="shiyongAllCount != null  ">shiyong_all_count=#{shiyongAllCount},</if>
+            <if test="shiyongCount != null  ">shiyong_count=#{shiyongCount}</if>
+        </trim>
+        where project_id=#{projectId}
+        and is_type=#{isType}
+    </update>
+</mapper>

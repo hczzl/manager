@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.ProduceTypeMapper">
+
+    <resultMap type="ProduceType" id="ProduceTypeResult">
+        <id property="id" column="id"/>
+        <result property="producename" column="produce_name"/>
+        <result property="projectmanager" column="project_manager"/>
+    </resultMap>
+
+    <select id="selectproductypeidlist" resultType="Integer">
+        SELECT id FROM produce_type
+    </select>
+
+    <select id="getprojectmanagerbyid" resultType="String">
+        SELECT project_manager FROM produce_type WHERE id=#{id}
+    </select>
+
+    <select id="selectproducetype" resultMap="ProduceTypeResult">
+        SELECT id,produce_name,project_manager FROM produce_type
+    </select>
+    <select id="selectTypeByUserId" parameterType="java.lang.String" resultType="java.lang.Integer">
+        SELECT id FROM produce_type where project_manager = #{projectManager}
+    </select>
+</mapper>

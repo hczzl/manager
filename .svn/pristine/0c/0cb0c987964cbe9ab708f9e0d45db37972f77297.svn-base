@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.auth.SysAuthUserMapper">
+
+    <select id="selectList" parameterType="com.ruoyi.web.domain.auth.SysAuthUser" resultType="Map">
+        select sa.auth_no as authNo,su.dept_id as deptId
+        from sys_auth_user s
+        left join sys_auth sa on sa.auth_id = s.auth_id
+        left join sys_user su on su.user_id = s.user_id
+        where 1 = 1
+        <if test="userId !=null and userId !=''">
+            and s.user_id = #{userId}
+        </if>
+        order by su.dept_id
+    </select>
+</mapper>

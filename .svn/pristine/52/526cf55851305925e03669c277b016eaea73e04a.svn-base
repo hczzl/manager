@@ -1,0 +1,44 @@
+package com.ruoyi.web.service.item.impl;
+
+
+import com.ruoyi.common.utils.DateUtils;
+import com.ruoyi.web.domain.SysYearMonth;
+import com.ruoyi.web.mapper.item.SysYearMonthMapper;
+import com.ruoyi.web.service.item.SysYearMonthService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+/**
+ * @date 2019-08-20
+ */
+@Service
+public class SysYearMonthServiceImpl implements SysYearMonthService {
+
+    @Autowired
+    private SysYearMonthMapper sysYearMonthMapper;
+
+    @Override
+    public List<SysYearMonth> selectInfos(SysYearMonth sysYearMonth) {
+        return sysYearMonthMapper.selectInfos(sysYearMonth);
+    }
+
+    /**
+     * 将本月的第一天和最后一天存入数据库中
+     *
+     * @param sysYearMonth
+     * @return
+     */
+    @Override
+    public int insertDate(SysYearMonth sysYearMonth) {
+        int a = 0;
+        sysYearMonth.setStartTime(DateUtils.getfirstday());
+        sysYearMonth.setEndTime(DateUtils.getlastday());
+        List<SysYearMonth> list = sysYearMonthMapper.selectInfos(sysYearMonth);
+        if (list.size() < 1) {
+            a = sysYearMonthMapper.insertDate(sysYearMonth);
+        }
+        return a;
+    }
+}

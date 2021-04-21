@@ -1,0 +1,1201 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.TaskTableMapper">
+
+
+    <resultMap type="TaskTable" id="TaskTableList">
+        <result property="tId" column="t_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="taskTitle" column="task_title"/>
+        <result property="taskDescribe" column="task_describe"/>
+        <result property="chargepeopleId" column="chargepeople_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="period" column="period"/>
+        <result property="urgencyLevel" column="urgency_level"/>
+        <result property="scheduleRate" column="schedule_rate"/>
+        <result property="warnFlag" column="warn_flag"/>
+        <result property="warnDays" column="warn_days"/>
+        <result property="warnToobject" column="warn_toobject"/>
+        <result property="remindChargePeople" column="remind_charge_people"/>
+        <result property="remindOthars" column="remind_othars"/>
+        <result property="warnStatus" column="warn_status"/>
+        <result property="taskSubmittime" column="task_submittime"/>
+        <result property="taskSubmitremark" column="task_submitremark"/>
+        <result property="taskUpdatefileftp" column="task_updatefileftp"/>
+        <result property="taskFinishflag" column="task_finishFlag"/>
+        <result property="taskOverdueState" column="task_overdue_state"/>
+        <result property="taskNotstartState" column="task_notstart_state"/>
+        <result property="planInOut" column="plan_in_out"/>
+        <result property="taskFinishsubmittime" column="task_finishSubmitTime"/>
+        <result property="taskRater" column="task_rater"/>
+        <result property="taskScore" column="task_score"/>
+        <result property="stopMone" column="stop_mone"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="chargepeopleName" column="chargepeople_name"/>
+        <result property="stopUser" column="stop_user"/>
+    </resultMap>
+
+    <resultMap type="TaskTable" id="TaskTableResult">
+        <result property="tId" column="t_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="taskTitle" column="task_title"/>
+        <result property="taskDescribe" column="task_describe"/>
+        <result property="chargepeopleId" column="chargepeople_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="period" column="period"/>
+        <result property="urgencyLevel" column="urgency_level"/>
+        <result property="scheduleRate" column="schedule_rate"/>
+        <result property="warnFlag" column="warn_flag"/>
+        <result property="warnDays" column="warn_days"/>
+        <result property="warnToobject" column="warn_toobject"/>
+        <result property="remindChargePeople" column="remind_charge_people"/>
+        <result property="remindOthars" column="remind_othars"/>
+        <result property="warnStatus" column="warn_status"/>
+        <result property="taskSubmittime" column="task_submittime"/>
+        <result property="taskSubmitremark" column="task_submitremark"/>
+        <result property="taskUpdatefileftp" column="task_updatefileftp"/>
+        <result property="taskFinishflag" column="task_finishFlag"/>
+        <result property="taskOverdueState" column="task_overdue_state"/>
+        <result property="taskNotstartState" column="task_notstart_state"/>
+        <result property="planInOut" column="plan_in_out"/>
+        <result property="taskFinishsubmittime" column="task_finishSubmitTime"/>
+        <result property="taskRater" column="task_rater"/>
+        <result property="taskScore" column="task_score"/>
+        <result property="stopMone" column="stop_mone"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="chargepeopleName" column="chargepeople_name"/>
+        <result property="stopUser" column="stop_user"/>
+        <association property="projectName" column="project_id" javaType="java.lang.String"
+                     select="com.ruoyi.web.mapper.item.SysProjectTableMapper.selectProjectNameById"/>
+        <association property="chargePeopleName" column="chargepeople_id" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserNameById"/>
+        <association property="chargePeopleUsers" column="chargepeople_id"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectDetptIdAndPostId"/>
+        <association property="createName" column="create_by" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserNameById"/>
+        <association property="taskPostpone" column="t_id" javaType="com.ruoyi.web.domain.TaskPostpone"
+                     select="selecttaskPostponeByTId"/>
+        <association property="taskSubnitPlan" column="t_id" select="selectTaskSubnitPlanByTId"/>
+        <association property="projectTable" column="project_id" select="selecProjectTableByTId"/>
+        <association property="fileInfoList" column="t_id" select="selecFileInfoListByTId"/>
+        <association property="taskUserList" column="t_id" select="selecTaskUserListByTId"/>
+        <association property="projectPlanName" column="parent_id" javaType="java.lang.String"
+                     select="selectPlanTitleById"/>
+        <association property="approvalCommitUserName" column="create_by" javaType="java.lang.String"
+                     select="com.ruoyi.web.mapper.audit.AuditFlowCurrentMapper.selectUserName"/>
+        <association property="taskStopMemo" column="t_id" javaType="java.lang.String" select="selectTaskStopMemo"/>
+        <association property="changeTimeMemo" column="t_id" javaType="java.lang.String" select="selectChangeTimeMemo"/>
+        <association property="currentAuditUser" column="t_id" javaType="java.lang.String"
+                     select="getTaskCurrentAuditUser"/>
+    </resultMap>
+    <resultMap type="TaskTableVo" id="TaskTableVoResult">
+        <id property="tId" column="t_id"/>
+        <result property="taskTitle" column="task_title"/>
+    </resultMap>
+    <resultMap type="ResultApprovalRecord" id="ResultApprovalRecordResult">
+        <id property="id" column="id"/>
+        <result property="currentId" column="current_id"/>
+        <result property="applyId" column="apply_id"/>
+        <result property="auditId" column="audit_id"/>
+        <result property="number" column="number"/>
+        <result property="approvalState" column="approval_state"/>
+        <result property="approvalUserId" column="approval_user_id"/>
+        <result property="approvalUserName" column="approval_user_name"/>
+        <result property="approvalMemo" column="approval_memo"/>
+    </resultMap>
+    <resultMap type="SysProjectTable" id="SysProjectTableResult">
+        <id property="pId" column="p_id"/>
+        <result property="title" column="title"/>
+        <result property="producetypeid" column="producetype_id"/>
+        <result property="describeProject" column="describe_project"/>
+        <result property="chargepeopleId" column="chargepeople_id"/>
+        <result property="businessParticipants" column="business_participants"/>
+        <result property="techniquePeople" column="technique_people"/>
+        <result property="period" column="period"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="planRate" column="plan_rate"/>
+        <result property="remark" column="remark"/>
+        <result property="establishTime" column="establish_time"/>
+        <result property="establishStatus" column="establish_status"/>
+        <result property="projectFinishFlag" column="project_finishFlag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="stopUser" column="stop_user"/>
+        <!--与市场项目有关的数据库字段-->
+        <result property="projectType" column="project_type"/>
+        <result property="customerIsEstablish" column="customer_isestablish"/>
+        <result property="buildPeriod" column="build_period"/>
+        <result property="expectTime" column="expect_time"/>
+        <result property="customerIsBudget" column="customer_isbudget"/>
+        <result property="budgetAmount" column="budget_amount"/>
+        <result property="budgetTime" column="budget_time"/>
+        <result property="budgettimeAndAmcount" column=" budgettime_and_amcount"/>
+        <result property="updateFilePath" column="update_filepath"/>
+        <result property="clientHighdirectorJob" column="client_highdirector_job"/>
+        <association property="projectPlanTableList" column="p_id" select="selectprojectPlanTable"/>
+        <association property="chargePeopleName" column="chargepeople_id" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserNameById"/>
+        <!--<association property="techniqueUsers" column="technique_people"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectDetptIdAndPostId"/>-->
+    </resultMap>
+    <resultMap type="com.ruoyi.web.domain.TaskUser" id="TaskUserResult">
+        <result property="tId" column="t_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+        <association property="sysUser" column="user_id"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectDetptIdAndPostId"/>
+    </resultMap>
+    <resultMap type="SysProjectTableVo" id="SysProjectTableVoResult">
+        <id property="pId" column="p_id"/>
+        <result property="projectCache" column="project_cache"/>
+        <result property="techniquePeople" column="technique_people"/>
+        <result property="title" column="title"/>
+        <result property="inOrOut" column="in_or_out"/>
+        <result property="projectType" column="project_type"/>
+        <result property="chargepeopleId" column="chargepeople_id"/>
+        <result property="businessParticipants" column="business_participants"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="planRate" column="plan_rate"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="projectFinishFlag" column="project_finishFlag"/>
+        <result property="establishStatus" column="establish_status"/>
+        <result property="projectManager" column="project_manager"/>
+        <result property="stopUser" column="stop_user"/>
+    </resultMap>
+    <resultMap type="SysUserVo" id="SysUserVoResult">
+        <id property="userId" column="user_id"/>
+        <result property="userName" column="user_name"/>
+    </resultMap>
+    <select id="selectUserInfoList" parameterType="java.lang.String" resultMap="SysUserVoResult">
+        select * from sys_user
+        where
+        user_id in
+        <foreach item="status" collection="projectManager.split(',')" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+    </select>
+    <sql id="selectTaskTableVo">
+        select a.t_id,a.parent_id,a.project_id,a.task_title,a.task_finishFlag,a.task_describe,a.chargepeople_id,a.start_time,a.end_time,a.warn_toobject,a.period,
+        a.urgency_level,a.warn_status,a.warn_flag,a.warn_days,a.task_overdue_state,a.task_notstart_state,a.schedule_rate,a.remind_charge_people,
+        a.remind_othars,a.task_submittime,a.task_submitremark,a.task_updatefileftp,a.plan_in_out,a.task_finishSubmitTime,a.create_by,
+        a.create_time,a.update_by,a.update_time,a.stop_mone,task_score,task_rater,
+        (SELECT user_name  FROM sys_user  WHERE user_id=a.chargepeople_id) as chargepeople_name,
+        (SELECT user_name  FROM sys_user  WHERE user_id=a.create_by) as create_name from task_table a
+         LEFT JOIN  project_table c ON a.project_id=c.p_id
+         LEFT JOIN sys_user b ON b.user_id=a.chargepeople_id
+    </sql>
+    <sql id="taskTableVo">
+        SELECT  t_id,parent_id,project_id,task_title,task_finishFlag,task_describe,chargepeople_id,start_time,end_time,warn_toobject,period,
+        urgency_level,warn_status,warn_flag,warn_days,task_overdue_state,task_notstart_state,schedule_rate,remind_charge_people,
+        remind_othars,task_submittime,task_submitremark,task_updatefileftp,plan_in_out,task_finishSubmitTime,stop_mone,create_by,
+        create_time,update_by,update_time,task_score,task_rater,stop_user
+        FROM task_table
+    </sql>
+    <select id="selecApprovalRecordListByProjectId" parameterType="ResultApprovalRecord"
+            resultMap="ResultApprovalRecordResult">
+        select id,current_id,apply_id,audit_id,number,approval_user_id,approval_user_name,approval_state,approval_memo from result_approval_record where apply_id=#{t_id}
+    </select>
+    <select id="selectAllTask" parameterType="TaskTable" resultMap="TaskTableResult">
+        SELECT
+        t.t_id,p.title,t.task_title,t.end_time,t.start_time,t.urgency_level,t.task_describe,t.parent_id,t.stop_mone,
+        t.create_by,t.period,t.create_time,t.task_finishFlag,t.parent_id,t.plan_in_out,
+        t.remind_charge_people,t.remind_panticiants,t.remind_othars,t.task_overdue_state,
+        t.schedule_rate,t.warn_days,t.warn_toobject,t.task_updatefileftp,t.project_id,t.chargepeople_id,
+        l.plan_id,t.stop_user,t.task_score,t.task_rater
+        FROM task_table t
+        LEFT JOIN project_table p ON p.p_id=t.project_id
+        LEFT JOIN sys_user s ON t.chargepeople_id=s.user_id
+        LEFT JOIN project_plantable l ON l.plan_id=t.parent_id and l.project_id=t.project_id
+        <where>
+            and t.task_finishFlag > -1
+            <if test="projectId !=null">and t.project_id=#{projectId}</if>
+            <if test="parentId !=null">and t.parent_id=#{parentId}</if>
+        </where>
+        and t.task_finishFlag !='8'
+        <if test="pages!=0">
+            ORDER by t.create_time DESC
+            limit #{pageNumber},#{total}
+        </if>
+    </select>
+    <!--查询临时任务接口-->
+    <select id="selectTemporaryTask" parameterType="TaskTable" resultMap="TaskTableResult">
+        select  t.t_id,t.task_title,t.end_time,t.start_time,t.urgency_level,t.task_describe,t.parent_id,t.create_by,
+        t.remind_charge_people,t.remind_panticiants,t.remind_othars,t.plan_in_out,
+	            t.schedule_rate,t.warn_days,t.warn_toobject,t.task_updatefileftp,t.project_id,t.chargepeople_id,t.create_time,t.stop_user
+        FROM task_table t WHERE
+        t.project_id = 0
+        and t.parent_id = 0
+        and t.task_finishFlag > -1
+        order by t.create_time desc
+    </select>
+    <!--获得下属任务getLowerTask-->
+    <select id="getLowerTask" parameterType="Integer" resultMap="TaskTableResult">
+        <include refid="taskTableVo"/>
+        where task_finishFlag > -1 and t_id=#{tId}
+    </select>
+    <select id="selecttaskPostponeByTId" parameterType="Long"
+            resultMap="com.ruoyi.web.mapper.item.TaskPostponeMapper.TaskPostponeResult">
+       SELECT id,t_id,start_time,end_time,state,period,memo,create_time,update_time
+       FROM task_postpone  WHERE  id=(SELECT MAX(id) FROM task_postpone WHERE t_id=#{t_id}) AND state=1
+    </select>
+    <select id="selectTaskStopMemo" parameterType="long" resultType="String">
+        SELECT m.stop_mone FROM task_stop_mone m LEFT JOIN task_table t ON m.t_id=t.t_id
+        WHERE
+        m.t_id=#{t_id}
+        and m.id IN (SELECT MAX(id) FROM task_stop_mone WHERE t_id =#{t_id})
+        <!--and (select task_finishFlag from task_table where t_id=#{t_id}) in ('2')-->
+    </select>
+    <select id="selectChangeTimeMemo" parameterType="long" resultType="String">
+        SELECT p.memo FROM task_postpone p
+        WHERE
+        p.t_id=#{t_id}
+        and p.id IN (SELECT MAX(id) FROM task_postpone WHERE t_id =#{t_id})
+    </select>
+    <select id="selectTaskSubnitPlanByTId" parameterType="Long"
+            resultMap="com.ruoyi.web.mapper.item.TaskSubnitPlanMapper.TaskSubnitPlanResult">
+        SELECT id,t_id,schedule_rate,task_submittime,memo,create_by
+        FROM task_subnit_plan   WHERE  t_id=#{t_id}
+    </select>
+    <select id="selecProjectTableByTId" parameterType="Long" resultMap="SysProjectTableResult">
+        SELECT  p_id,title,producetype_id,chargepeople_id,technique_people,project_manager,project_type,establish_status,project_finishFlag,period,start_time,end_time,plan_rate,establish_time,
+        department_id,memo,customer_isestablish,describe_project,build_period,expect_time,customer_isbudget,budget_amount,budget_time,budgettime_and_amcount,
+        update_filepath,client_highdirector_job,client_highdupdirector_job,client_midbranchleader_job,client_middupbranchleader_authority,client_middupbranchleader_job,
+        client_midcommissar_job,client_highdirector_authority,client_highdupdirector_authority,client_midbranchleader_authority,client_midcommissar_anthority,
+        client_highdirector_reporting,client_highdupdirector_reporting,client_midbranchleader_reporting,client_middupbranchleader_reporting,client_midcommissar_reporting,
+        client_highdirector_meet,client_midbranchleader_meet,client_highdupdirector_meet,client_middupbranchleader_meet,client_midcommissar_meet,client_highdirector_transmit,
+        client_highdupdirector_transmit,client_midbranchleader_transmit,client_middupbranchleader_transmit,client_midcommissar_transmit,client_highdirector_will,
+        client_highdupdirector_will,client_midbranchleader_will,client_middupbranchleader_will,client_midcommissar_will,client_lowinfluence,need_background,need_application,
+        need_understand,need_feasible,need_endTime,is_dianzi,dianzi_period,dianzi_money,is_shiyong,shiyong_period,risk_describe_business,risk_solutions_business,
+        risk_describe_technique,risk_solutions_technique,create_by,create_time,update_by,update_time
+        FROM project_table
+        WHERE  p_id=#{project_id}
+    </select>
+    <select id="selectprojectPlanTable" parameterType="Long"
+            resultMap="com.ruoyi.web.mapper.item.ProjectPlanMapper.PlanTableResult">
+        select pp.plan_id,pp.project_id,pp.plan_sn,pp.plan_title,pp.plan_endTime,pp.plan_startTime,pp.create_time,pp.update_time
+        from project_plantable pp WHERE pp.project_id=#{p_id}
+    </select>
+    <select id="getAllTitle" parameterType="TaskTable" resultType="java.lang.Integer">
+        SELECT COUNT(task_title) FROM task_table;
+    </select>
+    <select id="selecTaskUserListByTId" parameterType="Long" resultMap="TaskUserResult">
+        SELECT a.t_id,a.user_id,
+        (SELECT user_name  FROM sys_user  WHERE user_id=a.user_id) as user_name FROM task_user a WHERE a.t_id=#{t_id};
+    </select>
+    <select id="selecFileInfoListByTId" parameterType="Long"
+            resultMap="com.ruoyi.web.mapper.SysFileInfoMapper.FileInfoResult">
+        SELECT
+            f.file_id,f.file_name,f.file_path,f.file_type,f.work_id,f.file_time,f.`user_id`,u.`user_name`
+        FROM
+            sys_user AS u
+	    LEFT JOIN
+	        sys_file_info AS f
+        ON
+            u.`user_id`=f.`user_id`
+        WHERE
+            f.file_type=0
+            AND  f.work_id=#{p_id}
+    </select>
+    <select id="selectPlanTitleById" parameterType="Long" resultType="String">
+        select plan_title from project_plantable
+        where plan_id = #{parentId}
+    </select>
+
+    <select id="selectTaskTableList" parameterType="TaskTable" resultMap="TaskTableResult">
+        select
+        a.t_id,a.parent_id,a.project_id,a.task_title,a.task_finishFlag,a.task_describe,a.chargepeople_id,a.start_time,a.end_time,a.warn_toobject,a.period,
+        a.urgency_level,a.warn_status,a.warn_flag,a.warn_days,a.task_overdue_state,a.task_notstart_state,a.schedule_rate,a.remind_charge_people,
+        a.remind_panticiants,a.remind_othars,a.task_submittime,a.task_submitremark,a.task_updatefileftp,a.plan_in_out,a.stop_mone,a.create_by,a.task_score,a.task_rater,a.stop_user,
+        (SELECT user_name FROM sys_user WHERE user_id=a.chargepeople_id) as chargepeople_name,
+        c.project_type as projectType,
+        (SELECT user_name FROM sys_user WHERE user_id=a.create_by) as create_name from task_table a
+        LEFT JOIN project_table c ON a.project_id=c.p_id
+        LEFT JOIN sys_user b ON b.user_id=a.chargepeople_id
+        <where>
+            <trim prefixOverrides="and">
+
+                <if test="createBy != null ">and a.create_by = #{createBy}</if>
+                <!--紧急程度-->
+                <if test="urgencyLevel !=null and  urgencyLevel !=''">and urgency_level = #{urgencyLevel}</if>
+
+                <if test="chargepeopleId != null ">and a.chargepeople_id = #{chargepeopleId}</if>
+
+                <!--根据任务状态-->
+                <if test="taskFinishflag !=null and taskFinishflag!=''">
+                    and a.task_finishFlag=#{taskFinishflag}
+                </if>
+                <if test="taskFinishflag ==null or taskFinishflag ==''">
+                    and a.task_finishFlag > -1
+                </if>
+                <!--计划内外-->
+                <if test="planInOut !=null">
+                    and a.plan_in_out=#{planInOut}
+                </if>
+                <!--项目查询-->
+                <if test="projectId !=null">
+                    and a.project_id=#{projectId}
+                </if>
+
+                <!--用来获取逾期的任务的-->
+                <if test="overdue==1">
+                    and a.task_overdue_state ='0'
+                </if>
+                <if test="searchUnderling !=null">b.user_id IN (SELECT user_id FROM sys_user c WHERE c.dept_id IN(SELECT
+                    t.dept_id FROM sys_dept t WHERE FIND_IN_SET (100,ancestors)))
+                </if>
+                <if test="searchDepeId == 1 ">and b.user_id IN (SELECT user_id FROM sys_user c WHERE c.dept_id IN(SELECT
+                    t.dept_id FROM sys_dept t WHERE FIND_IN_SET (${searchDepeId},ancestors)))
+                </if>
+
+                <!--参与人-->
+                <if test="attention != null ">and a.t_id IN (SELECT t_id FROM user_task_attention where
+                    user_id=#{attention})
+                </if>
+
+                <!--遍历peopleList中的值-->
+                <if test="peopleList !=null and peopleList.size()>0">
+                    and a.t_id in
+                    <foreach item="item" index="index" open="(" separator="," close=")" collection="peopleList">
+                        #{item}
+                    </foreach>
+                </if>
+
+                <!--部门查询-->
+                <if test="deptId !=null">
+                    and a.t_id IN(
+                    SELECT event_id FROM project_task_table WHERE type_id!=1 AND user_id IN
+                    (SELECT user_id FROM sys_user WHERE dept_id=#{deptId}))
+                </if>
+
+                <!--时间查询-->
+                <if test="startTime!=null and endTime!=null">
+                    and(
+                    (a.start_time &lt;= #{endTime} and a.end_time &gt;=#{endTime}) or
+                    (a.start_time &gt;= #{startTime} and a.end_time &lt;=#{endTime}) or
+                    (a.start_time &lt;= #{endTime} and a.end_time &gt;=#{startTime})
+                    )
+
+                </if>
+
+                <!--关键字查询-->
+                <if test="projectName !=null">AND (( c.title like concat('%', #{projectName}, '%')) or (b.user_name like
+                    concat('%', #{projectName}, '%')) or (a.task_title like concat('%', #{projectName}, '%')) )
+                </if>
+                and a.task_finishFlag !='8'
+            </trim>
+        </where>
+        limit #{pageNumber},#{total}
+    </select>
+    <select id="selectTaskTableListCount" parameterType="TaskTable" resultType="java.lang.Integer">
+        select count(*) from task_table a
+        LEFT JOIN project_table c ON a.project_id=c.p_id
+        LEFT JOIN sys_user b ON b.user_id=a.chargepeople_id
+        <where>
+            <trim prefixOverrides="and">
+
+                <if test="createBy != null ">and a.create_by = #{createBy}</if>
+                <!--紧急程度-->
+                <if test="urgencyLevel !=null and  urgencyLevel !=''">and urgency_level = #{urgencyLevel}</if>
+
+                <if test="chargepeopleId != null ">and a.chargepeople_id = #{chargepeopleId}</if>
+
+                <!--根据任务状态-->
+                <if test="taskFinishflag !=null and taskFinishflag!=''">
+                    and a.task_finishFlag=#{taskFinishflag}
+                </if>
+                <if test="taskFinishflag ==null or taskFinishflag ==''">
+                    and a.task_finishFlag > -1
+                </if>
+                <!--计划内外-->
+                <if test="planInOut !=null">
+                    and a.plan_in_out=#{planInOut}
+                </if>
+                <!--项目查询-->
+                <if test="projectId !=null">
+                    and a.project_id=#{projectId}
+                </if>
+
+                <!--用来获取逾期的任务的-->
+                <if test="overdue==1">
+                    and a.task_overdue_state ='0'
+                </if>
+                <if test="searchUnderling !=null">b.user_id IN (SELECT user_id FROM sys_user c WHERE c.dept_id IN(SELECT
+                    t.dept_id FROM sys_dept t WHERE FIND_IN_SET (100,ancestors)))
+                </if>
+                <if test="searchDepeId == 1 ">and b.user_id IN (SELECT user_id FROM sys_user c WHERE c.dept_id IN(SELECT
+                    t.dept_id FROM sys_dept t WHERE FIND_IN_SET (${searchDepeId},ancestors)))
+                </if>
+
+
+                <!--参与人-->
+                <if test="attention != null ">and a.t_id IN (SELECT t_id FROM user_task_attention where
+                    user_id=#{attention})
+                </if>
+
+                <!--遍历peopleList中的值-->
+                <if test="peopleList !=null and peopleList.size()>0">
+                    and a.t_id in
+                    <foreach item="item" index="index" open="(" separator="," close=")" collection="peopleList">
+                        #{item}
+                    </foreach>
+                </if>
+
+                <!--部门查询-->
+                <if test="deptId !=null">
+                    and a.t_id IN(
+                    SELECT event_id FROM project_task_table WHERE type_id!=1 AND user_id IN
+                    (SELECT user_id FROM sys_user WHERE dept_id=#{deptId}))
+                </if>
+
+                <!--时间查询-->
+                <if test="startTime!=null and endTime!=null">
+                    and(
+                    (a.start_time &lt;= #{endTime} and a.end_time &gt;=#{endTime}) or
+                    (a.start_time &gt;= #{startTime} and a.end_time &lt;=#{endTime}) or
+                    (a.start_time &lt;= #{endTime} and a.end_time &gt;=#{startTime})
+                    )
+                </if>
+                <!--关键字查询-->
+                <if test="projectName !=null">AND (( c.title like concat('%', #{projectName}, '%')) or (b.user_name like
+                    concat('%', #{projectName}, '%')) or (a.task_title like concat('%', #{projectName}, '%')) )
+                </if>
+                and a.task_finishFlag !='8'
+            </trim>
+        </where>
+    </select>
+    <!--实现我的任务功能-->
+    <select id="selectTaskByTid1" parameterType="TaskTable" resultMap="TaskTableResult">
+        <include refid="selectTaskTableVo"/>
+        <where>
+            a.task_finishFlag > -1
+            <if test="urgencyLevel !=null and urgencyLevel !=''">and urgency_level = #{urgencyLevel}</if>
+            <if test="planInOut !=null and planInOut!=''">and plan_in_out = #{planInOut}</if>
+            <if test="taskFinishflag != null and taskFinishflag !=''">and a.task_finishFlag=#{taskFinishflag}</if>
+            <if test="projectId != null and projectId !=''">and a.project_id=#{projectId}</if>
+            <if test="tId !=null and tId !='' ">and a.t_id=#{tId}</if>
+            <if test="deptId !=null and deptId !=''">
+                and a.t_id in (select event_id from project_task_table where type_id = 0
+                and user_id in (select user_id from sys_user where dept_id =#{deptId}))
+            </if>
+            <!--时间查询-->
+            <if test="startTimes != 0 and endTimes != 0 ">
+                and (UNIX_TIMESTAMP( a.start_time ) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND UNIX_TIMESTAMP( #{endTime})
+                OR UNIX_TIMESTAMP( a.end_time ) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND UNIX_TIMESTAMP( #{endTime} ))
+            </if>
+            <if test="startTimes != 0 and endTimes == 0">
+                and (UNIX_TIMESTAMP( a.start_time) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND 253397894400000
+                OR UNIX_TIMESTAMP( a.end_time ) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND 253397894400000)
+            </if>
+            <if test="startTimes == 0 and endTimes != 0">
+                and (UNIX_TIMESTAMP( a.end_time ) BETWEEN 0 AND UNIX_TIMESTAMP( #{endTime} )
+                OR UNIX_TIMESTAMP( a.start_time ) BETWEEN 0 AND UNIX_TIMESTAMP( #{endTime} ))
+            </if>
+            <!--关键字查询-->
+            <if test="projectName !=null">AND (( c.title like concat('%', #{projectName}, '%')) or (b.user_name like
+                concat('%', #{projectName}, '%')) or (a.task_title like concat('%', #{projectName}, '%')) )
+            </if>
+        </where>
+        order by a.end_time
+    </select>
+
+    <select id="selectListByChargeId" parameterType="TaskTable" resultMap="TaskTableResult">
+        <include refid="selectTaskTableVo"/>
+        <where>
+            and a.task_finishFlag > -1 and task_finishFlag not in(2)
+            <if test="createBy != null ">and a.create_by = #{createBy}</if>
+            <if test="urgencyLevel != null ">and urgency_level = #{urgencyLevel}</if>
+            <if test="taskFinishflag !='2' and taskFinishflag != null ">and a.task_finishFlag not IN (2)</if>
+            <if test="attention != null ">and a.t_id in (SELECT t_id FROM user_task_attention where user_id =
+                #{attention})
+            </if>
+            <if test="chargepeopleId != null ">and a.chargepeople_id = #{chargepeopleId}</if>
+            <if test="startTimes != 0 and endTimes != 0 ">
+                and (UNIX_TIMESTAMP( a.start_time ) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND UNIX_TIMESTAMP( #{endTime}
+                )
+                OR UNIX_TIMESTAMP( a.end_time ) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND UNIX_TIMESTAMP( #{endTime} ))
+            </if>
+            <if test="startTimes != 0 and endTimes == 0">
+                and (UNIX_TIMESTAMP( a.start_time) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND 253397894400000
+                OR UNIX_TIMESTAMP( a.end_time ) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND 253397894400000)
+            </if>
+            <if test="startTimes == 0 and endTimes != 0">
+                and (UNIX_TIMESTAMP( a.end_time ) BETWEEN 0 AND UNIX_TIMESTAMP( #{endTime} )
+                OR UNIX_TIMESTAMP( a.start_time ) BETWEEN 0 AND UNIX_TIMESTAMP( #{endTime} ))
+            </if>
+        </where>
+    </select>
+
+    <select id="getAllTaskTable" parameterType="TaskTable" resultMap="TaskTableList">
+        <include refid="selectTaskTableVo"/>
+        <where>
+            and a.task_finishFlag > -1
+        </where>
+    </select>
+    <select id="selectTaskTableById" parameterType="Long" resultMap="TaskTableResult">
+        <include refid="selectTaskTableVo"/>
+        where t_id = #{tId} ORDER by a.create_time DESC
+    </select>
+    <select id="getStartTime" parameterType="TaskTable" resultType="java.util.Date">
+    select start_time from task_table where t_id=#{tId}
+    </select>
+    <insert id="insertTaskTable" parameterType="TaskTable" useGeneratedKeys="true" keyProperty="tId">
+        insert into task_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null ">project_id,</if>
+            <if test="taskTitle != null  and taskTitle != ''">task_title,</if>
+            <if test="taskDescribe != null  and taskDescribe != ''">task_describe,</if>
+            <if test="chargepeopleId != null ">chargepeople_id,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+            <if test="period != null ">period,</if>
+            <if test="urgencyLevel != null  and urgencyLevel != ''">urgency_level,</if>
+            <if test="scheduleRate != null ">schedule_rate,</if>
+            <if test="warnFlag != null  and warnFlag != ''">warn_flag,</if>
+            <if test="warnDays != null  and warnDays != ''">warn_days,</if>
+            <if test="remindChargePeople != null ">remind_charge_people,</if>
+            <if test="remindPanticiants != null ">remind_panticiants,</if>
+            <if test="remindOthars != null ">remind_othars,</if>
+            <if test="warnStatus != null  and warnStatus != ''">warn_status,</if>
+            <if test="taskSubmittime != null ">task_submittime,</if>
+            <if test="taskSubmitremark != null  and taskSubmitremark != ''">task_submitremark,</if>
+            <if test="taskUpdatefileftp != null  and taskUpdatefileftp != ''">task_updatefileftp,</if>
+            <if test="taskFinishflag != null  and taskFinishflag != ''">task_finishFlag,</if>
+            <if test="planInOut != null  and planInOut != ''">plan_in_out,</if>
+            <if test="taskFinishsubmittime != null ">task_finishSubmitTime,</if>
+            <if test="stopMone != null  and stopMone != ''">stop_mone,</if>
+            <if test="createBy != null and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time</if>
+
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="taskTitle != null  and taskTitle != ''">#{taskTitle},</if>
+            <if test="taskDescribe != null  and taskDescribe != ''">#{taskDescribe},</if>
+            <if test="chargepeopleId != null ">#{chargepeopleId},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="period != null ">#{period},</if>
+            <if test="urgencyLevel != null  and urgencyLevel != ''">#{urgencyLevel},</if>
+            <if test="scheduleRate != null ">#{scheduleRate},</if>
+            <if test="warnFlag != null  and warnFlag != ''">#{warnFlag},</if>
+            <if test="warnDays != null  and warnDays != ''">#{warnDays},</if>
+            <!--<if test="warnToobject != null  and warnToobject != ''">#{warnToobject},</if>-->
+            <if test="remindChargePeople != null ">#{remindChargePeople},</if>
+            <if test="remindPanticiants != null ">#{remindPanticiants},</if>
+            <if test="remindOthars != null">#{remindOthars},</if>
+            <if test="warnStatus != null  and warnStatus != ''">#{warnStatus},</if>
+            <if test="taskSubmittime != null ">#{taskSubmittime},</if>
+            <if test="taskSubmitremark != null  and taskSubmitremark != ''">#{taskSubmitremark},</if>
+            <if test="taskUpdatefileftp != null  and taskUpdatefileftp != ''">#{taskUpdatefileftp},</if>
+            <if test="taskFinishflag != null  and taskFinishflag != ''">#{taskFinishflag},</if>
+            <if test="planInOut != null  and planInOut != ''">#{planInOut},</if>
+            <if test="taskFinishsubmittime != null ">#{taskFinishsubmittime},</if>
+            <if test="stopMone != null  and stopMone != ''">#{stopMone},</if>
+            <if test="createBy != null and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime}</if>
+        </trim>
+    </insert>
+
+    <update id="updateTaskTable" parameterType="TaskTable">
+        update task_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null ">project_id = #{projectId},</if>
+            <if test="parentId != null and parentId!=''">parent_id = #{parentId},</if>
+            <if test="taskTitle != null  and taskTitle !=''">task_title = #{taskTitle},</if>
+            <if test="taskDescribe != null">task_describe = #{taskDescribe},</if>
+            <if test="chargepeopleId != null and chargepeopleId !=''">chargepeople_id = #{chargepeopleId},</if>
+            <if test="startTime != null ">start_time = #{startTime},</if>
+            <if test="endTime != null ">end_time = #{endTime},</if>
+            <if test="period != null ">period = #{period},</if>
+            <if test="urgencyLevel != null">urgency_level = #{urgencyLevel},</if>
+            <if test="scheduleRate != null and scheduleRate != ''">schedule_rate = #{scheduleRate},</if>
+            <if test="warnFlag != null ">warn_flag = #{warnFlag},</if>
+            <if test="warnDays != null and  warnDays !=''">warn_days = #{warnDays},</if>
+            <if test="warnToobject != null ">warn_toobject = #{warnToobject},</if>
+            <if test="remindChargePeople != null and remindChargePeople!=''">remind_charge_people =
+                #{remindChargePeople},
+            </if>
+            <if test="remindPanticiants != null and remindPanticiants !=''">remind_panticiants = #{remindPanticiants},
+            </if>
+            <if test="remindOthars != null and  remindOthars!=''">remind_othars = #{remindOthars},</if>
+            <if test="warnStatus != null ">warn_status = #{warnStatus},</if>
+            <if test="taskSubmittime != null ">task_submittime = #{taskSubmittime},</if>
+            <if test="taskSubmitremark != null ">task_submitremark = #{taskSubmitremark},</if>
+            <if test="taskUpdatefileftp != null ">task_updatefileftp=#{taskUpdatefileftp},</if>
+            <if test="taskFinishflag != null ">task_finishFlag = #{taskFinishflag},</if>
+            <if test="planInOut != null and planInOut !=''">plan_in_out = #{planInOut},</if>
+            <if test="taskFinishsubmittime != null ">task_finishSubmitTime = #{taskFinishsubmittime},</if>
+            <if test="taskScore != null ">task_score = #{taskScore},</if>
+            <if test="taskRater != null ">task_rater = #{taskRater},</if>
+            <if test="stopMone != null ">stop_mone = #{stopMone},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="stopUser != null">stop_user = #{stopUser},</if>
+            <if test="taskOverdueState != null">task_overdue_state = #{taskOverdueState},</if>
+        </trim>
+        where t_id = #{tId}
+    </update>
+
+    <update id="updateTaskTableByFlag" parameterType="TaskTable">
+        update task_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="taskFinishflag != null">task_finishFlag = #{taskFinishflag},</if>
+            <if test="stopMone != null and stopMone !=''">stop_mone = #{stopMone},</if>
+            <if test="scheduleRate != null">schedule_rate = #{scheduleRate},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="taskDescribe != null">task_describe=#{taskDescribe}</if>
+            <if test="taskOverdueState != null">task_overdue_state=#{taskOverdueState},</if>
+            <if test="stopUser != null and stopUser !=''">stop_user = #{stopUser}</if>
+        </trim>
+        where t_id = #{tId}
+    </update>
+    <delete id="deleteTaskTableById" parameterType="Long">
+        delete from task_table where t_id = #{tId}
+    </delete>
+
+    <delete id="deleteTaskTableByIds" parameterType="String">
+        delete from task_table where t_id in
+        <foreach collection="tIds" item="tId" open="(" separator="," close=")">
+            #{tId}
+        </foreach>
+    </delete>
+
+    <update id="quashTaskByIds" parameterType="String">
+        update task_table set task_finishFlag = '8' where t_id in
+        <foreach collection="tIds" item="tId" open="(" separator="," close=")">
+            #{tId}
+        </foreach>
+    </update>
+
+    <select id="getAllTaskRemind" parameterType="TaskTable" resultMap="TaskTableResult">
+            select * from
+    </select>
+
+    <select id="selectWarnList" parameterType="Map" resultType="Map">
+        select
+        t_id tId,
+        parent_id parentId,
+        project_id projectId,
+        task_title taskTitle,
+        task_finishFlag taskFinishFlag,
+        task_describe taskDescribe,
+        chargepeople_id chargepeopleId,
+        start_time startTime,
+        end_time endTime,
+        period,
+        urgency_level urgencyLevel,
+        schedule_rate scheduleRate,
+        warn_flag warnFlag,
+        warn_days warnDays,
+        warn_toobject warnToobject,
+        remind_charge_people remindChargePeople,
+        remind_othars remindOthars,
+        warn_status warnStatus,
+        task_submittime taskSubmittime,
+        task_submitremark taskSubmitremark,
+        task_updatefileftp taskUpdatefileftp,
+        plan_in_out planInOut,
+        task_finishSubmitTime taskFinishSubmitTime,
+        stop_mone stopMone,
+        create_by createBy,
+        create_time createTime,
+        update_by updateBy,
+        update_time updateTime,
+        task_overdue_state overdueState,
+        task_notstart_state notstartState
+        from task_table
+        where
+        start_time is not null
+        and end_time is not null
+        and
+        (
+        <!--任务未完成,任务到期日到期前。提醒状态为0，的情况，向负责人提醒-->
+        (warn_flag ='1' and (task_finishFlag > -1 and warn_status = '0' and end_time > now()))
+        OR
+        <!--任务未完成,任务到期日到期前。提醒状态为0，的情况，向负责人提醒-->
+        (task_finishFlag > -1 and task_overdue_state = '0' and urgency_level = '1' and end_time &lt;=now())
+        OR
+        <!--任务未完成,任务未开始0，进度为0,的情况，向负责人提醒-->
+        (task_finishFlag > -1 and task_notstart_state = '0' and end_time &gt; now() and schedule_rate = 0 )
+        )
+        limit #{start},#{end}
+    </select>
+    <!---and warn_flag = "1"-->
+    <update id="update" parameterType="Map">
+        update task_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="warnStatus != null ">warn_status = #{warnStatus},</if>
+            <if test="notstartState != null ">task_notstart_state = #{notstartState},</if>
+            <if test="overdueState != null ">task_overdue_state = #{overdueState},</if>
+            <if test="taskFinishflag != null and taskFinishflag !=''">task_finishFlag = #{taskFinishflag}</if>
+        </trim>
+        where t_id = #{tId}
+    </update>
+    <select id="selectChargePeopleId" parameterType="java.lang.Integer" resultType="Integer">
+     SELECT p.chargepeople_id FROM task_table t,project_table p
+     WHERE  t.project_id=p.p_id AND t.t_id=#{tId}
+    </select>
+
+    <select id="selectTechniqueUserId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+     SELECT p.technique_people FROM task_table t,project_table p
+     WHERE  t.project_id=p.p_id AND t.t_id=#{tId}
+    </select>
+    <select id="queryProjectBytId" parameterType="java.lang.Long" resultMap="SysProjectTableVoResult">
+        select p.p_id,p.chargepeople_id,p.technique_people,p.project_type
+        from task_table t,project_table p
+        where  t.project_id=p.p_id AND t.t_id=#{tId}
+    </select>
+    <select id="selectProjectId" parameterType="java.lang.Long" resultType="Integer">
+     SELECT project_id FROM task_table WHERE  t_id=#{tId}
+    </select>
+    <!--获取任务进度-->
+    <select id="selectTaskSchedule" parameterType="TaskTable" resultType="Integer">
+     SELECT schedule_rate FROM task_table WHERE  t_id=#{tId}
+    </select>
+    <select id="selectCreateId" parameterType="java.lang.Long" resultType="String">
+     SELECT create_by FROM task_table WHERE  t_id=#{tId}
+    </select>
+    <select id="selectTaskInfos" parameterType="java.lang.Long" resultMap="TaskTableResult">
+     SELECT create_by,chargepeople_id,task_finishFlag,project_id FROM task_table WHERE  t_id=#{tId}
+    </select>
+
+    <insert id="insertTaskTableForPlan" parameterType="TaskTable" useGeneratedKeys="true" keyProperty="tId">
+        insert into task_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null ">project_id,</if>
+            <if test="taskTitle != null ">task_title,</if>
+            <if test="taskDescribe != null and taskDescribe !=''">task_describe,</if>
+            <if test="chargepeopleId != null ">chargepeople_id,</if>
+            <if test="parentId != null ">parent_id,</if>
+            <if test="startTime != null ">start_time,</if>
+            <if test="endTime != null ">end_time,</if>
+            <if test="period != null ">period,</if>
+            <if test="urgencyLevel != null  and urgencyLevel != ''">urgency_level,</if>
+            <if test="scheduleRate != null ">schedule_rate,</if>
+            <if test="warnFlag != null  and warnFlag != ''">warn_flag,</if>
+            <if test="warnDays != null  and warnDays != ''">warn_days,</if>
+            <!--<if test="warnToobject != null  and warnToobject != ''">warn_toobject,</if>-->
+            <if test="remindChargePeople != null ">remind_charge_people,</if>
+            <if test="remindPanticiants != null ">remind_panticiants,</if>
+            <if test="remindOthars != null">remind_othars,</if>
+            <if test="warnStatus != null  and warnStatus != ''">warn_status,</if>
+            <if test="taskSubmittime != null ">task_submittime,</if>
+            <if test="taskSubmitremark != null  and taskSubmitremark != ''">task_submitremark,</if>
+            <if test="taskUpdatefileftp != null  and taskUpdatefileftp != ''">task_updatefileftp,</if>
+            <if test="taskFinishflag != null  and taskFinishflag != ''">task_finishFlag,</if>
+            <if test="planInOut != null  and planInOut != ''">plan_in_out,</if>
+            <if test="taskFinishsubmittime != null ">task_finishSubmitTime,</if>
+            <if test="stopMone != null  and stopMone != ''">stop_mone,</if>
+            <if test=" createBy != null">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="taskImportedBy != null ">task_imported_by,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="taskTitle != null  and taskTitle != ''">#{taskTitle},</if>
+            <if test="taskDescribe != null  and taskDescribe != ''">#{taskDescribe},</if>
+            <if test="chargepeopleId != null ">#{chargepeopleId},</if>
+            <if test="parentId != null ">#{parentId},</if>
+            <if test="startTime != null ">#{startTime},</if>
+            <if test="endTime != null ">#{endTime},</if>
+            <if test="period != null ">#{period},</if>
+            <if test="urgencyLevel != null  and urgencyLevel != ''">#{urgencyLevel},</if>
+            <if test="scheduleRate != null ">#{scheduleRate},</if>
+            <if test="warnFlag != null  and warnFlag != ''">#{warnFlag},</if>
+            <if test="warnDays != null  and warnDays != ''">#{warnDays},</if>
+            <!--<if test="warnToobject != null and warnToobject != ''">#{warnToobject},</if>-->
+            <if test="remindChargePeople != null ">#{remindChargePeople},</if>
+            <if test="remindPanticiants != null ">#{remindPanticiants},</if>
+            <if test="remindOthars != null">#{remindOthars},</if>
+            <if test="warnStatus != null  and warnStatus != ''">#{warnStatus},</if>
+            <if test="taskSubmittime != null ">#{taskSubmittime},</if>
+            <if test="taskSubmitremark != null  and taskSubmitremark != ''">#{taskSubmitremark},</if>
+            <if test="taskUpdatefileftp != null  and taskUpdatefileftp != ''">#{taskUpdatefileftp},</if>
+            <if test="taskFinishflag != null  and taskFinishflag != ''">#{taskFinishflag},</if>
+            <if test="planInOut != null  and planInOut != ''">#{planInOut},</if>
+            <if test="taskFinishsubmittime != null ">#{taskFinishsubmittime},</if>
+            <if test="stopMone != null  and stopMone != ''">#{stopMone},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="taskImportedBy != null ">#{taskImportedBy},</if>
+        </trim>
+    </insert>
+    <select id="selectTaskByTid" parameterType="TaskTable" resultMap="TaskTableResult">
+        <include refid="taskTableVo"/>
+        where chargepeople_id=#{chargepeopleId}
+    </select>
+
+
+    <select id="selectTaskByTid2" parameterType="TaskTable" resultMap="TaskTableResult">
+        <include refid="taskTableVo"/>
+        where
+        <!--task_finishFlag > -1-->
+        t_id=#{tId}
+    </select>
+    <select id="selectTaskByChargePeoleId" parameterType="TaskTable" resultMap="TaskTableResult">
+        <include refid="taskTableVo"/>
+        where task_finishFlag > -1
+        and chargepeople_id=#{chargepeopleId}
+    </select>
+
+    <select id="selectFinishFlagById" parameterType="TaskTable" resultType="java.lang.String">
+        select task_finishFlag from task_table where t_id=#{tId}
+    </select>
+
+    <select id="selectAllChargePeople" parameterType="TaskTable" resultMap="TaskTableResult">
+        select chargepeople_id from task_table
+    </select>
+    <select id="selectAllTid" parameterType="TaskTable" resultMap="TaskTableResult">
+        select t_id from task_table where chargepeople_id=#{chargepeopleId} and task_finishFlag > -1
+    </select>
+    <select id="selectUserAttention" parameterType="UserTaskAttention" resultType="Integer">
+        select state from user_task_attention
+        where
+        t_id=#{tId}
+        and user_id=#{userId}
+    </select>
+    <select id="selectTitle" parameterType="long" resultType="String">
+        select task_title from task_table where t_id=#{tId}
+    </select>
+    <select id="selectCreateBy" parameterType="TaskTable" resultMap="TaskTableResult">
+        <include refid="taskTableVo"/>
+        where create_by=#{createBy}
+        and task_finishFlag !='8'
+    </select>
+    <select id="selectTaskTableByPlantId" parameterType="Integer" resultMap="TaskTableResult">
+        <include refid="taskTableVo"/>
+        where parent_id=#{parentid}
+    </select>
+    <select id="selectTaskMemo" parameterType="Integer" resultType="String">
+        select s.memo from  task_subnit_plan s
+        LEFT JOIN task_table t on s.t_id = t.t_id
+        where  t.t_id=#{t_id}
+    </select>
+
+    <select id="selectTaskTableByName" parameterType="String" resultMap="TaskTableResult">
+        <include refid="taskTableVo"/>
+        <where>
+            task_title like concat('%', #{title}, '%')
+        </where>
+    </select>
+
+    <select id="selectTaskTableByProjectId" parameterType="Integer" resultMap="TaskTableResult">
+        <include refid="taskTableVo"/>
+        <where>
+            project_id=#{pid}
+        </where>
+    </select>
+
+    <select id="selectTaskVos" parameterType="TaskTableVo" resultMap="TaskTableVoResult">
+        select t_id,task_title,task_finishFlag as  taskFinishFlag from task_table where project_id=#{projectId}
+    </select>
+    <select id="selectInfoByProjectId" parameterType="TaskTable" resultMap="TaskTableResult">
+        select * from  task_table where project_id=#{projectId}
+    </select>
+
+    <select id="selectTaskByTitleAndPid" parameterType="TaskTable" resultMap="TaskTableResult">
+        SELECT chargepeople_id FROM task_table WHERE task_title=#{taskTitle} AND parent_id= #{parentId}
+    </select>
+
+    <select id="selectTaskByUserId" parameterType="Long" resultMap="TaskTableList">
+        SELECT
+            t_id,parent_id,project_id,task_title,task_finishFlag,task_describe,chargepeople_id,start_time,end_time,warn_toobject,period,urgency_level,warn_status,
+            warn_flag,warn_days,task_overdue_state,task_notstart_state,schedule_rate,remind_charge_people,remind_othars,task_submittime,
+            task_submitremark,task_updatefileftp,plan_in_out,task_finishSubmitTime,stop_mone,create_by,create_time,update_by,update_time
+         FROM
+            task_table
+        WHERE
+            chargepeople_id=#{userId}
+            and task_finishFlag not in ('-1','8')
+    </select>
+
+    <select id="selectTaskByUserIdByParticipants" parameterType="Long" resultMap="TaskTableList">
+        SELECT
+            t_id,parent_id,project_id,task_title,task_finishFlag,task_describe,chargepeople_id,start_time,end_time,warn_toobject,period,urgency_level,warn_status,
+            warn_flag,warn_days,task_overdue_state,task_notstart_state,schedule_rate,remind_charge_people,remind_othars,task_submittime,
+            task_submitremark,task_updatefileftp,plan_in_out,task_finishSubmitTime,stop_mone,create_by,create_time,update_by,update_time
+         FROM
+            task_table
+         WHERE
+            t_id IN (
+                SELECT
+                    t_id
+                FROM
+                    task_user
+                WHERE
+                    user_id=#{userId}
+                )
+    </select>
+
+    <select id="selectCountTask" parameterType="TaskTable" resultMap="TaskTableResult">
+        select
+        a.t_id,a.task_finishFlag,urgency_level,a.chargepeople_id,a.start_time,a.end_time,c.title,b.user_name,a.task_title,
+        a.project_id,b.user_id,a.create_time,a.create_by
+        from task_table a
+        LEFT JOIN project_table c ON a.project_id=c.p_id
+        LEFT JOIN sys_user b ON b.user_id=a.chargepeople_id
+        <where>
+            a.task_finishFlag > -1
+            <if test="createBy != null ">and a.create_by = #{createBy}</if>
+            <!--紧急程度-->
+            <if test="urgencyLevel !=null and  urgencyLevel !=''">and urgency_level = #{urgencyLevel}</if>
+            <if test="taskFinishflag != '' and taskFinishflag != null and taskFinishflag !='2' and taskFinishflag !='1'">
+                and a.task_finishFlag
+                not IN (1,2)
+            </if>
+            <if test="attention != null ">and a.t_id IN (SELECT t_id FROM user_task_attention where
+                user_id=#{attention})
+            </if>
+            <if test="chargepeopleId != null ">and a.chargepeople_id = #{chargepeopleId}</if>
+            <!--时间查询-->
+            <if test="startTimes != 0 and endTimes != 0 ">
+                and (UNIX_TIMESTAMP( a.start_time ) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND UNIX_TIMESTAMP( #{endTime})
+                OR UNIX_TIMESTAMP( a.end_time ) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND UNIX_TIMESTAMP( #{endTime} ))
+            </if>
+            <if test="startTimes != 0 and endTimes == 0">
+                and (UNIX_TIMESTAMP( a.start_time) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND 253397894400000
+                OR UNIX_TIMESTAMP( a.end_time ) BETWEEN UNIX_TIMESTAMP(#{startTime}) AND 253397894400000)
+            </if>
+            <if test="startTimes == 0 and endTimes != 0">
+                and (UNIX_TIMESTAMP( a.end_time ) BETWEEN 0 AND UNIX_TIMESTAMP( #{endTime} )
+                OR UNIX_TIMESTAMP( a.start_time ) BETWEEN 0 AND UNIX_TIMESTAMP( #{endTime} ))
+            </if>
+            <!--关键字查询-->
+            <if test="projectName !=null">AND (( c.title like concat('%', #{projectName}, '%')) or (b.user_name like
+                concat('%', #{projectName}, '%')) or (a.task_title like concat('%', #{projectName}, '%')) )
+            </if>
+            <!--遍历peopleList中的值-->
+            <if test="isKey != null and isKey !=''">
+                and a.t_id in
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="peopleList">
+                    #{item}
+                </foreach>
+            </if>
+            <!--查临时任务-->
+            <if test="projectId !=null ">and a.project_id = #{projectId}</if>
+            <!--根据任务状态-->
+            <if test="taskFinishflag !=null and taskFinishflag!=''">
+                and a.task_finishFlag=#{taskFinishflag}
+            </if>
+            <!--计划内外-->
+            <if test="planInOut !=null">
+                and a.plan_in_out=#{planInOut}
+            </if>
+            <!--项目查询-->
+            <if test="projectId !=null">
+                and a.project_id=#{projectId}
+            </if>
+            <!--部门查询-->
+            <if test="deptId !=null">
+                and a.t_id IN
+                (SELECT event_id FROM project_task_table WHERE type_id!=1 AND user_id IN
+                (SELECT user_id FROM sys_user WHERE dept_id=#{deptId}))
+            </if>
+            <!--用来获取逾期的任务的-->
+            <if test="overdue==1">
+                and( UNIX_TIMESTAMP(now()) > UNIX_TIMESTAMP(a.end_time)
+                and a.schedule_rate != 100
+                and( (UNIX_TIMESTAMP(a.start_time) BETWEEN UNIX_TIMESTAMP(#{begin})AND UNIX_TIMESTAMP(#{end}))
+                OR UNIX_TIMESTAMP(a.end_time) BETWEEN UNIX_TIMESTAMP(#{begin})AND UNIX_TIMESTAMP(#{end})))
+            </if>
+            <if test="searchUnderling !=null">b.user_id IN (SELECT user_id FROM sys_user c WHERE c.dept_id IN(SELECT
+                t.dept_id FROM sys_dept t WHERE FIND_IN_SET (100,ancestors)))
+            </if>
+            <if test="searchDepeId == 1 ">and b.user_id IN (SELECT user_id FROM sys_user c WHERE c.dept_id IN(SELECT
+                t.dept_id FROM sys_dept t WHERE FIND_IN_SET (${searchDepeId},ancestors)))
+            </if>
+        </where>
+        <if test="pages!=0">
+            ORDER by a.create_time DESC limit #{pageNumber},#{total}<!--表示从第几页(pageNumber)开始，总共取多少条数据(total)-->
+        </if>
+    </select>
+
+    <update id="updateWarnInfo" parameterType="TaskSubnitPlan">
+        UPDATE task_table SET warn_days=#{warnDays},remind_charge_people=#{remindChargePeople},remind_panticiants=#{remindPanticiants} WHERE t_id=#{tId}
+    </update>
+
+    <select id="selectNewInfo" parameterType="TaskTable" resultMap="TaskTableResult">
+        select  t_id,chargepeople_id,start_time,end_time,period
+        from task_table
+        where t_id = #{tId}
+    </select>
+
+    <select id="selectAttentionlist" parameterType="TaskTable" resultMap="TaskTableResult">
+        select * from task_table t where t.t_id in (select t_id from user_task_attention where user_id=#{userId})
+    </select>
+
+    <update id="upTaskOverdueState">
+         update task_table set task_overdue_state =#{state} where t_id=#{id}
+    </update>
+    <update id="modifyOverdueState">
+         update task_table set task_overdue_state = '1' where task_finishFlag = '2'
+    </update>
+    <select id="selectTaskPlayersIdByTid" parameterType="TaskTable" resultType="Long">
+        select user_id from task_user  where t_id = #{tId}
+    </select>
+
+    <select id="selectTaskUserId" parameterType="Long" resultType="Long">
+        SELECT chargepeople_id FROM `task_table` WHERE t_id=#{tid}
+        UNION ALL
+        SELECT user_id FROM `task_user` WHERE t_id=#{tid}
+    </select>
+
+    <select id="getTaskCurrentAuditUser" parameterType="String" resultType="String">
+        SELECT user_name FROM sys_user WHERE user_id =
+         (
+            SELECT user_id FROM audit_flow_node_role WHERE current_id =
+            (
+            SELECT current_id FROM audit_flow_current WHERE apply_id = #{t_id} AND audit_id IN (1,8,9,12)
+            ORDER BY add_time DESC  LIMIT 1
+            )
+            ORDER BY add_time DESC LIMIT 1
+         )
+    </select>
+    <select id="selectApprovalDetail" parameterType="com.ruoyi.web.domain.vo.AuditFlowCrurrentVo" resultType="Map">
+        select t.t_id as tId,t.task_title as taskTitle,t.chargepeople_id as chargepeopleId,
+        (select s.user_name from sys_user s where s.user_id = t.chargepeople_id) as chargePeopleName,
+        (select s.user_name from sys_user s where s.user_id =t.create_by)as createName,
+        t.urgency_level as urgencyLevel,t.start_time as startTime,t.end_time as endTime,
+        t.period,t.task_describe as taskDescribe,t.schedule_rate as scheduleRate,t.plan_in_out as planInOut,
+        t.task_submitremark as taskSubmitremark,(select p.title from project_table p where p.p_id = t.project_id)as projectName,
+        (select s.user_name from sys_user s where s.user_id =
+        (select a.user_id from audit_flow_node_role a where a.current_id =(select f.current_id from audit_flow_current f where f.apply_id = t.t_id and  f.audit_id in (1,8,9,12) order by f.add_time desc  limit 1) order by add_time desc limit 1))as currentAuditUser
+        from task_table t
+        where t.t_id = #{tId}
+    </select>
+    <select id="selectApprovalCreate" parameterType="Map" resultType="java.lang.String">
+        select  s.user_name  from  audit_flow_current a
+        left join sys_user s on s.user_id = a.create_by
+        where a.apply_id = #{applyId}
+        and a.audit_id = #{auditId}
+        order by add_time desc
+        limit 1
+    </select>
+    <select id="selectApprovalMemo" parameterType="Map" resultType="java.lang.String">
+        select  m.oper_memo  from  audit_flow_oper_record m
+        left join audit_flow_current a on m.current_id = a.current_id and a.current_node_id = m.current_node_id
+        where a.apply_id = #{applyId} and a.audit_id = #{auditId}
+    </select>
+    <select id="selectCreateByCount" parameterType="Map" resultType="java.lang.Integer">
+        select count(*) from task_table
+        where create_by=#{userId}
+        and create_time &gt;= #{startTime}
+        and create_time &lt;= #{endTime}
+        and task_finishFlag not in('-1','2','8')
+    </select>
+    <select id="selectTaskList" parameterType="Long" resultMap="TaskTableList">
+        SELECT
+            t_id,parent_id,project_id,task_title,task_finishFlag,task_describe,chargepeople_id,start_time,end_time,warn_toobject,period,urgency_level,warn_status,
+            warn_flag,warn_days,task_overdue_state,task_notstart_state,schedule_rate,remind_charge_people,remind_othars,task_submittime,
+            task_submitremark,task_updatefileftp,plan_in_out,task_finishSubmitTime,stop_mone,create_by,create_time,update_by,update_time
+         FROM
+            task_table
+        WHERE
+            chargepeople_id=#{userId}
+            and task_finishFlag not in('-1','2','8')
+    </select>
+    <select id="selectTaskListByTime" parameterType="Map" resultType="Map">
+        SELECT
+        t_id as tId,task_title as taskTitle,task_finishFlag as taskFinishFlag,start_time as startTime,end_time as
+        endTime,
+        period,task_score as taskScore
+        FROM
+        task_table
+        WHERE
+        chargepeople_id=#{userId}
+        and task_finishFlag not in('-1','2','8')
+        <if test="startTime !=null and endTime !=null">
+            and ((start_time &lt;= #{endTime} and end_time &gt;= #{endTime}) or(start_time &gt;= #{startTime} and
+            end_time &lt;= #{endTime}) or (start_time &lt;= #{startTime} and end_time &gt;= #{startTime} ) )
+        </if>
+
+    </select>
+    <select id="selectYearCount" parameterType="Map" resultType="java.lang.Long">
+        select count(*) from task_table
+        where chargepeople_id=#{userId}
+        <if test="finish !=null and finish !=''">and task_finishFlag =#{finish}</if>
+        <if test="notFinish !=null and notFinish.size > 0">
+            and task_finishFlag not in
+            <foreach item="item" index="index" open="(" separator="," close=")" collection="notFinish">
+                #{item}
+            </foreach>
+        </if>
+        <if test="startTime !=null and endTime !=null">
+            and ((start_time &lt;= #{endTime} and end_time &gt;= #{endTime}) or(start_time &gt;= #{startTime} and
+            end_time &lt;= #{endTime}) or (start_time &lt;= #{startTime} and end_time &gt;= #{startTime} ) )
+        </if>
+        <if test="taskOverdueState !=null and taskOverdueState !=''">and (task_overdue_state = #{taskOverdueState} and
+            task_finishFlag not in ('-1','2','8') )
+        </if>
+    </select>
+    <select id="selectPageTaskList" parameterType="Map" resultType="Map">
+        select t_id  as tId, task_finishFlag as taskFinishFlag,start_time as startTime,end_time as endTime,task_overdue_state  as taskOverdueState
+        from task_table
+        where task_finishFlag not in ('-1','1','2','8')
+        limit #{start},#{end}
+    </select>
+    <select id="selectJoinProjectList" parameterType="Map" resultType="Map">
+        select distinct p.title,p.project_type as projectType,(select u.user_name from sys_user u where u.user_id =
+        p.chargepeople_id) as chargepeopleName,t.project_id as projectId,
+        (select u.user_name from sys_user u where u.user_id = p.technique_people) as techniqueName,p.establish_status as
+        establishStatus,
+        p.project_finishFlag as projectFinishFlag,p.start_time as startTime,p.end_time as endTime
+        from task_table t
+        left join project_table p on t.project_id = p.p_id
+        where 1 = 1
+        and t.project_id != 0
+        <if test="startTime !=null and endTime !=null">
+            and ((t.start_time &lt;= #{endTime} and t.end_time &gt;= #{endTime}) or
+            (t.start_time &gt;= #{startTime} and t.end_time &lt;= #{endTime}) or
+            (t.start_time &lt;= #{startTime} and t.end_time &gt;= #{startTime} ))
+        </if>
+        <if test="chargepeopleId !=null">
+            and t.chargepeople_id = #{chargepeopleId}
+        </if>
+        order by p.project_type
+    </select>
+    <select id="selectTaskCount" parameterType="Map" resultType="java.lang.Long">
+        select count(distinct t_id)as total
+        from task_table t
+        where
+        t.task_finishFlag not in ('-1','8','2')
+        <if test="chargepeopleId !=null">
+            and t.chargepeople_id = #{chargepeopleId}
+        </if>
+        <if test="projectId !=null">
+            and t.project_id = #{projectId}
+        </if>
+        <if test="startTime !=null and endTime !=null">
+            and ((t.start_time &lt;= #{endTime} and t.end_time &gt;= #{endTime}) or
+            (t.start_time &gt;= #{startTime} and t.end_time &lt;= #{endTime}) or
+            (t.start_time &lt;= #{startTime} and t.end_time &gt;= #{startTime} ))
+        </if>
+        <if test="taskFinishFlagList !=null and taskFinishFlagList.size>0">
+            and t.task_finishFlag in
+            <foreach item="item" index="index" open="(" separator="," close=")" collection="taskFinishFlagList">
+                #{item}
+            </foreach>
+        </if>
+    </select>
+</mapper>

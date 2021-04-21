@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.SysProjectTableFailMapper">
+
+    <resultMap type="SysProjectTableFail" id="SysProjectTableFailResult">
+        <id property="id" column="id"/>
+        <result property="pId" column="p_id"/>
+        <result property="title" column="title"/>
+        <result property="describeProject" column="describe_project"/>
+        <result property="chargepeopleId" column="chargepeople_id"/>
+        <result property="techniquePeople" column="technique_people"/>
+        <result property="period" column="period"/>
+        <result property="startTime" column="start_time"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="endTime" column="end_time"/>
+        <result property="planRate" column="plan_rate"/>
+        <result property="memo" column="memo"/>
+        <result property="establishTime" column="establish_time"/>
+        <result property="establishStatus" column="establish_status"/>
+        <result property="projectFinishFlag" column="project_finishFlag"/>
+        <result property="projectType" column="project_type"/>
+        <result property="customerIsEstablish" column="customer_isestablish"/>
+        <result property="buildPeriod" column="build_period"/>
+        <result property="expectTime" column="expect_time"/>
+        <result property="customerIsBudget" column="customer_isbudget"/>
+        <result property="budgetAmount" column="budget_amount"/>
+        <result property="budgetTime" column="budget_time"/>
+        <result property="budgettimeAndAmcount" column=" budgettime_and_amcount"/>
+        <result property="updateFilePath" column="update_filepath"/>
+        <result property="clientHighdirectorJob" column="client_highdirector_job"/>
+        <result property="clientHighDupdirectorJob" column="client_highdupdirector_job"/>
+        <result property="clientMidbranchleaderJob" column="client_midbranchleader_job"/>
+        <result property="clientMidDupbranchleaderJob" column="client_middupbranchleader_job"/>
+        <result property="clientMidcommissarjob" column="client_midcommissar_job"/>
+        <result property="clientHighdirectorAuthority" column="client_highdirector_authority"/>
+        <result property="clientHighDupdirectorAuthority" column="client_highdupdirector_authority"/>
+        <result property="clientMidbranchleaderAuthority" column="client_midbranchleader_authority"/>
+        <result property="clientMidDupbranchleaderAuthority" column="client_middupbranchleader_authority"/>
+        <result property="clientMidcommissarAnthority" column="client_midcommissar_anthority"/>
+        <result property="clientHighdirectorReporting" column="client_highdirector_reporting"/>
+        <result property="clientHighDupdirectorReporting" column="client_highdupdirector_reporting"/>
+        <result property="clientMidbranchleaderReporting" column="client_midbranchleader_reporting"/>
+        <result property="clientMidDupbranchleaderReporting" column="client_middupbranchleader_reporting"/>
+        <result property="clientMidcommissarReporting" column="client_midcommissar_reporting"/>
+        <result property="clientHighdirectorMeet" column="client_highdirector_meet"/>
+        <result property="clientHighDupdirectorMeet" column="client_highdupdirector_meet"/>
+        <result property="clientMidbranchleaderMeet" column="client_midbranchleader_meet"/>
+        <result property="clientMidDupbranchleaderMeet" column="client_middupbranchleader_meet"/>
+        <result property="clientMidcommissarMeet" column="client_midcommissar_meet"/>
+        <result property="clientHighdirectorTransmit" column="client_highdirector_transmit"/>
+        <result property="clientHighDupdirectorTransmit" column="client_highdupdirector_transmit"/>
+        <result property="clientMidbranchleaderTransmit" column="client_midbranchleader_transmit"/>
+        <result property="clientMidDupbranchleaderTransmit" column="client_middupbranchleader_transmit"/>
+        <result property="clientMidcommissarTransmit" column="client_midcommissar_transmit"/>
+        <result property="clientHighdirectorWill" column="client_highdirector_will"/>
+        <result property="clientHighDupdirectorWill" column="client_highdupdirector_will"/>
+        <result property="clientMidbranchleaderWill" column="client_midbranchleader_will"/>
+        <result property="clientMidDupbranchleaderWill" column="client_middupbranchleader_will"/>
+        <result property="clientMidcommissarWill" column="client_midcommissar_will"/>
+        <result property="clientLowinfluence" column="client_lowinfluence"/>
+        <result property="needBackground" column="need_background"/>
+        <result property="needApplication" column="need_application"/>
+        <result property="needUnderstand" column="need_understand"/>
+        <result property="needFeasible" column="need_feasible"/>
+        <result property="needEndTime" column="need_endTime"/>
+        <result property="isDianzi" column="is_dianzi"/>
+        <result property="dianziPeriod" column="dianzi_period"/>
+        <result property="dianziMoney" column="dianzi_money"/>
+        <result property="isShiyong" column="is_shiyong"/>
+        <result property="shiyongPeriod" column="shiyong_period"/>
+        <result property="riskDescribeBusiness" column="risk_describe_business"/>
+        <result property="riskSolutionsBusiness" column="risk_solutions_business"/>
+        <result property="riskDescribeTechnique" column="risk_describe_technique"/>
+        <result property="riskSolutionsTechnique" column="risk_solutions_technique"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <!--市场项目的相关方法-->
+    <!--添加市场项目-->
+    <insert id="insertFailProject" parameterType="SysProjectTableFail" useGeneratedKeys="true" keyProperty="id">
+        insert into project_table_fail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectType != null ">project_type,</if>
+            <!--商务负责人书写部分-->
+            <if test="title != null ">title,</if><!--项目名称-->
+            <if test="chargepeopleId != null ">chargepeople_id,</if><!--商务负责人-->
+            <if test="techniquePeople != null ">technique_people,</if><!--技术负责人-->
+            <if test="period != null ">period,</if><!--运作周期-->
+            <if test="startTime != null ">start_time,</if><!--启动时间-->
+            <if test="endTime != null">end_time,</if><!--结束时间-->
+            <if test="describeProject != null ">describe_project,</if><!--客户名称-->
+            <if test="customerIsEstablish != null ">customer_isestablish,</if><!--客户是否立项-->
+            <if test="buildPeriod != null ">build_period,</if><!--1：周期-->
+            <if test="expectTime != null ">expect_time,</if><!--0：预计立项时间-->
+            <if test="customerIsBudget != null ">customer_isbudget,</if><!--客户是否立项-->
+            <if test="budgetAmount != null ">budget_amount,</if><!--预算金额-->
+            <if test="budgetTime != null ">budget_time,</if><!--时间-->
+            <if test="budgettimeAndAmcount != null ">budgettime_and_amcount,</if><!--预算金额-->
+            <if test="isDianzi != null  ">is_dianzi,</if><!--是否垫资-->
+            <if test="dianziPeriod != null  ">dianzi_period,</if><!--周期-->
+            <if test="dianziMoney != null  ">dianzi_money,</if><!--金额(单位万元)-->
+            <if test="isShiyong != null  ">is_shiyong,</if><!--是否试用-->
+            <if test="shiyongPeriod != null  ">shiyong_period,</if><!--试用周期-->
+            <if test="clientHighdirectorJob != null ">client_highdirector_job,</if><!--局长-->
+            <if test="clientHighdirectorAuthority != null ">client_highdirector_authority,</if><!--决策权-->
+            <if test="clientHighdirectorReporting != null ">client_highdirector_reporting,</if><!--方案汇报-->
+            <if test="clientHighdirectorMeet != null ">client_highdirector_meet,</if><!--商务洽谈-->
+            <if test="clientHighdirectorTransmit != null ">client_highdirector_transmit,</if><!--上下传达-->
+            <if test="clientHighdirectorWill != null ">client_highdirector_will,</if><!--合作意愿-->
+            <if test="clientHighDupdirectorJob != null ">client_highdupdirector_job,</if><!--副局长-->
+            <if test="clientHighDupdirectorAuthority != null ">client_highdupdirector_authority,</if><!---->
+            <if test="clientHighDupdirectorReporting != null ">client_highdupdirector_reporting,</if><!---->
+            <if test="clientHighDupdirectorMeet != null ">client_highdupdirector_meet,</if><!---->
+            <if test="clientHighDupdirectorTransmit != null ">client_highdupdirector_transmit,</if><!---->
+            <if test="clientHighDupdirectorWill != null ">client_highdupdirector_will,</if><!---->
+            <if test="clientMidbranchleaderJob != null ">client_midbranchleader_job,</if><!--支队长-->
+            <if test="clientMidbranchleaderAuthority != null ">client_midbranchleader_authority,</if><!---->
+            <if test="clientMidbranchleaderReporting != null ">client_midbranchleader_reporting,</if><!---->
+            <if test="clientMidbranchleaderMeet != null ">client_midbranchleader_meet,</if><!---->
+            <if test="clientMidbranchleaderTransmit != null ">client_midbranchleader_transmit,</if><!---->
+            <if test="clientMidbranchleaderWill != null ">client_midbranchleader_will,</if><!---->
+            <if test="clientMidDupbranchleaderJob != null ">client_middupbranchleader_job,</if><!--副支队长-->
+            <if test="clientMidDupbranchleaderAuthority != null ">client_middupbranchleader_authority,</if><!---->
+            <if test="clientMidDupbranchleaderReporting != null ">client_middupbranchleader_reporting,</if><!---->
+            <if test="clientMidDupbranchleaderMeet != null ">client_middupbranchleader_meet,</if><!---->
+            <if test="clientMidDupbranchleaderTransmit != null ">client_midDupbranchleader_transmit,</if><!---->
+            <if test="clientMidDupbranchleaderWill != null ">client_middupbranchleader_will,</if><!---->
+            <if test="clientMidcommissarjob != null ">client_midcommissar_job,</if><!--政委-->
+            <if test="clientMidcommissarAnthority != null ">client_midcommissar_anthority,</if><!---->
+            <if test="clientMidcommissarReporting != null ">client_midcommissar_reporting,</if><!---->
+            <if test="clientMidcommissarMeet != null ">client_midcommissar_meet,</if>
+            <if test="clientMidcommissarTransmit != null ">client_midcommissar_transmit,</if><!---->
+            <if test="clientMidcommissarWill != null ">client_midcommissar_will,</if><!---->
+            <if test="clientLowinfluence != null ">client_lowinfluence,</if><!--基层-->
+            <if test="riskDescribeBusiness != null ">risk_describe_business,</if><!--商务风险描述-->
+            <if test="riskSolutionsBusiness != null ">risk_solutions_business,</if><!--解决措施-->
+            <if test="updateFilePath != null ">update_filepath,</if><!--有关文档上传的地址-->
+            <if test="createBy != null ">create_by,</if><!---->
+            <if test="createTime != null ">create_time,</if><!---->
+            establish_time<!--立项提交时间-->
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectType != null ">#{projectType},</if>
+            <if test="title != null ">#{title},</if>
+            <if test="chargepeopleId != null ">#{chargepeopleId},</if>
+            <if test="techniquePeople != null ">#{techniquePeople},</if>
+            <if test="period != null ">#{period},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="describeProject != null ">#{describeProject},</if>
+            <if test="customerIsEstablish != null ">#{customerIsEstablish},</if>
+            <if test="buildPeriod != null ">#{buildPeriod},</if>
+            <if test="expectTime != null ">#{expectTime},</if>
+            <if test="customerIsBudget != null ">#{customerIsBudget},</if>
+            <if test="budgetAmount != null ">#{budgetAmount},</if>
+            <if test="budgetTime != null ">#{budgetTime},</if>
+            <if test="budgettimeAndAmcount != null ">#{budgettimeAndAmcount},</if>
+            <if test="isDianzi != null  ">#{isDianzi},</if>
+            <if test="dianziPeriod != null  ">#{dianziPeriod},</if>
+            <if test="dianziMoney != null  ">#{dianziMoney},</if>
+            <if test="isShiyong != null  ">#{isShiyong},</if>
+            <if test="shiyongPeriod != null  ">#{shiyongPeriod},</if>
+            <if test="clientHighdirectorJob != null ">#{clientHighdirectorJob},</if>
+            <if test="clientHighdirectorAuthority != null ">#{clientHighdirectorAuthority},</if>
+            <if test="clientHighdirectorReporting != null ">#{clientHighdirectorReporting},</if>
+            <if test="clientHighdirectorMeet != null ">#{clientHighdirectorMeet},</if>
+            <if test="clientHighdirectorTransmit != null ">#{clientHighdirectorTransmit},</if>
+            <if test="clientHighdirectorWill != null ">#{clientHighdirectorWill},</if>
+            <if test="clientHighDupdirectorJob != null ">#{clientHighDupdirectorJob},</if>
+            <if test="clientHighDupdirectorAuthority != null ">#{clientHighDupdirectorAuthority},</if>
+            <if test="clientHighDupdirectorReporting != null ">#{clientHighDupdirectorReporting},</if>
+            <if test="clientHighDupdirectorMeet != null ">#{clientHighDupdirectorMeet},</if>
+            <if test="clientHighDupdirectorTransmit != null ">#{clientHighDupdirectorTransmit},</if>
+            <if test="clientHighDupdirectorWill != null ">#{clientHighDupdirectorWill},</if>
+            <if test="clientMidbranchleaderJob != null ">#{clientMidbranchleaderJob},</if>
+            <if test="clientMidbranchleaderAuthority != null ">#{clientMidbranchleaderAuthority},</if>
+            <if test="clientMidbranchleaderReporting != null ">#{clientMidbranchleaderReporting},</if>
+            <if test="clientMidbranchleaderMeet != null ">#{clientMidbranchleaderMeet},</if>
+            <if test="clientMidbranchleaderTransmit != null ">#{clientMidbranchleaderTransmit},</if>
+            <if test="clientMidbranchleaderWill != null ">#{clientMidbranchleaderWill},</if>
+            <if test="clientMidDupbranchleaderJob != null ">#{clientMidDupbranchleaderJob},</if>
+            <if test="clientMidDupbranchleaderAuthority != null ">#{clientMidDupbranchleaderAuthority},</if>
+            <if test="clientMidDupbranchleaderReporting != null ">#{clientMidDupbranchleaderReporting},</if>
+            <if test="clientMidDupbranchleaderMeet != null ">#{clientMidDupbranchleaderMeet},</if>
+            <if test="clientMidDupbranchleaderTransmit != null ">#{clientMidDupbranchleaderTransmit},</if>
+            <if test="clientMidDupbranchleaderWill != null ">#{clientMidDupbranchleaderWill},</if>
+            <if test="clientMidcommissarjob != null ">#{clientMidcommissarjob},</if>
+            <if test="clientMidcommissarAnthority != null ">#{clientMidcommissarAnthority},</if>
+            <if test="clientMidcommissarReporting != null ">#{clientMidcommissarReporting},</if>
+            <if test="clientMidcommissarMeet != null ">#{clientMidcommissarMeet},</if><!---->
+            <if test="clientMidcommissarTransmit != null ">#{clientMidcommissarTransmit},</if>
+            <if test="clientMidcommissarWill != null ">#{clientMidcommissarWill},</if>
+            <if test="clientLowinfluence != null ">#{clientLowinfluence},</if>
+            <if test="riskDescribeBusiness != null ">#{riskDescribeBusiness},</if>
+            <if test="riskSolutionsBusiness != null ">#{riskSolutionsBusiness},</if>
+            <if test="updateFilePath != null ">#{updateFilePath},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            sysdate()
+        </trim>
+    </insert>
+    <select id="selectId" parameterType="SysProjectTableFail" resultType="Integer">
+        select id from  project_table_fail where p_id=#{pId}
+    </select>
+</mapper>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ruoyi.system.mapper.SysUserTokenMapper">
+
+	<resultMap type="SysUserToken" id="SysUserTokenResult">
+		<result property="userId"     column="user_id"      />
+		<result property="token"     column="token"      />
+		<result property="expireTime"     column="expire_time"      />
+		<result property="updateTime"     column="update_time"      />
+	</resultMap>
+	
+
+	<select id="queryByToken" resultMap="SysUserTokenResult">
+		select * from sys_user_token where token = #{token}
+	</select>
+	
+	<select id="selectById" parameterType="long" resultMap="SysUserTokenResult">
+		select * from sys_user_token where user_id = #{userId}
+	</select>
+	
+	<insert id="save" parameterType="SysUserToken">
+		insert into sys_user_token
+		values(#{userId},#{token},#{expireTime},#{updateTime})
+	</insert>
+	
+	<update id="updateById" parameterType="SysUserToken">
+		update sys_user_token
+		set 
+			token=#{token},
+			expire_time=#{expireTime},
+			update_time=#{updateTime}
+		where
+			user_id=#{userId}	
+	</update>
+	<delete id="deleteTokenByUserId" parameterType="long">
+		delete from sys_user_token where user_id=#{userId}
+	</delete>
+
+	<select id="selectRoleId" parameterType="SysUserRole" resultType="Integer">
+	    select role_id from sys_user_role where user_id=#{userId}
+	</select>
+</mapper>

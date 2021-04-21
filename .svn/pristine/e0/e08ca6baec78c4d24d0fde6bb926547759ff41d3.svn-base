@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.ResultApprovalRecordMapper">
+
+    <resultMap type="ResultApprovalRecord" id="ResultApprovalRecordResult">
+        <id property="id" column="id"/>
+        <result property="currentId" column="current_id"/>
+        <result property="applyId" column="apply_id"/>
+        <result property="auditId" column="audit_id"/>
+        <result property="number" column="number"/>
+        <result property="approvalState" column="approval_state"/>
+        <result property="approvalUserId" column="approval_user_id"/>
+        <result property="approvalUserName" column="approval_user_name"/>
+        <result property="approvalTime" column="approval_time"/>
+        <result property="approvalMemo" column="approval_memo"/>
+        <result property="currentNodeId" column="current_node_id"/>
+        <association property="avatar" column="approval_user_id" javaType="java.lang.String" select="selectAvatarById"/>
+        <association property="approvalTypeName" column="audit_id" javaType="java.lang.String"
+                     select="com.ruoyi.web.mapper.audit.AuditFlowMapper.selectFlowNameByFlowId"/>
+        <association property="userDeptId" column="approval_user_id" javaType="java.lang.Integer"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserDeptId"/>
+    </resultMap>
+
+    <select id="selectAvatarById" parameterType="Integer" resultType="java.lang.String">
+        select avatar from sys_user where user_id = #{approval_user_id}
+    </select>
+
+    <!--插入审批记录-->
+    <insert id="insertApprovalRecord" parameterType="ResultApprovalRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into result_approval_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="currentId != null">current_id,</if>
+            <if test="applyId!= null">apply_id,</if>
+            <if test="auditId!= null">audit_id,</if>
+            <if test="number!= null">number,</if>
+            <if test="approvalState!= null">approval_state,</if>
+            <if test="approvalUserId!= null">approval_user_id,</if>
+            <if test="approvalUserName!= null and approvalUserName !=''">approval_user_name,</if>
+            <if test="approvalMemo!= null">approval_memo,</if>
+            <if test="currentNodeId != null">current_node_id</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="currentId != null">#{currentId},</if>
+            <if test="applyId != null">#{applyId},</if>
+            <if test="auditId != null">#{auditId},</if>
+            <if test="number != null">#{number},</if>
+            <if test="approvalState != null">#{approvalState},</if>
+            <if test="approvalUserId != null">#{approvalUserId},</if>
+            <if test="approvalUserName != null and approvalUserName !=''">#{approvalUserName},</if>
+            <if test="approvalMemo != null">#{approvalMemo},</if>
+            <if test="currentNodeId != null">#{currentNodeId}</if>
+        </trim>
+    </insert>
+    <select id="selectApprovalRecord" parameterType="ResultApprovalRecord" resultMap="ResultApprovalRecordResult">
+        select
+        id,current_id,apply_id,audit_id,number,approval_user_id,approval_user_name,approval_state,approval_memo,approval_time,current_node_id
+        from result_approval_record
+        <where>
+            <!--approval_state !='转推'-->
+            <if test="currentId !=null">AND current_id=#{currentId}</if>
+            <if test="applyId !=null">AND apply_id=#{applyId}</if>
+            <if test="number !=null">AND number=#{number}</if>
+            <if test="auditId !=null">AND audit_id=#{auditId}</if>
+            <if test="approvalUserId !=null and approvalUserId !='' ">AND approval_user_id=#{approvalUserId}</if>
+            <if test="approvalUserName !=null">AND approval_user_name=#{approvalUserName}</if>
+            <if test="approvalType ==1">
+                AND audit_id in (3,7,10,11)
+            </if>
+        </where>
+    </select>
+
+    <select id="selectNumber" parameterType="ResultApprovalRecord" resultType="Integer">
+        select number from result_approval_record
+        <where>
+            <if test="currentId !=null">AND current_id=#{currentId}</if>
+            <if test="applyId !=null">AND apply_id=#{applyId}</if>
+            <if test="auditId !=null">AND audit_id=#{auditId}</if>
+            <if test="approvalUserId != null  ">AND approval_user_id = #{approvalUserId}</if>
+        </where>
+    </select>
+    <update id="updateApprovalRecord" parameterType="ResultApprovalRecord">
+        update result_approval_record
+        <trim prefix="set" suffixOverrides=",">
+            <if test="currentId != null  ">current_id = #{currentId},</if>
+            <if test="applyId != null  ">apply_id = #{applyId},</if>
+            <if test="auditId != null  ">audit_id = #{auditId},</if>
+            <if test="number != null  ">number = #{number},</if>
+            <if test="approvalState != null  ">approval_state = #{approvalState},</if>
+            <if test="approvalUserId != null  ">approval_user_id = #{approvalUserId},</if>
+            <if test="approvalUserName != null  ">approval_user_name = #{approvalUserName},</if>
+            <if test="approvalTime != null  ">approval_time = #{approvalTime},</if>
+            <if test="push != null and push == 1 ">approval_time = null,</if>
+            <if test="approvalMemo != null  ">approval_memo = #{approvalMemo},</if>
+            <if test="currentNodeId != null">current_node_id= #{currentNodeId}</if>
+        </trim>
+        <where>
+            <if test="currentId !=null">and current_id=#{currentId}</if>
+            <if test="applyId !=null">and apply_id=#{applyId}</if>
+            <if test="auditId !=null">and audit_id=#{auditId}</if>
+            <if test="approvalUserId !=null ">and approval_user_id=#{approvalUserId}</if>
+            <if test="approvalUserName !=null and approvalUserName !=''">and approval_user_name=#{approvalUserName}</if>
+            <if test="currentNodeId != null">and current_node_id= #{currentNodeId}</if>
+        </where>
+    </update>
+
+    <delete id="deleteApprovalRecord" parameterType="ResultApprovalRecord">
+        delete from result_approval_record
+        <where>
+            <if test="currentId !=null">and current_id = #{currentId}</if>
+            <if test="number != null">and number=#{number}</if>
+            <if test="applyId != null">and apply_id=#{applyId}</if>
+            <if test="auditId != null">and audit_id=#{auditId}</if>
+            <if test="approvalUserId != null">and approval_user_id=#{approvalUserId}</if>
+            <if test="approvalUserName !=null">and approval_user_name = #{approvalUserName}</if>
+            <if test="approvalState !=null">and approval_state = #{approvalState}</if>
+            <if test="currentNodeId != null">and current_node_id= #{currentNodeId}</if>
+        </where>
+    </delete>
+    <select id="selectApprovalInfo" parameterType="ResultApprovalRecord" resultMap="ResultApprovalRecordResult">
+        select
+        id,current_id,apply_id,audit_id,number,approval_user_id,approval_user_name,approval_state,approval_memo,approval_time
+        from result_approval_record
+        <where>
+            <if test="currentId !=null">AND current_id=#{currentId}</if>
+            <if test="applyId !=null">AND apply_id=#{applyId}</if>
+            <if test="number !=null">AND number=#{number}</if>
+            <if test="auditId !=null">AND audit_id=#{auditId}</if>
+            <if test="approvalUserId !=null and approvalUserId !='' ">AND approval_user_id=#{approvalUserId}</if>
+            <if test="approvalUserName !=null">AND approval_user_name=#{approvalUserName}</if>
+            <if test="currentNodeId != null">and current_node_id= #{currentNodeId}</if>
+            <if test="state !=null and state !=''">
+                and approval_state != '转推'
+            </if>
+        </where>
+    </select>
+    <select id="selectUserIdList" parameterType="ResultApprovalRecord" resultType="java.lang.Integer">
+        select approval_user_id from result_approval_record
+        <where>
+            <if test="currentId !=null">AND current_id=#{currentId}</if>
+            <if test="applyId !=null">AND apply_id=#{applyId}</if>
+            <if test="number !=null">AND number=#{number}</if>
+            <if test="auditId !=null">AND audit_id=#{auditId}</if>
+            <if test="approvalUserId !=null and approvalUserId !='' ">AND approval_user_id=#{approvalUserId}</if>
+            <if test="approvalUserName !=null">AND approval_user_name=#{approvalUserName}</if>
+            <if test="state !=null and state !=''">
+                and approval_state != '转推'
+            </if>
+        </where>
+    </select>
+</mapper>

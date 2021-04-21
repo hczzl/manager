@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.ParticipantsMapper">
+
+    <resultMap type="ParticipantsTable" id="ParticipantsResult">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="projectId" column="project_id"/>
+        <association property="userName" column="user_id" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserNameById"/>
+        <association property="projectTable" column="project_id" javaType="SysProjectTable"
+                     resultMap="ProjectTableResult"/>
+        <association property="resultApprovalRecordList" column="project_id"
+                     select="selecApprovalRecordListByProjectId"/>
+
+    </resultMap>
+    <resultMap type="ParticipantsTable" id="ParticipantsIdResult">
+        <id property="id" column="id"></id>
+        <result property="userId" column="user_id"/>
+        <result property="projectId" column="project_id"/>
+        <association property="userName" column="user_id"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserNameById"/>
+    </resultMap>
+    <resultMap type="ResultApprovalRecord" id="ResultApprovalRecordResult">
+        <id property="id" column="id"/>
+        <result property="applyId" column="apply_id"/>
+        <result property="number" column="number"/>
+        <result property="approvalState" column="approval_state"/>
+        <result property="approvalUserId" column="approval_user_id"/>
+        <result property="approvalUserName" column="approval_user_name"/>
+        <result property="approvalMemo" column="approval_memo"/>
+    </resultMap>
+    <resultMap type="SysProjectTable" id="ProjectTableResult">
+        <id property="pId" column="p_id"/>
+        <result property="title" column="title"/>
+        <result property="describeProject" column="describe_project"/>
+        <result property="chargepeopleId" column="chargepeople_id"/>
+        <result property="period" column="period"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="planRate" column="plan_rate"/>
+        <result property="remark" column="remark"/>
+        <result property="establishTime" column="establish_time"/>
+        <result property="establishStatus" column="establish_status"/>
+        <result property="projectFinishFlag" column="project_finishFlag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <!--与市场项目有关的数据库字段-->
+        <result property="projectType" column="project_type"/>
+        <association property="chargePeopleName" column="chargepeople_id" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserNameById"/>
+        <association property="departmentName" column="department_id" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysDeptMapper.selectDepartmentNameById"/>
+        <association property="participantsList" column="project_id" select="selecParticipantsListById"/>
+    </resultMap>
+    <select id="selecApprovalRecordListByProjectId" parameterType="ResultApprovalRecord"
+            resultMap="ResultApprovalRecordResult">
+        select id,apply_id,number,approval_user_id,approval_user_name,approval_state,approval_memo from result_approval_record where apply_id=#{p_id}
+    </select>
+    <!-- 添加内容 -->
+    <insert id="insertparticipants" parameterType="ParticipantsTable" useGeneratedKeys="true" keyProperty="id">
+        insert into participants_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="projectId != null ">project_id</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">#{userId},</if>
+            <if test="projectId != null ">#{projectId}</if>
+        </trim>
+    </insert>
+    <!--查询项目参与人list-->
+    <select id="selecParticipantsListById" parameterType="java.lang.Integer" resultMap="ParticipantsIdResult">
+        SELECT a.*,(SELECT user_name  FROM sys_user  WHERE user_id=a.user_id) as user_name FROM participants_table a WHERE a.project_id=#{project_id};
+    </select>
+    <!--查询参与人表，得到参与用户名字、参与了哪些项目，参加了多少个项目-->
+    <select id="selectParticients" parameterType="ParticipantsTable" resultMap="ParticipantsResult">
+        SELECT user_id,project_id  FROM  participants_table
+    </select>
+
+    <!--查询参与人的所有id-->
+    <select id="selectUserJoin" parameterType="ParticipantsTable" resultMap="ParticipantsResult">
+        SELECT DISTINCT user_id  FROM  participants_table ORDER by user_id ASC
+    </select>
+
+    <!--查询参与人的参加项目的总数-->
+    <select id="getAlltimes" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT COUNT(user_id)allJoin,participants_id FROM  participants_table
+        where user_id=#{userId}
+        GROUP by user_id
+    </select>
+    <!--查询所有的userId-->
+    <select id="selectAllUserId" parameterType="ParticipantsTable" resultMap="ParticipantsResult">
+        SELECT user_id  FROM  participants_table
+    </select>
+    <select id="getProjectByProjectId" parameterType="ParticipantsTable" resultMap="ParticipantsResult">
+        select * from  participants_table where user_id=#{userId}
+    </select>
+    <!--查询参与人表，得到参与用户名字、参与了哪些项目，参加了多少个项目-->
+    <select id="getUserIdByPid" parameterType="java.lang.Integer" resultMap="ParticipantsResult">
+        SELECT user_id  FROM  participants_table where project_id=#{project_id}
+    </select>
+
+    <select id="selectInfo" parameterType="ParticipantsTable" resultMap="ParticipantsResult">
+        SELECT * FROM participants_table
+        <where>
+            <if test="projectId !=null">and project_id = #{projectId}</if>
+            <if test="userId !=null">and user_id = #{userId}</if>
+        </where>
+    </select>
+    <select id="selectInfo1" parameterType="ParticipantsTable" resultMap="ParticipantsResult">
+        SELECT *  FROM  participants_table where project_id=#{projectId} and user_id = #{userId}
+    </select>
+    <!--删除项目的参与人-->
+    <delete id="deletePeople" parameterType="ParticipantsTable">
+        delete from participants_table
+        <where>
+            <if test="projectId !=null">and project_id = #{projectId}</if>
+            <!--<if test="userId !=null ">and user_id = #{userId}</if>-->
+        </where>
+    </delete>
+    <select id="querypIdByUserId" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select project_id from  participants_table where user_id=#{userId}
+    </select>
+    <select id="selectUserName" parameterType="java.lang.Integer" resultType="Map">
+        select p.user_id as userId,
+        (select s.user_name from sys_user s where s.user_id = p.user_id)as userName
+        from  participants_table p
+        where p.project_id = #{projectId}
+    </select>
+</mapper>

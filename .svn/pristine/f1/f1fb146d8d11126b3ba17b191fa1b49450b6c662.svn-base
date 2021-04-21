@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.SysUserWorksMapper">
+
+    <resultMap type="com.ruoyi.web.domain.SysUserWorks" id="userWorksResult">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="year" column="year"/>
+        <result property="month" column="month"/>
+        <result property="taskAverageScore" column="task_average_score"/>
+        <result property="multipleMonthScore" column="multiple_month_score"/>
+        <result property="monthScore" column="month_score"/>
+        <result property="workDays" column="work_days"/>
+        <result property="period" column="period"/>
+        <result property="createTaskNum" column="create_task_num"/>
+        <result property="saturation" column="saturation"/>
+        <result property="taskAlreadyFinish" column="task_already_finish"/>
+        <result property="taskNotFinish" column="task_not_finish"/>
+        <result property="taskOverdue" column="task_overdue"/>
+        <result property="taskNotOverdue" column="task_not_overdue"/>
+        <result property="yearScore" column="year_score"/>
+        <result property="personalScore" column="personal_score"/>
+        <result property="yearAverageScore" column="year_average_score"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+    <insert id="insertUserWorks" parameterType="com.ruoyi.web.domain.SysUserWorks" useGeneratedKeys="true"
+            keyProperty="id">
+        insert into sys_user_works
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="year != null ">year,</if>
+            <if test="month != null">month,</if>
+            <if test="taskAverageScore !=null ">task_average_score,</if>
+            <if test="workDays != null ">work_days,</if>
+            <if test="period != null ">period,</if>
+            <if test="createTaskNum != null ">create_task_num,</if>
+            <if test="saturation != null ">saturation,</if>
+            <if test="taskAlreadyFinish != null">task_already_finish,</if>
+            <if test="taskNotFinish !=null">task_not_finish,</if>
+            <if test="taskOverdue != null ">task_overdue,</if>
+            <if test="taskNotOverdue != null">task_not_overdue,</if>
+            <if test="yearScore != null ">year_score,</if>
+            <if test="monthScore != null ">month_score,</if>
+            <if test="personalScore != null ">personal_score,</if>
+            <if test="yearAverageScore != null ">year_average_score,</if>
+            <if test="createTime != null">create_time</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">#{userId},</if>
+            <if test="year != null ">#{year},</if>
+            <if test="month != null ">#{month},</if>
+            <if test="taskAverageScore !=null ">#{taskAverageScore},</if>
+            <if test="workDays != null ">#{workDays},</if>
+            <if test="period != null ">#{period},</if>
+            <if test="createTaskNum != null ">#{createTaskNum},</if>
+            <if test="saturation != null ">#{saturation},</if>
+            <if test="taskAlreadyFinish != null">#{taskAlreadyFinish},</if>
+            <if test="taskNotFinish !=null ">#{taskNotFinish},</if>
+            <if test="taskOverdue != null ">#{taskOverdue},</if>
+            <if test="taskNotOverdue != null ">#{taskNotOverdue},</if>
+            <if test="yearScore != null ">#{yearScore},</if>
+            <if test="monthScore != null ">#{monthScore},</if>
+            <if test="personalScore != null ">#{personalScore},</if>
+            <if test="yearAverageScore != null ">#{yearAverageScore},</if>
+            <if test="createTime != null">#{createTime}</if>
+        </trim>
+    </insert>
+
+    <update id="updateUserWorks" parameterType="com.ruoyi.web.domain.SysUserWorks">
+        update sys_user_works
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null">user_id=#{userId},</if>
+            <if test="year != null ">year = #{year},</if>
+            <if test="month != null ">month = #{month},</if>
+            <if test="taskAverageScore !=null ">task_average_score=#{taskAverageScore},</if>
+            <if test="multipleMonthScore !=null">multiple_month_score=#{multipleMonthScore},</if>
+            <if test="monthScore !=null ">month_score=#{monthScore},</if>
+            <if test="workDays != null ">work_days=#{workDays},</if>
+            <if test="period != null and period != ''">period=#{period},</if>
+            <if test="createTaskNum != null ">create_task_num=#{createTaskNum},</if>
+            <if test="saturation != null">saturation=#{saturation},</if>
+            <if test="taskAlreadyFinish != null">task_already_finish=#{taskAlreadyFinish},</if>
+            <if test="taskNotFinish !=null ">task_not_finish=#{taskNotFinish},</if>
+            <if test="taskOverdue != null">task_overdue=#{taskOverdue},</if>
+            <if test="taskNotOverdue != null ">task_not_overdue=#{taskNotOverdue},</if>
+            <if test="yearScore != null ">year_score=#{yearScore},</if>
+            <if test="monthScore != null ">month_score=#{monthScore},</if>
+            <if test="personalScore != null ">personal_score=#{personalScore},</if>
+            <if test="yearAverageScore != null ">year_average_score=#{yearAverageScore},</if>
+            <if test="updateTime != null">update_time=#{updateTime}</if>
+        </trim>
+        <where>
+            <if test="userId !=null">and user_id = #{userId}</if>
+            <if test="month !=null">and month = #{month}</if>
+            <if test="year !=null">and year = #{year}</if>
+        </where>
+    </update>
+    <select id="selectUserWorks" parameterType="com.ruoyi.web.domain.SysUserWorks" resultMap="userWorksResult">
+        select
+        id,s.user_id,s.month,s.year,s.task_average_score,s.task_average_score,s.work_days,s.period,s.create_task_num,s.saturation,
+        task_already_finish,task_not_finish,task_overdue,task_not_overdue,year_score,personal_score,year_average_score,month_score,
+        s.update_time,s.create_time
+        from sys_user_works s
+        <where>
+            <if test="userId !=null and userId !=''">and s.user_id = #{userId}</if>
+            <if test="month !=null and month !=''">and s.month = #{month}</if>
+            <if test="year !=null and year !=''">and s.year = #{year}</if>
+            <if test="workDays !=null and workDays !=''">and s.work_days = #{workDays}</if>
+        </where>
+    </select>
+    <select id="selectCount" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select count(*) from sys_user_works where user_id = #{userId} and year = #{year} and month = #{month}
+    </select>
+    <select id="selectMonthScore" parameterType="Map" resultType="Map">
+        select year_score as yearScore,personal_score as personalScore,multiple_month_score as multipleMonthScore,
+        task_average_score as taskAverageScore,year_average_score as yearAverageScore,month_score as monthScore
+        from sys_user_works
+        where 1 = 1
+        <if test="userId !=null and userId !=''">and user_id = #{userId}</if>
+        <if test="month !=null and month !=''">and month = #{month}</if>
+        <if test="year !=null and year !=''">and year = #{year}</if>
+        <if test="yearAverage !=null">and month !=#{yearAverage}</if>
+    </select>
+    <select id="selectScoreByTime" parameterType="Map" resultType="Map">
+        select year_average_score as yearAverageScore,month_score as monthScore,multiple_month_score as
+        multipleMonthScore,
+        personal_score as personalScore
+        from sys_user_works
+        where 1 = 1
+        <if test="userId !=null and userId !=''">and user_id = #{userId}</if>
+        <if test="month !=null and month !=''">and month = #{month}</if>
+        <if test="year !=null and year !=''">and year = #{year}</if>
+    </select>
+    <select id="selectWorkDays" parameterType="Map" resultType="java.lang.Integer">
+        select period from sys_user_works
+        where 1 = 1
+        <if test="userId !=null and userId !=''">and user_id = #{userId}</if>
+        <if test="month !=null and month !=''">and month = #{month}</if>
+        <if test="year !=null and year !=''">and year = #{year}</if>
+    </select>
+
+</mapper>

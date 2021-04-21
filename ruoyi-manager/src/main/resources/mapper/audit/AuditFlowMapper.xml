@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.audit.AuditFlowMapper">
+    
+    <resultMap type="AuditFlow" id="AuditFlowResult">
+        <result property="flowId"    column="flow_id"    />
+        <result property="flowName"    column="flow_name"    />
+        <result property="applyTableName"    column="apply_table_name"    />
+        <result property="applyClassName"    column="apply_class_name"    />
+        <result property="memo"    column="memo"    />
+        <result property="addTime"    column="add_time"    />
+        <result property="state"    column="state"    />
+        <result property="typeId"    column="type_id"    />
+        <result property="typeName"    column="type_name"    />
+    </resultMap>
+	
+	<sql id="selectAuditFlowVo">
+        select flow_id,flow_name,type_id,type_name,apply_table_name,apply_class_name,memo,add_time,state from audit_flow
+    </sql>
+    <select id="selectFlowNameByFlowId" parameterType="Integer" resultType="java.lang.String">
+        select flow_name from audit_flow where type_id is not null and flow_id=#{flowId}
+    </select>
+	<!--根据条件查询审批类型表-->
+    <select id="selectAuditFlowList" parameterType="AuditFlow" resultMap="AuditFlowResult">
+        <include refid="selectAuditFlowVo"/>
+        <where>  
+            <if test="flowId != null "> and flow_id = #{flowId}</if>
+             <if test="flowName != null  and flowName != '' "> and flow_name = #{flowName}</if>
+             <if test="applyTableName != null  and applyTableName != '' "> and apply_table_name = #{applyTableName}</if>
+             <if test="applyClassName != null  and applyClassName != '' "> and apply_class_name = #{applyClassName}</if>
+             <if test="memo != null  and memo != '' "> and memo = #{memo}</if>
+             <if test="addTime != null "> and add_time = #{addTime}</if>
+             <if test="state != null "> and state = #{state}</if>
+         </where>
+    </select>
+    <select id="selectAuditFlowById" parameterType="Integer" resultMap="AuditFlowResult">
+        <include refid="selectAuditFlowVo"/>
+        where flow_id = #{flowId}
+    </select>
+        
+    <insert id="insertAuditFlow" parameterType="AuditFlow" useGeneratedKeys="true" keyProperty="flowId">
+        insert into audit_flow
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="flowName != null  and flowName != ''  ">flow_name,</if>
+			<if test="applyTableName != null  and applyTableName != ''  ">apply_table_name,</if>
+			<if test="applyClassName != null  and applyClassName != ''  ">apply_class_name,</if>
+			<if test="memo != null  and memo != ''  ">memo,</if>
+			<if test="addTime != null  ">add_time,</if>
+			<if test="state != null  ">state,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="flowName != null  and flowName != ''  ">#{flowName},</if>
+			<if test="applyTableName != null  and applyTableName != ''  ">#{applyTableName},</if>
+			<if test="applyClassName != null  and applyClassName != ''  ">#{applyClassName},</if>
+			<if test="memo != null  and memo != ''  ">#{memo},</if>
+			<if test="addTime != null  ">#{addTime},</if>
+			<if test="state != null  ">#{state},</if>
+         </trim>
+    </insert>
+	 
+    <update id="updateAuditFlow" parameterType="AuditFlow">
+        update audit_flow
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="flowName != null  and flowName != ''  ">flow_name = #{flowName},</if>
+            <if test="applyTableName != null  and applyTableName != ''  ">apply_table_name = #{applyTableName},</if>
+            <if test="applyClassName != null  and applyClassName != ''  ">apply_class_name = #{applyClassName},</if>
+            <if test="memo != null  and memo != ''  ">memo = #{memo},</if>
+            <if test="addTime != null  ">add_time = #{addTime},</if>
+            <if test="state != null  ">state = #{state},</if>
+        </trim>
+        where flow_id = #{flowId}
+    </update>
+
+	<delete id="deleteAuditFlowById" parameterType="Integer">
+        delete from audit_flow where flow_id = #{flowId}
+    </delete>
+	
+    <delete id="deleteAuditFlowByIds" parameterType="String">
+        delete from audit_flow where flow_id in 
+        <foreach item="flowId" collection="array" open="(" separator="," close=")">
+            #{flowId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.ProjectPlanMapper">
+
+    <resultMap type="ProjectPlanTable" id="PlanTableResult">
+        <id property="planId" column="plan_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="planSn" column="plan_sn"/>
+        <result property="planTitle" column="plan_title"/>
+        <result property="planEndTime" column="plan_endTime"/>
+        <result property="planStartTime" column="plan_startTime"/>
+
+    </resultMap>
+
+    <!--根据plan_id得到plan_title-->
+    <select id="selectPlanTitleById" parameterType="Long" resultType="String">
+		select plan_title from project_plantable
+		where plan_id = #{parentId}
+	</select>
+
+    <select id="selectAllPlan" parameterType="java.lang.Integer" resultMap="PlanTableResult">
+		select plan_id,project_id,plan_sn,plan_title,plan_endTime,plan_startTime from project_plantable
+		where project_id=#{projectId} order by plan_endTime
+	</select>
+
+    <insert id="insertPlan" parameterType="ProjectPlanTable" useGeneratedKeys="true" keyProperty="planId">
+        insert into project_plantable(
+        <if test="planSn!= null and planSn!= ''">plan_sn,</if>
+        <if test="projectId!= null and projectId!= ''">project_id,</if>
+        <if test="planTitle!= null and planTitle!=''">plan_title,</if>
+        <if test="planEndTime!= null">plan_endTime,</if>
+        <if test="planStartTime!= null">plan_startTime</if>
+        )values(
+        <if test="planSn != null and planSn != ''">#{planSn},</if>
+        <if test="projectId!= null and projectId!= ''">#{projectId},</if>
+        <if test="planTitle!= null and planTitle != ''">#{planTitle},</if>
+        <if test="planEndTime!= null">#{planEndTime},</if>
+        <if test="planStartTime!= null">#{planStartTime}</if>
+        )
+    </insert>
+
+    <delete id="deletePlanTitle" parameterType="ProjectPlanTable">
+        delete from project_plantable
+        <where>
+            <if test="planId !=null">and plan_id=#{planId}</if>
+            <if test="projectId!= null">and project_id= #{projectId}</if>
+        </where>
+    </delete>
+    <!--根据项目id获取里程碑信息-->
+    <select id="selectAllByProjectId" parameterType="Integer" resultMap="PlanTableResult">
+        SELECT plan_id,plan_title,plan_startTime,plan_endTime FROM `project_plantable` WHERE project_id=#{id};
+    </select>
+
+    <select id="selectProjectPlanTableById" parameterType="Long" resultMap="PlanTableResult">
+        select * from project_plantable where plan_id=#{planId}
+    </select>
+
+    <select id="selectProjectPlanTableIdByTitle" parameterType="ProjectPlanTable" resultType="java.lang.Integer">
+        select plan_id from project_plantable
+        where
+        plan_title=#{planTitle} and project_id=#{projectId}
+        order by create_time desc
+        limit 0,1
+    </select>
+
+
+</mapper>

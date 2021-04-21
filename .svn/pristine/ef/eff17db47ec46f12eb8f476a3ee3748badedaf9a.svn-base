@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.audit.AuditFlowCurrentMapper">
+
+    <resultMap type="AuditFlowCurrent" id="AuditFlowCurrentResult">
+        <result property="currentId" column="current_id"/>
+        <result property="applyId" column="apply_id"/>
+        <result property="applytitle" column="apply_title"/>
+        <result property="auditId" column="audit_id"/>
+        <result property="currentNodeId" column="current_node_id"/>
+        <result property="currentState" column="current_state"/>
+        <result property="firstUserId" column="first_user_id"/>
+        <result property="addTime" column="add_time"/>
+        <result property="createBy" column="create_by"/>
+        <result property="state" column="state"/>
+        <association property="auditFlowOperRecordSet" column="current_id"
+                     select="getauditFlowOperRecordSet"></association>
+        <association property="taskTable" column="apply_id" select="selectAllTask"></association>
+        <association property="projectTable" column="apply_id" select="selectAllProject"></association>
+        <association property="auditFlowOperRecordSet" column="current_id"
+                     select="getauditFlowOperRecordSet"></association>
+        <collection property="auditFlow" ofType="com.ruoyi.web.domain.AuditFlow"
+                    resultMap="com.ruoyi.web.mapper.audit.AuditFlowMapper.AuditFlowResult">
+        </collection>
+        <collection property="auditFlowNode" ofType="com.ruoyi.web.domain.AuditFlowNode"
+                    resultMap="com.ruoyi.web.mapper.audit.AuditFlowNodeMapper.AuditFlowNodeResult">
+        </collection>
+    </resultMap>
+    <resultMap type="com.ruoyi.web.domain.TaskTable" id="TaskTableResult">
+        <result property="tId" column="t_id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="taskTitle" column="task_title"/>
+        <result property="taskDescribe" column="task_describe"/>
+        <result property="chargepeopleId" column="chargepeople_id"/>
+        <result property="participantsId" column="participants_id"/>
+        <result property="parentId" column="parent_id"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="period" column="period"/>
+        <result property="urgencyLevel" column="urgency_level"/>
+        <result property="scheduleRate" column="schedule_rate"/>
+        <result property="warnFlag" column="warn_flag"/>
+        <result property="warnDays" column="warn_days"/>
+        <result property="warnToobject" column="warn_toobject"/>
+        <result property="warnStatus" column="warn_status"/>
+        <result property="taskSubmittime" column="task_submittime"/>
+        <result property="taskSubmitremark" column="task_submitremark"/>
+        <result property="taskUpdatefileftp" column="task_updatefileftp"/>
+        <result property="taskFinishflag" column="task_finishFlag"/>
+        <result property="taskFinishsubmittime" column="task_finishSubmitTime"/>
+        <result property="stopMone" column="stop_mone"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <association property="planTitle" column="plan_id" javaType="java.lang.String"
+                     select="selectPlanTitleById"/>
+        <collection property="projectTable" ofType="com.ruoyi.web.domain.SysProjectTable"
+                    resultMap="com.ruoyi.web.mapper.item.SysProjectTableMapper.SysProjectTableResult">
+        </collection>
+
+    </resultMap>
+    <sql id="selectAuditFlowCurrentVo">
+         select current_id,apply_id,apply_title,audit_id,current_node_id,current_state,first_user_id,create_by,add_time,state from audit_flow_current afc
+    </sql>
+    <select id="selectFlowCurrent" parameterType="AuditFlowCurrent" resultType="Map">
+        select afc.current_id as currentId,afc.apply_id as applyId,afc.apply_title as auditName,
+        afc.current_state as currentState,afc.current_node_id as currentNodeId,
+        afc.audit_id as auditId,afc.add_time as time,af.flow_name as flowName,af.type_id as typeId,af.type_name as
+        typeName,
+        (select afn.node_name from audit_flow_node afn where afn.flow_id = afc.audit_id and afn.node_id =
+        afc.current_node_id)as currentNodeName
+        from audit_flow_current afc
+        left join audit_flow af on afc.audit_id = af.flow_id
+        where 1 = 1
+        <!--查询待办审批-->
+        <if test="notcommission != null and notcommission !='' ">
+            and (${userId} in (select fno.user_id from audit_flow_node_role fno where fno.node_id=afc.current_node_id
+            and fno.current_id=afc.current_id and state = 1)
+            and afc.current_state not in (5,3,7)
+            and afc.current_id in (select afor.current_id FROM audit_flow_node_role afor))
+        </if>
+        <!--查询已提交的审批-->
+        <if test="myCommittPart != null and myCommittPart !=null">
+            and afc.create_by = #{createBy}
+        </if>
+        <if test="operUserId != null">
+            and afc.current_id in (select afor.current_id from audit_flow_oper_record afor where afor.oper_user_id =
+            #{operUserId} )
+        </if>
+        <!--查询已办任务审批-->
+        <if test="type !=null and type ==0">
+            and afc.audit_id in(1,8,9,12)
+        </if>
+        <!--查询已办项目审批-->
+        <if test="type !=null and type ==1">
+            and afc.audit_id in(3,7,10,11,13,14)
+        </if>
+        <if test="keyword != null and keyword !=''">and (instr(afc.apply_title, #{keyword})>0)</if>
+        <if test="timeType ==0 and starttime !=null and starttime !=''">
+            and afc.add_time &gt;= #{starttime}
+        </if>
+        <if test="timeType ==0 and endtime !=null and endtime !=''">
+            and afc.add_time &lt;= #{endtime}
+        </if>
+        <if test="timeType ==1 and starttime !=null and starttime !=''">
+            and afc.current_id in (select afor.current_id from audit_flow_oper_record afor where afor.add_time &gt;=
+            #{starttime})
+        </if>
+        <if test="timeType ==1 and endtime !=null and endtime !=''">
+            and afc.current_id in (select afor.current_id from audit_flow_oper_record afor where afor.add_time &lt;=#{endtime})
+        </if>
+        order by afc.add_time desc
+    </select>
+    <select id="selectPlanTitleById" parameterType="Long" resultType="String">
+        select plan_title from project_plantable
+        where plan_id = #{parentId}
+    </select>
+    <select id="selectUserName" parameterType="Integer" resultType="String">
+        SELECT user_name FROM  sys_user s LEFT JOIN audit_flow_current a
+        ON s.user_id=a.create_by WHERE a.apply_id=#{apply_id} limit 1
+    </select>
+    <select id="selectAuditFlowCurrentList" parameterType="AuditFlowCurrent" resultMap="AuditFlowCurrentResult">
+        select afc.current_id, afc.apply_id, afc.apply_title,afc.audit_id, afc.current_node_id, afc.current_state,
+        afc.first_user_id,afc.create_by, afc.add_time,afc.create_by,afc.state,
+        af.flow_id, af.flow_name, af.apply_table_name, af.apply_class_name, af.memo, af.add_time, af.state,af.type_id,
+        af.type_name,
+        afn.node_id, afn.flow_id, afn.node_name, afn.prev_node, afn.next_node, afn.node_type, afn.node_seqno,
+        afn.add_time,afn.state,
+        <if test="applyTableName == 'task_table' ">pt.*,</if>
+        tab.*
+        from audit_flow_current afc
+        LEFT JOIN audit_flow af ON afc.audit_id=af.flow_id
+        LEFT JOIN audit_flow_node afn ON afc.audit_id=afn.flow_id AND afc.current_node_id=afn.node_id
+        LEFT JOIN ${applyTableName} tab on tab.${applyClassName}=afc.apply_id
+        <if test="applyTableName == 'task_table' ">LEFT JOIN project_table pt on pt.p_id=tab.project_id</if>
+        <where>
+            af.apply_table_name=#{applyTableName}
+            <!--判断是否是待办审批模块-->
+            <if test="notcommission != null ">
+                AND ${userId} IN (SELECT user_id FROM audit_flow_node_role WHERE node_id=afc.current_node_id and
+                current_id=afc.current_id and state=1)
+                AND afc.current_state NOT IN (5,3,7)
+                AND afc.current_id IN (SELECT current_id FROM audit_flow_node_role afor)
+            </if>
+            <if test="operUserId != null ">
+                and afc.current_id in (SELECT afor.current_id FROM audit_flow_oper_record afor WHERE afor.oper_user_id =
+                #{operUserId} )
+            </if>
+            <if test="approvalstarttime != null ">
+                and afc.current_id in (SELECT afor.current_id FROM audit_flow_oper_record afor WHERE afor.add_time &gt;=
+                #{approvalstarttime})
+            </if>
+            <if test="approvalendtime != null ">
+                and afc.current_id in (SELECT afor.current_id FROM audit_flow_oper_record afor WHERE afor.add_time &lt;=
+                #{approvalendtime})
+            </if>
+            <if test="myCommittPart != null ">
+                AND afc.create_by = #{createBy}
+            </if>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+            <if test="applyId != null ">and apply_id = #{applyId}</if>
+            <if test="auditId != null ">and audit_id = #{auditId}</if>
+            <if test="currentNodeId != null ">and current_node_id = #{currentNodeId}</if>
+            <if test="currentState != null ">and current_state = #{currentState}</if>
+            <if test="firstUserId != null ">and first_user_id = #{firstUserId}</if>
+            <if test="addTime != null ">and add_time = #{addTime}</if>
+            <if test="starttime != null ">and afc.add_time &gt;=#{starttime}</if>
+            <if test="endtime != null ">and afc.add_time &lt; #{endtime}</if>
+            <if test="keyword != null ">and (instr(afc.apply_title, #{keyword})>0)</if>
+            <if test="state != null ">and afn.state = #{state}</if>
+        </where>
+        order by afc.add_time DESC
+    </select>
+
+
+    <select id="getallFlowNodeRoleList" parameterType="Integer"
+            resultMap="com.ruoyi.web.mapper.audit.AuditFlowNodeRoleMapper.AuditFlowNodeRoleResult">
+       select a.node_role_id,a.node_id,a.role_id,a.add_time,a.state,a.current_id,a.user_id,
+       b.user_name as  user_name FROM  audit_flow_node_role a LEFT  JOIN  sys_user b  on a.user_id=b.user_id WHERE a.current_id=#{current_id}
+    </select>
+    <select id="selectAuditFlowCurrentById" parameterType="Integer" resultMap="AuditFlowCurrentResult">
+        <include refid="selectAuditFlowCurrentVo"/>
+        where current_id = #{currentId}
+    </select>
+    <select id="getauditFlowOperRecordSet" parameterType="Integer"
+            resultMap="com.ruoyi.web.mapper.audit.AuditFlowOperRecordMapper.AuditFlowOperRecordResult">
+        SELECT  record_id,current_id,current_node_id,oper_user_id,oper_type,oper_memo,add_time,state
+        FROM audit_flow_oper_record
+        where current_id = #{current_id}
+    </select>
+    <select id="selectAllTask" parameterType="TaskTable"
+            resultMap="com.ruoyi.web.mapper.item.TaskTableMapper.TaskTableResult">
+        SELECT  t_id,parent_id,project_id,task_title,plan_in_out,task_finishFlag,task_describe,chargepeople_id,start_time,end_time,warn_toobject,period,
+        urgency_level,warn_status,warn_flag,warn_days,task_overdue_state,task_notstart_state,schedule_rate,remind_charge_people,participants_id,
+        remind_panticiants,remind_othars,task_submittime,task_submitremark,task_updatefileftp,task_finishSubmitTime,stop_mone,create_by,
+        create_time,update_by,update_time,task_score
+         FROM task_table
+         where t_id = #{t_id} and task_finishFlag != '8'
+    </select>
+    <select id="selectAllProject" parameterType="SysProjectTable"
+            resultMap="com.ruoyi.web.mapper.item.SysProjectTableMapper.SysProjectTableResult">
+        SELECT  p_id,title,chargepeople_id,technique_people,project_type,establish_status,project_finishFlag,period,start_time,end_time,plan_rate,establish_time,
+        department_id,memo,customer_isestablish,describe_project,build_period,expect_time,customer_isbudget,budget_amount,budget_time,budgettime_and_amcount,
+        update_filepath,client_highdirector_job,client_highdupdirector_job,client_midbranchleader_job,client_middupbranchleader_authority,client_middupbranchleader_job,
+        client_midcommissar_job,client_highdirector_authority,client_highdupdirector_authority,client_midbranchleader_authority,client_midcommissar_anthority,
+        client_highdirector_reporting,client_highdupdirector_reporting,client_midbranchleader_reporting,client_middupbranchleader_reporting,client_midcommissar_reporting,
+        client_highdirector_meet,client_midbranchleader_meet,client_highdupdirector_meet,client_middupbranchleader_meet,client_midcommissar_meet,client_highdirector_transmit,
+        client_highdupdirector_transmit,client_midbranchleader_transmit,client_middupbranchleader_transmit,client_midcommissar_transmit,client_highdirector_will,
+        client_highdupdirector_will,client_midbranchleader_will,client_middupbranchleader_will,client_midcommissar_will,client_lowinfluence,need_background,need_application,
+        need_understand,need_feasible,need_endTime,is_dianzi,dianzi_period,dianzi_money,is_shiyong,shiyong_period,risk_describe_business,risk_solutions_business,
+        risk_describe_technique,risk_solutions_technique,create_by,create_time,update_by,update_time,stop_type,stop_cause
+        FROM project_table
+        where p_id = #{p_id} and establish_status != '4'
+    </select>
+    <insert id="insertAuditFlowCurrent" parameterType="AuditFlowCurrent" useGeneratedKeys="true"
+            keyProperty="currentId">
+        insert into audit_flow_current
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="applyId != null  ">apply_id,</if>
+            <if test="applytitle != null  ">apply_title,</if>
+            <if test="auditId != null  ">audit_id,</if>
+            <if test="currentNodeId != null  ">current_node_id,</if>
+            <if test="currentState != null  ">current_state,</if>
+            <if test="firstUserId != null  ">first_user_id,</if>
+            <if test="addTime != null  ">add_time,</if>
+            <if test="createBy != null  ">create_by,</if>
+            <if test="state != null  ">state</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="applyId != null  ">#{applyId},</if>
+            <if test="applytitle != null  ">#{applytitle},</if>
+            <if test="auditId != null  ">#{auditId},</if>
+            <if test="currentNodeId != null  ">#{currentNodeId},</if>
+            <if test="currentState != null  ">#{currentState},</if>
+            <if test="firstUserId != null  ">#{firstUserId},</if>
+            <if test="addTime != null  ">#{addTime},</if>
+            <if test="createBy != null  ">#{createBy},</if>
+            <if test="state != null  ">#{state}</if>
+        </trim>
+    </insert>
+
+    <update id="updateAuditFlowCurrent" parameterType="AuditFlowCurrent">
+        update audit_flow_current
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applyId != null  ">apply_id = #{applyId},</if>
+            <if test="applytitle != null  ">apply_title = #{applytitle},</if>
+            <if test="auditId != null  ">audit_id = #{auditId},</if>
+            <if test="currentNodeId != null  ">current_node_id = #{currentNodeId},</if>
+            <if test="currentState != null  ">current_state = #{currentState},</if>
+            <if test="firstUserId != null  ">first_user_id = #{firstUserId},</if>
+            <if test="addTime != null  ">add_time = #{addTime},</if>
+            <if test="state != null  ">state = #{state},</if>
+        </trim>
+        where current_id = #{currentId}
+    </update>
+
+    <delete id="deleteAuditFlowCurrentById" parameterType="AuditFlowCurrent">
+        delete from audit_flow_current
+        <where>
+            <if test="currentId !=null">and current_id = #{currentId}</if>
+            <if test="auditId">and audit_id = #{auditId}</if>
+        </where>
+
+    </delete>
+
+    <delete id="deleteAuditFlowCurrentByIds" parameterType="String">
+        delete from audit_flow_current where current_id in
+        <foreach item="currentId" collection="array" open="(" separator="," close=")">
+            #{currentId}
+        </foreach>
+    </delete>
+    <select id="getFlowCurrentNodeId" parameterType="java.lang.Integer" resultType="Integer">
+        select current_node_id from audit_flow_current where current_id=#{currentId}
+    </select>
+    <select id="getFlowCurrentStatre" parameterType="AuditFlowCurrent" resultMap="AuditFlowCurrentResult">
+        select current_state,audit_id,current_node_id from audit_flow_current
+        <where>
+            <if test="currentId!=null">and current_id=#{currentId}</if>
+            <if test="currentNodeId!=null">and current_node_id=#{currentNodeId}</if>
+        </where>
+    </select>
+    <select id="selectCurrentId" parameterType="AuditFlowCurrent" resultMap="AuditFlowCurrentResult">
+        select current_id,current_node_id,current_state,audit_id,apply_id,apply_title from audit_flow_current
+        <where>
+            <if test="applyId !=null">and apply_id=#{applyId}</if>
+            <if test="auditId !=null">and audit_id=#{auditId}</if>
+            <if test="auditList != null">
+                and audit_id in
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="auditList">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+        limit 1
+    </select>
+    <select id="selectBuinessId" resultType="Map">
+        select current_id as currentId,current_node_id as currentNodeId from audit_flow_current
+        where audit_id = #{auditId} and apply_id=#{applyId}
+    </select>
+    <select id="selectAuditForApplyId" parameterType="AuditFlowCurrent" resultMap="AuditFlowCurrentResult">
+        select audit_id from audit_flow_current where apply_id=#{applyId} order by audit_id
+    </select>
+    <!--获得所有的apply_id-->
+    <select id="selectAllApplyId" parameterType="AuditFlowCurrent" resultMap="AuditFlowCurrentResult">
+        select apply_id from audit_flow_current
+    </select>
+    <select id="selectApplyIdByCurrentId" parameterType="Integer" resultType="Integer">
+        select apply_id from audit_flow_current
+        where current_id=#{current_id}
+    </select>
+    <select id="selectAuditIdByCurrentId" parameterType="AuditFlowCurrent" resultMap="AuditFlowCurrentResult">
+         select current_id,apply_id,audit_id,current_node_id,current_state,first_user_id,create_by,add_time,state
+        from audit_flow_current where  current_id=#{currentId}
+    </select>
+    <select id="selectList" parameterType="java.lang.Integer" resultType="Map">
+         select current_id as currentId,apply_id as applyId,audit_id as auditId,current_state as currentState
+         from audit_flow_current
+         where current_id=#{currentId}
+    </select>
+    <select id="selectCurrentState" parameterType="AuditFlowCurrent" resultType="Integer">
+        SELECT a.current_state FROM audit_flow_current a
+            LEFT JOIN task_table t ON  t.t_id = a.apply_id WHERE a.apply_id = #{applyId} and a.audit_id = 1
+    </select>
+
+    <select id="selectAuditFlowCurrentList1" parameterType="AuditFlowCurrent" resultMap="AuditFlowCurrentResult">
+        select afc.current_id, afc.apply_id, afc.apply_title, afc.audit_id, afc.current_node_id, afc.current_state,
+        afc.first_user_id,afc.create_by, afc.add_time,afc.create_by,afc.state,
+        af.flow_id, af.flow_name, af.apply_table_name, af.apply_class_name, af.memo, af.add_time, af.state,af.type_id,
+        af.type_name,
+        afn.node_id, afn.flow_id, afn.node_name, afn.prev_node, afn.next_node, afn.node_type, afn.node_seqno,
+        afn.add_time, afn.state
+        from audit_flow_current afc
+        LEFT JOIN audit_flow af ON afc.audit_id=af.flow_id
+        LEFT JOIN audit_flow_node afn ON afc.audit_id=afn.flow_id AND afc.current_node_id=afn.node_id
+        <where>
+            <if test="currentId != null ">and current_id = #{currentId}</if>
+            <if test="applyId != null ">and apply_id = #{applyId}</if>
+            <if test="auditId != null ">and audit_id = #{auditId}</if>
+            <if test="currentNodeId != null ">and current_node_id = #{currentNodeId}</if>
+            <if test="currentState != null ">and current_state = #{currentState}</if>
+            <if test="firstUserId != null ">and first_user_id = #{firstUserId}</if>
+            <if test="addTime != null ">and add_time = #{addTime}</if>
+            <if test="state != null ">and state = #{state}</if>
+            <if test="operUserId != null ">and afc.current_id in (SELECT afor.current_id FROM audit_flow_oper_record
+                afor WHERE
+                afor.oper_user_id = #{operUserId} )
+            </if>
+            <if test="myCommittPart != null ">
+                AND afc.create_by = #{createBy}
+            </if>
+            <if test="notcommission != null "><!--判断是否是待审批模块-->
+                AND ${userId} IN (SELECT user_id FROM audit_flow_node_role WHERE node_id=afc.current_node_id and
+                current_id=afc.current_id)
+                AND afc.current_state NOT IN (5,3,7)
+                AND afc.current_id IN (SELECT current_id FROM audit_flow_node_role afor)
+            </if>
+        </where>
+        ORDER BY afc.add_time DESC
+    </select>
+    <select id="selectCurrentInfo" parameterType="AuditFlowCurrent" resultMap="AuditFlowCurrentResult">
+        <include refid="selectAuditFlowCurrentVo"/>
+        <where>
+            <if test="currentId !=null">and current_id=#{currentId}</if>
+            <if test="auditId != null ">and audit_id = #{auditId}</if>
+        </where>
+    </select>
+    <update id="updateCurrentState" parameterType="Map">
+        update audit_flow_current
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="applytitle != null  ">apply_title = #{applytitle},</if>
+            <if test="currentNodeId != null  ">current_node_id = #{currentNodeId},</if>
+            <if test="currentState != null  ">current_state = #{currentState}</if>
+        </trim>
+        where current_id = #{currentId}
+    </update>
+    <delete id="deleteMultipleApproval" parameterType="java.lang.Integer">
+        delete a,b from audit_flow_current a
+        left join audit_flow_node_role b on a.current_id = b.current_id
+        where a.current_id=#{currentId}
+    </delete>
+    <select id="selectFlowCurrentMap" parameterType="java.lang.Integer" resultType="Map">
+        select a.current_id as currentId,a.audit_id as auditId,a.apply_id as applyId,a.create_by,a.current_state as currentState,
+        (select u.user_name from sys_user u where u.user_id = a.create_by) as createName
+        from audit_flow_current a
+        where current_id=#{currentId}
+    </select>
+    <delete id="deleteMultipleTable" parameterType="java.lang.Integer">
+        delete a,b,c from audit_flow_current a
+        left join audit_flow_node_role b on a.current_id = b.current_id
+        left join result_approval_record c on a.current_id = c.current_id
+        where a.current_id=#{currentId}
+    </delete>
+    <select id="selectCount" resultType="java.lang.Long">
+        select count(*) from audit_flow_current
+        where apply_id=#{applyId} and audit_id = #{auditId} and current_state = #{currentState}
+    </select>
+</mapper>

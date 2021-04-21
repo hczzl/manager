@@ -1,0 +1,1365 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.SysProjectTableMapper">
+
+    <resultMap type="SysProjectTable" id="SysProjectTableResult">
+        <id property="pId" column="p_id"/>
+        <result property="title" column="title"/>
+        <result property="inOrOut" column="in_or_out"/>
+        <result property="producetypeid" column="producetype_id"/>
+        <result property="projectCache" column="project_cache"/>
+        <result property="describeProject" column="describe_project"/>
+        <result property="chargepeopleId" column="chargepeople_id"/>
+        <result property="businessParticipants" column="business_participants"/>
+        <result property="techniquePeople" column="technique_people"/>
+        <result property="period" column="period"/>
+        <result property="startTime" column="start_time"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="endTime" column="end_time"/>
+        <result property="planRate" column="plan_rate"/>
+        <result property="memo" column="memo"/>
+        <result property="establishTime" column="establish_time"/>
+        <result property="establishStatus" column="establish_status"/>
+        <result property="projectFinishFlag" column="project_finishFlag"/>
+        <result property="checktime" column="check_time"/>
+        <result property="stoptype" column="stop_type"/>
+        <result property="stopcause" column="stop_cause"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="projectType" column="project_type"/>
+        <result property="customerIsEstablish" column="customer_isestablish"/>
+        <result property="buildPeriod" column="build_period"/>
+        <result property="expectTime" column="expect_time"/>
+        <result property="customerIsBudget" column="customer_isbudget"/>
+        <result property="budgetAmount" column="budget_amount"/>
+        <result property="budgetTime" column="budget_time"/>
+        <result property="budgettimeAndAmcount" column="budgettime_and_amcount"/>
+        <result property="updateFilePath" column="update_filepath"/>
+        <result property="clientHighdirectorJob" column="client_highdirector_job"/>
+        <result property="clientHighDupdirectorJob" column="client_highdupdirector_job"/>
+        <result property="clientMidbranchleaderJob" column="client_midbranchleader_job"/>
+        <result property="clientMidDupbranchleaderJob" column="client_middupbranchleader_job"/>
+        <result property="clientMidcommissarjob" column="client_midcommissar_job"/>
+        <result property="clientHighdirectorAuthority" column="client_highdirector_authority"/>
+        <result property="clientHighDupdirectorAuthority" column="client_highdupdirector_authority"/>
+        <result property="clientMidbranchleaderAuthority" column="client_midbranchleader_authority"/>
+        <result property="clientMidDupbranchleaderAuthority" column="client_middupbranchleader_authority"/>
+        <result property="clientMidcommissarAnthority" column="client_midcommissar_anthority"/>
+        <result property="clientHighdirectorReporting" column="client_highdirector_reporting"/>
+        <result property="clientHighDupdirectorReporting" column="client_highdupdirector_reporting"/>
+        <result property="clientMidbranchleaderReporting" column="client_midbranchleader_reporting"/>
+        <result property="clientMidDupbranchleaderReporting" column="client_middupbranchleader_reporting"/>
+        <result property="clientMidcommissarReporting" column="client_midcommissar_reporting"/>
+        <result property="clientHighdirectorMeet" column="client_highdirector_meet"/>
+        <result property="clientHighDupdirectorMeet" column="client_highdupdirector_meet"/>
+        <result property="clientMidbranchleaderMeet" column="client_midbranchleader_meet"/>
+        <result property="clientMidDupbranchleaderMeet" column="client_middupbranchleader_meet"/>
+        <result property="clientMidcommissarMeet" column="client_midcommissar_meet"/>
+        <result property="clientHighdirectorTransmit" column="client_highdirector_transmit"/>
+        <result property="clientHighDupdirectorTransmit" column="client_highdupdirector_transmit"/>
+        <result property="clientMidbranchleaderTransmit" column="client_midbranchleader_transmit"/>
+        <result property="clientMidDupbranchleaderTransmit" column="client_middupbranchleader_transmit"/>
+        <result property="clientMidcommissarTransmit" column="client_midcommissar_transmit"/>
+        <result property="clientHighdirectorWill" column="client_highdirector_will"/>
+        <result property="clientHighDupdirectorWill" column="client_highdupdirector_will"/>
+        <result property="clientMidbranchleaderWill" column="client_midbranchleader_will"/>
+        <result property="clientMidDupbranchleaderWill" column="client_middupbranchleader_will"/>
+        <result property="clientMidcommissarWill" column="client_midcommissar_will"/>
+        <result property="clientLowinfluence" column="client_lowinfluence"/>
+        <result property="needBackground" column="need_background"/>
+        <result property="needApplication" column="need_application"/>
+        <result property="needUnderstand" column="need_understand"/>
+        <result property="needFeasible" column="need_feasible"/>
+        <result property="needEndTime" column="need_endTime"/>
+        <result property="isDianzi" column="is_dianzi"/>
+        <result property="dianziPeriod" column="dianzi_period"/>
+        <result property="dianziMoney" column="dianzi_money"/>
+        <result property="advancedfundsDescribe" column="advancedfunds_describe"/>
+        <result property="estimatedBuildperiod" column="estimated_buildperiod"/>
+        <result property="isShiyong" column="is_shiyong"/>
+        <result property="shiyongPeriod" column="shiyong_period"/>
+        <result property="riskDescribeBusiness" column="risk_describe_business"/>
+        <result property="riskSolutionsBusiness" column="risk_solutions_business"/>
+        <result property="riskDescribeTechnique" column="risk_describe_technique"/>
+        <result property="riskSolutionsTechnique" column="risk_solutions_technique"/>
+        <association property="departmentName" column="department_id" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysDeptMapper.selectDepartmentNameById"/>
+        <association property="chargePeopleName" column="chargepeople_id" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserNameById"/>
+        <association property="chargePeopleUsers" column="chargepeople_id"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectDetptIdAndPostId"/>
+        <association property="techniquePeopleName" column="technique_people" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysUserMapper.getUserName"/>
+        <association property="participantsList" column="p_id" select="selecParticipantsListById"/>
+        <association property="techniqueUsers" column="technique_people"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectDetptIdAndPostId"/>
+        <association property="finishMemo" column="p_id"
+                     select="com.ruoyi.web.mapper.item.ProjectMemoMapper.selectFinishMemo"/>
+        <association property="createByName" column="create_by" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysUserMapper.getCreateByName"/>
+    </resultMap>
+
+    <resultMap type="ResultApprovalRecord" id="ResultApprovalRecordResult">
+        <id property="id" column="id"/>
+        <result property="projectCache" column="project_cache"/>
+        <result property="inOrOut" column="in_or_out"/>
+        <result property="currentId" column="current_id"/>
+        <result property="applyId" column="apply_id"/>
+        <result property="auditId" column="audit_id"/>
+        <result property="number" column="number"/>
+        <result property="approvalState" column="approval_state"/>
+        <result property="approvalUserId" column="approval_user_id"/>
+        <result property="approvalUserName" column="approval_user_name"/>
+        <result property="approvalMemo" column="approval_memo"/>
+        <association property="approvalTypeName" column="audit_id" javaType="java.lang.String"
+                     select="com.ruoyi.web.mapper.audit.AuditFlowMapper.selectFlowNameByFlowId"/>
+    </resultMap>
+    <resultMap type="SysProjectTableVo" id="SysProjectTableVoResult">
+        <id property="pId" column="p_id"/>
+        <result property="projectCache" column="project_cache"/>
+        <result property="techniquePeople" column="technique_people"/>
+        <result property="title" column="title"/>
+        <result property="producetypeid" column="producetype_id"/>
+        <result property="inOrOut" column="in_or_out"/>
+        <result property="projectType" column="project_type"/>
+        <result property="chargepeopleId" column="chargepeople_id"/>
+        <result property="businessParticipants" column="business_participants"/>
+        <result property="startTime" column="start_time"/>
+        <result property="endTime" column="end_time"/>
+        <result property="planRate" column="plan_rate"/>
+        <result property="departmentId" column="department_id"/>
+        <result property="projectFinishFlag" column="project_finishFlag"/>
+        <result property="establishStatus" column="establish_status"/>
+        <result property="producetypeid" column="producetype_id"/>
+    </resultMap>
+    <resultMap type="SysProjectTableTechnologyVo" id="SysProjectTableTechnologyVoResult">
+        <id property="pId" column="p_id"/>
+        <result property="title" column="title"/>
+        <result property="needBackground" column="need_background"/>
+        <result property="needApplication" column="need_application"/>
+        <result property="needUnderstand" column="need_understand"/>
+        <result property="needFeasible" column="need_feasible"/>
+        <result property="needEndTime" column="need_endTime"/>
+        <result property="riskDescribeTechnique" column="risk_describe_technique"/>
+        <result property="riskSolutionsTechnique" column="risk_solutions_technique"/>
+        <result property="projectFinishFlag" column="project_finishFlag"/>
+        <result property="establishStatus" column="establish_status"/>
+    </resultMap>
+    <resultMap type="ParticipantsTable" id="ParticipantsResult">
+        <id property="id" column="id"/>
+        <result property="userId" column="user_id"/>
+        <result property="projectId" column="project_id"/>
+        <association property="userName" column="user_id" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserNameById"/>
+        <association property="sysUser" column="user_id"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectDetptIdAndPostId"/>
+    </resultMap>
+
+    <resultMap type="ProjectMarketStageTable" id="ProjectMarketStageResult">
+        <id property="id" column="id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="stageType" column="stage_type"/>
+        <result property="people" column="people"/>
+        <result property="workPeriod" column="work_period"/>
+        <result property="deviceList" column="device_list"/>
+        <result property="toolList" column="tool_list"/>
+        <result property="isCar" column="is_car"/>
+        <result property="place" column="place"/>
+        <result property="partner" column="partner"/>
+    </resultMap>
+
+    <resultMap type="ProjectMarkTypeInfoTable" id="ProjectMarkTypeInfoResult">
+        <id property="id" column="id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="isType" column="is_type"/>
+    </resultMap>
+    <!--市场项目的相关方法-->
+    <!--添加市场项目-->
+    <insert id="insertMarkProject" parameterType="SysProjectTable" useGeneratedKeys="true" keyProperty="pId">
+        insert into project_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectType != null">project_type,</if>
+            <if test="projectCache != null">project_cache,</if>
+            <!--商务负责人书写部分-->
+            <if test="title != null ">title,</if><!--项目名称-->
+            <if test="producetypeid != null ">producetype_id,</if><!--产品类型id-->
+            <if test="chargepeopleId != null ">chargepeople_id,</if><!--商务负责人-->
+            <if test="businessParticipants != null ">business_participants,</if><!--商务参与人-->
+            <if test="techniquePeople != null ">technique_people,</if><!--技术负责人-->
+            <if test="period != null ">period,</if><!--运作周期-->
+            <if test="startTime != null ">start_time,</if><!--启动时间-->
+            <if test="endTime != null">end_time,</if><!--结束时间-->
+            <if test="describeProject != null ">describe_project,</if><!--客户名称-->
+            <if test="customerIsEstablish != null ">customer_isestablish,</if><!--客户是否立项-->
+            <if test="buildPeriod != null ">build_period,</if><!--1：周期-->
+            <if test="expectTime != null ">expect_time,</if><!--0：预计立项时间-->
+            <if test="customerIsBudget != null ">customer_isbudget,</if><!--客户是否预算-->
+            <if test="budgetAmount != null ">budget_amount,</if><!--预算金额-->
+            <if test="budgetTime != null ">budget_time,</if><!--时间-->
+            <if test="budgettimeAndAmcount != null ">budgettime_and_amcount,</if><!--预算金额-->
+            <if test="isDianzi != null  ">is_dianzi,</if><!--是否垫资-->
+            <if test="dianziPeriod != null  ">dianzi_period,</if><!--周期-->
+            <if test="dianziMoney != null  ">dianzi_money,</if><!--金额(单位万元)-->
+            <if test="advancedfundsDescribe != null and advancedfundsDescribe !='' ">advancedfunds_describe,</if>
+            <if test="estimatedBuildperiod != null  ">estimated_buildperiod,</if><!--是否试用-->
+            <if test="isShiyong != null  ">is_shiyong,</if><!--是否试用-->
+            <if test="shiyongPeriod != null  ">shiyong_period,</if><!--试用周期-->
+            <if test="clientHighdirectorJob != null ">client_highdirector_job,</if><!--局长-->
+            <if test="clientHighdirectorAuthority != null ">client_highdirector_authority,</if><!--决策权-->
+            <if test="clientHighdirectorReporting != null ">client_highdirector_reporting,</if><!--方案汇报-->
+            <if test="clientHighdirectorMeet != null ">client_highdirector_meet,</if><!--商务洽谈-->
+            <if test="clientHighdirectorTransmit != null ">client_highdirector_transmit,</if><!--上下传达-->
+            <if test="clientHighdirectorWill != null">client_highdirector_will,
+            </if><!--合作意愿-->
+            <if test="clientHighDupdirectorJob != null ">client_highdupdirector_job,</if><!--副局长-->
+            <if test="clientHighDupdirectorAuthority != null ">client_highdupdirector_authority,</if><!---->
+            <if test="clientHighDupdirectorReporting != null ">client_highdupdirector_reporting,</if><!---->
+            <if test="clientHighDupdirectorMeet != null ">client_highdupdirector_meet,</if><!---->
+            <if test="clientHighDupdirectorTransmit != null ">client_highdupdirector_transmit,</if><!---->
+            <if test="clientHighDupdirectorWill != null">
+                client_highdupdirector_will,
+            </if><!---->
+            <if test="clientMidbranchleaderJob != null ">client_midbranchleader_job,</if><!--支队长-->
+            <if test="clientMidbranchleaderAuthority != null ">client_midbranchleader_authority,</if><!---->
+            <if test="clientMidbranchleaderReporting != null ">client_midbranchleader_reporting,</if><!---->
+            <if test="clientMidbranchleaderMeet != null ">client_midbranchleader_meet,</if><!---->
+            <if test="clientMidbranchleaderTransmit != null ">client_midbranchleader_transmit,</if><!---->
+            <if test="clientMidbranchleaderWill != null">
+                client_midbranchleader_will,
+            </if><!---->
+            <if test="clientMidDupbranchleaderJob != null ">client_middupbranchleader_job,</if><!--副支队长-->
+            <if test="clientMidDupbranchleaderAuthority != null ">client_middupbranchleader_authority,</if><!---->
+            <if test="clientMidDupbranchleaderReporting != null ">client_middupbranchleader_reporting,</if><!---->
+            <if test="clientMidDupbranchleaderMeet != null ">client_middupbranchleader_meet,</if><!---->
+            <if test="clientMidDupbranchleaderTransmit != null ">client_midDupbranchleader_transmit,</if><!---->
+            <if test="clientMidDupbranchleaderWill != null">
+                client_middupbranchleader_will,
+            </if><!---->
+            <if test="clientMidcommissarjob != null ">client_midcommissar_job,</if><!--政委-->
+            <if test="clientMidcommissarAnthority != null ">client_midcommissar_anthority,</if><!---->
+            <if test="clientMidcommissarReporting != null ">client_midcommissar_reporting,</if><!---->
+            <if test="clientMidcommissarMeet != null ">client_midcommissar_meet,</if>
+            <if test="clientMidcommissarTransmit != null ">client_midcommissar_transmit,</if><!---->
+            <if test="clientMidcommissarWill != null">client_midcommissar_will,
+            </if><!---->
+            <if test="clientLowinfluence != null">client_lowinfluence,</if><!--基层-->
+            <if test="riskDescribeBusiness != null ">risk_describe_business,</if><!--商务风险描述-->
+            <if test="riskSolutionsBusiness != null ">risk_solutions_business,</if><!--解决措施-->
+            <if test="updateFilePath != null ">update_filepath,</if><!--有关文档上传的地址-->
+            <if test="createBy != null ">create_by,</if><!---->
+            <if test="createTime != null ">create_time,</if><!---->
+            establish_time<!--立项提交时间-->
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectType != null">#{projectType},</if>
+            <if test="projectCache != null">#{projectCache},</if>
+            <!--商务负责人书写部分-->
+            <if test="title != null ">#{title},</if><!--项目名称-->
+            <if test="producetypeid != null ">#{producetypeid},</if><!--产品类型id-->
+            <if test="chargepeopleId != null ">#{chargepeopleId},</if><!--商务负责人-->
+            <if test="businessParticipants != null ">#{businessParticipants},</if><!--商务参与人-->
+            <if test="techniquePeople != null ">#{techniquePeople},</if><!--技术负责人-->
+            <if test="period != null ">#{period},</if><!--运作周期-->
+            <if test="startTime != null ">#{startTime},</if><!--启动时间-->
+            <if test="endTime != null">#{endTime},</if><!--结束时间-->
+            <if test="describeProject != null ">#{describeProject},</if><!--客户名称-->
+            <if test="customerIsEstablish != null ">#{customerIsEstablish},</if><!--客户是否立项-->
+            <if test="buildPeriod != null ">#{buildPeriod},</if><!--1：周期-->
+            <if test="expectTime != null ">#{expectTime},</if><!--0：预计立项时间-->
+            <if test="customerIsBudget != null ">#{customerIsBudget},</if><!--客户是否立项-->
+            <if test="budgetAmount != null ">#{budgetAmount},</if><!--预算金额-->
+            <if test="budgetTime != null ">#{budgetTime},</if><!--时间-->
+            <if test="budgettimeAndAmcount != null ">#{budgettimeAndAmcount},</if><!--预算金额-->
+            <if test="isDianzi != null  ">#{isDianzi},</if><!--是否垫资-->
+            <if test="dianziPeriod != null  ">#{dianziPeriod},</if><!--周期-->
+            <if test="dianziMoney != null  ">#{dianziMoney},</if><!--金额(单位万元)-->
+            <if test="advancedfundsDescribe != null and advancedfundsDescribe !=''">#{advancedfundsDescribe},</if>
+            <if test="estimatedBuildperiod != null  ">#{estimatedBuildperiod},</if><!--是否试用-->
+            <if test="isShiyong != null  ">#{isShiyong},</if><!--是否试用-->
+            <if test="shiyongPeriod != null  ">#{shiyongPeriod},</if><!--试用周期-->
+            <if test="clientHighdirectorJob != null ">#{clientHighdirectorJob},</if><!--局长-->
+            <if test="clientHighdirectorAuthority != null ">#{clientHighdirectorAuthority},</if><!--决策权-->
+            <if test="clientHighdirectorReporting != null ">#{clientHighdirectorReporting},</if><!--方案汇报-->
+            <if test="clientHighdirectorMeet != null ">#{clientHighdirectorMeet},</if><!--商务洽谈-->
+            <if test="clientHighdirectorTransmit != null ">#{clientHighdirectorTransmit},</if><!--上下传达-->
+            <if test="clientHighdirectorWill != null">#{clientHighdirectorWill},
+            </if><!--合作意愿-->
+            <if test="clientHighDupdirectorJob != null ">#{clientHighDupdirectorJob},</if><!--副局长-->
+            <if test="clientHighDupdirectorAuthority != null ">#{clientHighDupdirectorAuthority},</if><!---->
+            <if test="clientHighDupdirectorReporting != null ">#{clientHighDupdirectorReporting},</if><!---->
+            <if test="clientHighDupdirectorMeet != null ">#{clientHighDupdirectorMeet},</if><!---->
+            <if test="clientHighDupdirectorTransmit != null ">#{clientHighDupdirectorTransmit},</if><!---->
+            <if test="clientHighDupdirectorWill != null">
+                #{clientHighDupdirectorWill},
+            </if><!---->
+            <if test="clientMidbranchleaderJob != null ">#{clientMidbranchleaderJob},</if><!--支队长-->
+            <if test="clientMidbranchleaderAuthority != null ">#{clientMidbranchleaderAuthority},</if><!---->
+            <if test="clientMidbranchleaderReporting != null ">#{clientMidbranchleaderReporting},</if><!---->
+            <if test="clientMidbranchleaderMeet != null ">#{clientMidbranchleaderMeet},</if><!---->
+            <if test="clientMidbranchleaderTransmit != null ">#{clientMidbranchleaderTransmit},</if><!---->
+            <if test="clientMidbranchleaderWill != null">
+                #{clientMidbranchleaderWill},
+            </if><!---->
+            <if test="clientMidDupbranchleaderJob != null ">#{clientMidDupbranchleaderJob},</if><!--副支队长-->
+            <if test="clientMidDupbranchleaderAuthority != null ">#{clientMidDupbranchleaderAuthority},</if><!---->
+            <if test="clientMidDupbranchleaderReporting != null ">#{clientMidDupbranchleaderReporting},</if><!---->
+            <if test="clientMidDupbranchleaderMeet != null ">#{clientMidDupbranchleaderMeet},</if><!---->
+            <if test="clientMidDupbranchleaderTransmit != null ">#{clientMidDupbranchleaderTransmit},</if><!---->
+            <if test="clientMidDupbranchleaderWill != null">
+                #{clientMidDupbranchleaderWill},
+            </if><!---->
+            <if test="clientMidcommissarjob != null ">#{clientMidcommissarjob},</if><!--政委-->
+            <if test="clientMidcommissarAnthority != null ">#{clientMidcommissarAnthority},</if><!---->
+            <if test="clientMidcommissarReporting != null ">#{clientMidcommissarReporting},</if><!---->
+            <if test="clientMidcommissarMeet != null ">#{clientMidcommissarMeet},</if>
+            <if test="clientMidcommissarTransmit != null ">#{clientMidcommissarTransmit},</if><!---->
+            <if test="clientMidcommissarWill != null">#{clientMidcommissarWill},
+            </if><!---->
+            <if test="clientLowinfluence != null">#{clientLowinfluence},</if><!--基层-->
+            <if test="riskDescribeBusiness != null ">#{riskDescribeBusiness},</if><!--商务风险描述-->
+            <if test="riskSolutionsBusiness != null ">#{riskSolutionsBusiness},</if><!--解决措施-->
+            <if test="updateFilePath != null ">#{updateFilePath},</if><!--有关文档上传的地址-->
+            <if test="createBy != null ">#{createBy},</if><!---->
+            <if test="createTime != null ">#{createTime},</if><!---->
+            establish_time<!--立项提交时间-->
+        </trim>
+    </insert>
+    <!--商务负责人修改接口-->
+    <update id="updateChargePeoplePart" parameterType="SysProjectTable">
+        update project_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectType != null and projectType !=''">project_type=#{projectType},</if>
+            <if test="title != null ">title=#{title},</if>
+            <if test="producetypeid != null ">producetype_id=#{producetypeid},</if>
+            <if test="establishStatus != null ">establish_status=#{establishStatus},</if>
+            <if test="projectFinishFlag != null ">project_finishFlag=#{projectFinishFlag},</if>
+            <if test="chargepeopleId != null ">chargepeople_id=#{chargepeopleId},</if>
+            <if test="businessParticipants != null ">business_participants=#{businessParticipants},</if>
+            <if test="techniquePeople != null ">technique_people=#{techniquePeople},</if>
+            <if test="period != null ">period=#{period},</if>
+            <if test="startTime != null">start_time=#{startTime},</if>
+            <if test="endTime != null">end_time=#{endTime},</if>
+            <if test="describeProject != null ">describe_project=#{describeProject},</if>
+            <if test="customerIsEstablish != null ">customer_isestablish=#{customerIsEstablish},</if>
+            <if test="buildPeriod != null ">build_period=#{buildPeriod},</if>
+            <if test="expectTime != null ">expect_time=#{expectTime},</if>
+            <if test="customerIsBudget != null ">customer_isbudget=#{customerIsBudget},</if>
+            <if test="budgetAmount != null ">budget_amount=#{budgetAmount},</if>
+            <if test="budgetTime != null ">budget_time=#{budgetTime},</if>
+            <if test="budgettimeAndAmcount != null ">budgettime_and_amcount=#{budgettimeAndAmcount},</if>
+            <if test="isDianzi != null  ">is_dianzi=#{isDianzi},</if>
+            <if test="dianziPeriod != null  ">dianzi_period=#{dianziPeriod},</if>
+            <if test="dianziMoney != null  ">dianzi_money=#{dianziMoney},</if>
+            <if test="advancedfundsDescribe != null  ">advancedfunds_describe=#{advancedfundsDescribe},</if>
+            <if test="estimatedBuildperiod != null  ">estimated_buildperiod=#{estimatedBuildperiod},</if>
+            <if test="isShiyong != null  ">is_shiyong=#{isShiyong},</if>
+            <if test="shiyongPeriod != null  ">shiyong_period=#{shiyongPeriod},</if>
+            <if test="clientHighdirectorJob != null ">client_highdirector_job=#{clientHighdirectorJob},</if>
+            <if test="clientHighdirectorAuthority != null ">
+                client_highdirector_authority=#{clientHighdirectorAuthority},
+            </if>
+            <if test="clientHighdirectorReporting != null ">
+                client_highdirector_reporting=#{clientHighdirectorReporting},
+            </if>
+            <if test="clientHighdirectorMeet != null ">client_highdirector_meet=#{clientHighdirectorMeet},</if>
+            <if test="clientHighdirectorTransmit != null ">client_highdirector_transmit=#{clientHighdirectorTransmit},
+            </if>
+            <if test="clientHighdirectorWill != null">
+                client_highdirector_will=#{clientHighdirectorWill},
+            </if>
+            <if test="clientHighDupdirectorJob != null ">client_highDupdirector_job=#{clientHighDupdirectorJob},</if>
+            <if test="clientHighDupdirectorAuthority != null ">
+                client_highDupdirector_authority=#{clientHighDupdirectorAuthority},
+            </if>
+            <if test="clientHighDupdirectorReporting != null ">
+                client_highDupdirector_reporting=#{clientHighDupdirectorReporting},
+            </if>
+            <if test="clientHighDupdirectorMeet != null ">client_highDupdirector_meet=#{clientHighDupdirectorMeet},</if>
+            <if test="clientHighDupdirectorTransmit != null ">
+                client_highDupdirector_transmit=#{clientHighDupdirectorTransmit},
+            </if>
+            <if test="clientHighDupdirectorWill != null and clientHighDupdirectorWill !=''">
+                client_highDupdirector_will=#{clientHighDupdirectorWill},
+            </if>
+            <if test="clientMidbranchleaderJob != null ">client_midbranchleader_job=#{clientMidbranchleaderJob},</if>
+            <if test="clientMidbranchleaderAuthority != null ">
+                client_midbranchleader_authority=#{clientMidbranchleaderAuthority},
+            </if>
+            <if test="clientMidbranchleaderReporting != null ">
+                client_midbranchleader_reporting=#{clientMidbranchleaderReporting},
+            </if>
+            <if test="clientMidbranchleaderMeet != null ">client_midbranchleader_meet=#{clientMidbranchleaderMeet},</if>
+            <if test="clientMidbranchleaderTransmit != null ">
+                client_midbranchleader_transmit=#{clientMidbranchleaderTransmit},
+            </if>
+            <if test="clientMidbranchleaderWill != null">
+                client_midbranchleader_will=#{clientMidbranchleaderWill},
+            </if>
+            <if test="clientMidDupbranchleaderJob != null ">
+                client_midDupbranchleader_job=#{clientMidDupbranchleaderJob},
+            </if>
+            <if test="clientMidDupbranchleaderAuthority != null ">
+                client_midDupbranchleader_authority=#{clientMidDupbranchleaderAuthority},
+            </if>
+            <if test="clientMidDupbranchleaderReporting != null ">
+                client_midDupbranchleader_reporting=#{clientMidDupbranchleaderReporting},
+            </if>
+            <if test="clientMidDupbranchleaderMeet != null ">
+                client_midDupbranchleader_meet=#{clientMidDupbranchleaderMeet},
+            </if>
+            <if test="clientMidcommissarMeet != null ">client_midcommissar_meet=#{clientMidcommissarMeet},</if>
+            <if test="clientMidDupbranchleaderTransmit != null ">
+                client_midDupbranchleader_transmit=#{clientMidDupbranchleaderTransmit},
+            </if>
+            <if test="clientMidDupbranchleaderWill != null">
+                client_midDupbranchleader_will=#{clientMidDupbranchleaderWill},
+            </if>
+            <if test="clientMidcommissarjob != null ">client_midcommissar_job=#{clientMidcommissarjob},</if>
+            <if test="clientMidcommissarAnthority != null ">
+                client_midcommissar_anthority=#{clientMidcommissarAnthority},
+            </if>
+            <if test="clientMidcommissarReporting != null ">
+                client_midcommissar_reporting=#{clientMidcommissarReporting},
+            </if>
+            <if test="clientMidcommissarTransmit != null ">client_midcommissar_transmit=#{clientMidcommissarTransmit},
+            </if>
+            <if test="clientMidcommissarWill != null">
+                client_midcommissar_will=#{clientMidcommissarWill},
+            </if>
+            <if test="clientLowinfluence != null">
+                client_lowinfluence=#{clientLowinfluence},
+            </if>
+            <if test="riskDescribeBusiness != null ">risk_describe_business=#{riskDescribeBusiness},</if>
+            <if test="riskSolutionsBusiness != null ">risk_solutions_business=#{riskSolutionsBusiness},</if>
+            <if test="updateFilePath != null ">update_filepath=#{updateFilePath},</if>
+            <if test="updateBy != null ">update_by=#{updateBy},</if>
+            <if test="updateTime != null ">update_time=#{updateTime}</if>
+        </trim>
+        where p_id=#{pId}
+    </update>
+    <sql id="projectTablebVo">
+        SELECT  p_id,title,producetype_id,chargepeople_id,technique_people,project_type,establish_status,project_finishFlag,period,start_time,end_time,plan_rate,establish_time,
+        department_id,memo,customer_isestablish,describe_project,build_period,expect_time,customer_isbudget,budget_amount,budget_time,budgettime_and_amcount,
+        update_filepath,client_highdirector_job,client_highdupdirector_job,client_midbranchleader_job,client_middupbranchleader_authority,client_middupbranchleader_job,
+        client_midcommissar_job,client_highdirector_authority,client_highdupdirector_authority,client_midbranchleader_authority,client_midcommissar_anthority,
+        client_highdirector_reporting,client_highdupdirector_reporting,client_midbranchleader_reporting,client_middupbranchleader_reporting,client_midcommissar_reporting,
+        client_highdirector_meet,client_midbranchleader_meet,client_highdupdirector_meet,client_middupbranchleader_meet,client_midcommissar_meet,client_highdirector_transmit,
+        client_highdupdirector_transmit,client_midbranchleader_transmit,client_middupbranchleader_transmit,client_midcommissar_transmit,client_highdirector_will,
+        client_highdupdirector_will,client_midbranchleader_will,client_middupbranchleader_will,client_midcommissar_will,client_lowinfluence,need_background,need_application,
+        need_understand,need_feasible,need_endTime,is_dianzi,dianzi_period,advancedfunds_describe,estimated_buildperiod,dianzi_money,is_shiyong,shiyong_period,risk_describe_business,risk_solutions_business,
+        risk_describe_technique,risk_solutions_technique,create_by,create_time,update_by,update_time,project_cache
+        FROM project_table
+
+    </sql>
+    <!--添加技术相关的内容-->
+    <update id="updateMarkProject" parameterType="SysProjectTable">
+        update project_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="needBackground != null ">need_background=#{needBackground},</if><!--项目背景-->
+            <if test="needApplication != null ">need_application=#{needApplication},</if><!--应用场景-->
+            <if test="needUnderstand != null ">need_understand=#{needUnderstand},</if><!--技术是否理解：0：不理解，1：理解-->
+            <if test="needFeasible != null ">need_feasible=#{needFeasible},</if><!--技术是否可行：0：不可行，1：可行-->
+            <if test="needEndTime != null ">need_endTime=#{needEndTime},</if><!--时间节点，结束时间-->
+            <if test="riskDescribeTechnique != null ">risk_describe_technique=#{riskDescribeTechnique},
+            </if><!--技术风险描述-->
+            <if test="riskSolutionsTechnique != null ">risk_solutions_technique=#{riskSolutionsTechnique},
+            </if><!--风险描述方法-->
+            <if test="updateBy != null ">update_by=#{updateBy},</if><!---->
+            <if test="updateTime != null ">update_time=#{updateTime}</if><!---->
+        </trim>
+        where p_id=#{pId}
+    </update>
+    <select id="getBigId" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        select p_id from project_table
+    </select>
+    <!--查询市场项目-->
+    <select id="selectAllInfo" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        SELECT
+        p_id,project_cache,in_or_out,title,producetype_id,chargepeople_id,technique_people,project_type,establish_status,project_finishFlag,period,start_time,end_time,plan_rate,establish_time,
+        department_id,memo,customer_isestablish,describe_project,build_period,expect_time,customer_isbudget,budget_amount,budget_time,budgettime_and_amcount,update_filepath,
+        <if test="parameter == 1">
+            client_highdirector_job,client_highdupdirector_job,client_midbranchleader_job,client_middupbranchleader_authority,client_middupbranchleader_job,
+            client_midcommissar_job,client_highdirector_authority,client_highdupdirector_authority,client_midbranchleader_authority,client_midcommissar_anthority,
+            client_highdirector_reporting,client_highdupdirector_reporting,client_midbranchleader_reporting,client_middupbranchleader_reporting,client_midcommissar_reporting,
+            client_highdirector_meet,client_midbranchleader_meet,client_highdupdirector_meet,client_middupbranchleader_meet,client_midcommissar_meet,client_highdirector_transmit,
+            client_highdupdirector_transmit,client_midbranchleader_transmit,client_middupbranchleader_transmit,client_midcommissar_transmit,client_highdirector_will,
+            client_highdupdirector_will,client_midbranchleader_will,client_middupbranchleader_will,client_midcommissar_will,client_lowinfluence,
+            risk_describe_business,risk_solutions_business,
+        </if>
+        need_background,need_application,
+        need_understand,need_feasible,need_endTime,is_dianzi,dianzi_period,advancedfunds_describe,estimated_buildperiod,dianzi_money,is_shiyong,shiyong_period,
+        create_by,create_time,update_by,update_time,risk_describe_technique,risk_solutions_technique
+        FROM project_table
+        <where>
+            <if test="title != null and title !='' ">and title=#{title}</if>
+            <if test="pId != null ">and p_id=#{pId}</if>
+        </where>
+    </select>
+
+    <select id="selectTechnology" parameterType="java.lang.Integer" resultMap="SysProjectTableTechnologyVoResult">
+        select p_id,title,producetype_id,need_background,need_application,need_understand,need_feasible,
+        need_endTime,risk_describe_technique,risk_solutions_technique,establish_status
+        from project_table
+        where p_id= #{pId}
+    </select>
+    <select id="selectTitle" parameterType="SysProjectTableTechnologyVo"
+            resultMap="SysProjectTableTechnologyVoResult">
+        SELECT p_id,title,producetype_id,establish_status,project_finishFlag FROM project_table
+        <where>
+            <if test="title != null and title !='' ">and title=#{title}</if>
+            <if test="pId != null ">and p_id=#{pId}</if>
+        </where>
+    </select>
+    <select id="selectTitleBypId" parameterType="Map" resultType="Map">
+        select p_id as pId,title,establish_status as establishStatus
+        from project_table
+        <where>
+            <if test="title != null and title !='' ">and title=#{title}</if>
+            <if test="pId != null ">and p_id=#{pId}</if>
+        </where>
+    </select>
+    <select id="selectTechniquePeopleId" parameterType="java.lang.Integer" resultType="Map">
+        select technique_people as techniquePeopleId,chargepeople_id as chargepeopleId from project_table  where p_id= #{pId}
+    </select>
+    <!--单个删除项目-->
+    <delete id="deleteProject" parameterType="java.lang.Integer">
+        delete from project_table where p_id = #{id}
+    </delete>
+    <!--科研项目有关方法-->
+    <!--查询项目表-->
+    <sql id="selectProjectTable">
+        select p.p_id,p.in_or_out,p.title,p.producetype_id,p.describe_project,p.chargepeople_id,p.period,p.start_time,p.end_time,
+        p.plan_rate,p.memo,p.establish_time,p.department_id,p.project_cache,
+        p.establish_status,p.project_finishFlag from project_table p
+    </sql>
+    <!--得到项目列表，信息不全-->
+    <sql id="project_lists">
+        SELECT p.title,s.login_name,d.dept_name,p.start_time,p.end_time,p.chargepeople_id,p.department_id,p.producetype_id
+        FROM project_table p,sys_user s,sys_dept d
+        WHERE p.chargepeople_id=s.user_id  AND p.department_id=d.dept_id order by p.start_time
+    </sql>
+    <!--查询三表，得到用户名和部门名字，且得到各个项目的详细信息-->
+    <sql id="user_project_dept">
+        SELECT
+        p.p_id,p.in_or_out,p.title,p.producetype_id,p.chargepeople_id,p.technique_people,p.project_type,p.establish_status,p.project_finishFlag,p.period,p.start_time,p.end_time,p.plan_rate,p.establish_time,
+        p.p_id,p.project_cache,p.in_or_out,p.title,p.chargepeople_id,p.technique_people,p.project_type,p.establish_status,p.project_finishFlag,p.period,p.start_time,p.end_time,p.plan_rate,p.establish_time,
+        p.department_id,p.memo,p.customer_isestablish,p.describe_project,p.build_period,p.expect_time,p.customer_isbudget,p.budget_amount,p.budget_time,p.budgettime_and_amcount,
+        p.update_filepath,p.client_highdirector_job,p.client_highdupdirector_job,p.client_midbranchleader_job,p.client_middupbranchleader_authority,p.client_middupbranchleader_job,
+        p.client_midcommissar_job,p.client_highdirector_authority,p.client_highdupdirector_authority,p.client_midbranchleader_authority,p.client_midcommissar_anthority,
+        p.client_highdirector_reporting,p.client_highdupdirector_reporting,p.client_midbranchleader_reporting,p.client_middupbranchleader_reporting,p.client_midcommissar_reporting,
+        p.client_highdirector_meet,p.client_midbranchleader_meet,p.client_highdupdirector_meet,p.client_middupbranchleader_meet,p.client_midcommissar_meet,p.client_highdirector_transmit,
+        p.client_highdupdirector_transmit,p.client_midbranchleader_transmit,p.client_middupbranchleader_transmit,p.client_midcommissar_transmit,p.client_highdirector_will,
+        p.client_highdupdirector_will,p.client_midbranchleader_will,p.client_middupbranchleader_will,p.client_midcommissar_will,p.client_lowinfluence,p.need_background,p.need_application,
+        p.need_understand,p.need_feasible,p.need_endTime,p.is_dianzi,p.dianzi_period,advancedfunds_describe,estimated_buildperiod,p.dianzi_money,p.is_shiyong,p.shiyong_period,p.risk_describe_business,p.risk_solutions_business,
+        p.risk_describe_technique,p.risk_solutions_technique,p.create_by,p.create_time,p.update_by,p.update_time
+
+        FROM project_table p
+        left join sys_user s on p.chargepeople_id=s.user_id
+        left join sys_dept d on p.department_id=d.dept_id
+    </sql>
+
+    <!--获取项目进度-->
+
+    <select id="getPlanRate" parameterType="java.lang.Integer" resultType="Double">
+
+       SELECT SUM((finishCount/taskTotalCount)*weight)plan_rate FROM (
+            SELECT pro.p_id,prop.plan_id,COUNT(task.t_id) AS taskTotalCount,
+            ROUND((((((UNIX_TIMESTAMP(prop.plan_endTime)-UNIX_TIMESTAMP(prop.plan_startTime))/(60*60*24))+1)/
+            pro.period)),2) AS weight
+        FROM project_table pro
+            LEFT JOIN project_plantable prop ON pro.p_id = prop.project_id
+            LEFT JOIN task_table task ON task.parent_id = prop.plan_id
+        WHERE pro.p_id = #{pro.pId}
+            GROUP BY prop.plan_id
+            )a LEFT JOIN (
+            SELECT COUNT(task.t_id) AS finishCount,task.parent_id FROM task_table task
+            WHERE task.task_finishFlag = 1 AND task.project_id =#{pro.pId}
+            GROUP BY task.parent_id) b ON a.plan_id = b.parent_id
+
+    </select>
+    <!-- 查询全部立项成功的项目-->
+    <select id="selectAllProject" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        SELECT
+        p.p_id,p.project_cache,p.in_or_out,p.title,p.producetype_id,p.chargepeople_id,p.technique_people,p.project_type,p.project_finishFlag,p.department_id,p.plan_rate,
+        p.establish_status,p.start_time,p.end_time
+        FROM project_table p
+        left join sys_dept d on p.department_id=d.dept_id
+        <where>
+            p.project_cache = '0'
+            AND p.establish_status='1'
+            AND project_finishFlag IN (0,-1,-2)
+            <if test="attention !=null">and p_id in (SELECT p_id FROM user_project_attention where user_id =
+                #{attention})
+            </if>
+            <if test="pId != null">and p_id=#{pId}</if>
+        </where>
+        order by p.start_time desc
+    </select>
+    <select id="selectProjectVos" parameterType="SysProjectTableVo" resultMap="SysProjectTableVoResult">
+        SELECT p.p_id,p.in_or_out,p.title,p.producetype_id,p.chargepeople_id,
+        (select user_name from sys_user where user_id =p.chargepeople_id )as chargePeopleName,
+        project_type,p.project_finishFlag,p.technique_people as techniquePeople,
+        (select user_name from sys_user where user_id =p.technique_people ) as techniquePeopleName,
+        p.department_id,(select dept_name from sys_dept where dept_id =p.department_id) as departmentName,p.plan_rate,
+        p.establish_status,p.start_time,p.end_time,p.producetype_id
+        FROM project_table p
+        left join sys_dept d on p.department_id=d.dept_id
+        <where>
+            p.project_cache = '0'
+            AND p.establish_status='1'
+            AND project_finishFlag in ('0','-1','-2')
+            <if test="projectType !=null">AND project_type=#{projectType}</if>
+            <if test="addTask == 1">AND p.p_id in (select distinct project_id from project_plantable)</if>
+            <if test="departmentId != null">AND p.department_id =#{departmentId}</if>
+            <if test="title != null and title != ''">AND p.title like concat('%', #{title}, '%')</if>
+            <if test="producetypeid != null and producetypeid != ''">AND p.producetype_id=#{producetypeid}</if>
+            <if test="chargepeopleId != null and chargepeopleId != ''">AND p.chargepeople_id=#{chargepeopleId}</if>
+            <if test="techniquePeople != null and techniquePeople != ''">AND p.technique_people=#{techniquePeople}</if>
+            <!--遍历peopleList中的值,查询负责人-->
+            <if test="peopleList !=null and peopleList.size()>0">
+                and
+                (p.chargepeople_id in
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="peopleList">
+                    #{item}
+                </foreach>
+                or
+                p.technique_people in
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="peopleList">
+                    #{item}
+                </foreach>)
+            </if>
+            <!--时间查询-->
+            <if test="(startTimes != null and startTimes !='') and (endTimes != null and endTimes !='')">
+                and ((p.start_time &lt;=#{endTimes} and p.end_time &gt;=#{endTimes}) OR
+                (p.start_time &gt;=#{startTimes} and p.end_time &lt;=#{endTimes}) OR
+                (p.start_time &lt;=#{startTimes} and p.end_time &gt;=#{startTimes}))
+            </if>
+            <if test="(endTimes != null and endTimes !='') and (startTimes == null or startTimes =='')">
+                and (p.start_time &lt;=#{endTimes})
+            </if>
+            <if test="(startTimes != null and startTimes !='') and (endTimes == null or endTimes =='')">
+                and (p.start_time &gt;=#{startTimes} or (p.start_time &lt;=#{startTimes} and p.end_time &gt;=#{startTimes}))
+            </if>
+        </where>
+        limit #{pageNumber},#{total}
+    </select>
+    <select id="selectManager" parameterType="SysProjectTableVo" resultMap="SysProjectTableVoResult">
+        SELECT p_id FROM project_table WHERE p_id=#{pId}
+    </select>
+    <select id="selectTypeId" parameterType="java.lang.Integer" resultType="java.lang.Integer">
+        SELECT producetype_id FROM project_table WHERE p_id=#{pId}
+    </select>
+    <!-- 表示从第几页(pageNumber)开始，总共取多少条数据(total) -->
+    <select id="selectProjectVosCount" parameterType="SysProjectTableVo" resultType="java.lang.Integer">
+        SELECT count(*) FROM project_table p left join sys_dept d on p.department_id=d.dept_id
+        <where>
+            p.project_cache = '0'
+            AND p.establish_status='1'
+            AND project_finishFlag IN (0,-1,-2)
+            <if test="projectType !=null">AND project_type=#{projectType}</if>
+            <if test="addTask == 1">AND p.p_id in (select distinct project_id from project_plantable)</if>
+            <if test="departmentId != null">AND p.department_id =#{departmentId}</if>
+            <if test="title != null and title != ''">AND p.title like concat('%', #{title}, '%')</if>
+            <!--遍历peopleList中的值,查询负责人-->
+            <if test="peopleList !=null and peopleList.size()>0">
+                and
+                p.chargepeople_id in
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="peopleList">
+                    #{item}
+                </foreach>
+                or
+                p.technique_people in
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="peopleList">
+                    #{item}
+                </foreach>
+            </if>
+            <!--时间查询-->
+            <if test="(startTimes != null and startTimes !='') and (endTimes != null and endTimes !='')">
+                and ((p.start_time &lt;=#{endTimes} and p.end_time &gt;=#{endTimes}) OR
+                (p.start_time &gt;=#{startTimes} and p.end_time &lt;=#{endTimes}) OR
+                (p.start_time &lt;=#{startTimes} and p.end_time &gt;=#{startTimes}))
+            </if>
+            <if test="(endTimes != null and endTimes !='') and (startTimes == null or startTimes =='')">
+                and (p.start_time &lt;=#{endTimes})
+            </if>
+            <if test="(startTimes != null and startTimes !='') and (endTimes == null or endTimes =='')">
+                and (p.start_time &gt;=#{startTimes} or (p.start_time &lt;=#{startTimes} and p.end_time &gt;=#{startTimes}))
+            </if>
+        </where>
+        order by p.project_type desc
+    </select>
+    <select id="selectUserAention" parameterType="UserProjectAttention" resultType="Integer">
+        select state from user_project_attention
+        where user_id=#{userId} and p_id=#{pId}
+    </select>
+    <select id="selectFollowUserId" resultType="java.lang.Integer">
+        select state from user_project_attention where user_id=#{userId} and p_id=#{pId}
+    </select>
+    <!-- 根据id查询指定项目信息-->
+    <select id="getProjectTable" parameterType="java.lang.Integer" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where p.establish_status ='1' AND project_finishFlag IN (0,1,-1,-2,2) AND p.p_id= #{pId}
+    </select>
+    <!-- 根据id查询指定项目信息-->
+    <select id="selectInfosBypId" parameterType="java.lang.Integer" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where p.p_id= #{p_id}
+    </select>
+    <!-- 根据id查询指定项目信息-->
+    <select id="getProjectTableByid" parameterType="java.lang.Integer" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where project_finishFlag IN (0,-1,-2) AND p.p_id= #{pId}
+    </select>
+
+    <select id="getProjectTableByProjectId" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where p.p_id= #{pId}
+    </select>
+
+    <!-- 根据项目类型查询指定项目信息-->
+    <select id="selectProjectByType" parameterType="java.lang.String" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where p.establish_status='1' AND project_finishFlag IN (0,-1,-2) AND p.project_type=#{projectType} order by
+        p.start_time desc
+    </select>
+    <!-- 三条件，满足条件之一就可以运行-->
+    <select id="selectAllestablish" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where p.establish_status IN (0,2) AND project_finishFlag ='0'
+        AND
+        p.title like concat('%', #{title,jdbcType=VARCHAR}, '%')
+        OR p.chargepeople_id=#{chargepeopleId}
+        OR p.establish_status=#{establishStatus}
+    </select>
+    <select id="selectMyProject" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where
+        p.project_cache = '0'
+        and p.establish_status='1'
+        and project_finishFlag IN (0,-1,-2)
+        and p.p_id=#{pId}
+        <if test="keyword != null and keyword !='' ">and (instr(p.title, #{keyword}))>0</if>
+        <if test="chargepeopleId != null">and p.chargepeople_id=#{chargepeopleId}</if>
+        <if test="techniquePeople != null">and p.technique_people=#{techniquePeople}</if>
+    </select>
+
+    <select id="selectByChargePeople" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where p.establish_status='1' AND project_finishFlag IN (0,-1,-2)
+        and p.chargepeople_id=#{chargepeopleId}
+    </select>
+    <select id="selectByTechniquePeople" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where p.establish_status='1' AND project_finishFlag IN (0,-1,-2)
+        and p.technique_people=#{techniquePeople}
+    </select>
+    <!-- 查询立项列表-->
+    <select id="selectEstablish" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        <where>
+            p.project_cache = '0' AND
+            p.establish_status IN (0,2,3)
+            <if test="establishStatus != null">
+                and establish_status =#{establishStatus}
+            </if>
+            <if test="projectFinishFlag !=null ">and p.project_finishFlag ='0'</if>
+            <if test="projectType !=null">AND project_type=#{projectType}</if>
+            <if test="departmentId != null">AND p.department_id =#{departmentId}</if>
+            <if test="title != null and title != ''">AND p.title like concat('%', #{title}, '%')</if>
+            <!--遍历peopleList中的值,查询负责人-->
+            <if test="peopleList !=null and peopleList.size()>0">
+                and
+                p.chargepeople_id in
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="peopleList">
+                    #{item}
+                </foreach>
+                or
+                p.technique_people in
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="peopleList">
+                    #{item}
+                </foreach>
+            </if>
+            <!--时间查询-->
+            <if test="(startTimes != null and startTimes !='') and (endTimes != null and endTimes !='')">
+                and ((p.start_time &lt;=#{endTimes} and p.end_time &gt;=#{endTimes}) OR
+                (p.start_time &gt;=#{startTimes} and p.end_time &lt;=#{endTimes}) OR
+                (p.start_time &lt;=#{startTimes} and p.end_time &gt;=#{startTimes}))
+            </if>
+            <if test="(endTimes != null and endTimes !='') and (startTimes == null or startTimes =='')">
+                and (p.start_time &lt;=#{endTimes})
+            </if>
+            <if test="(startTimes != null and startTimes !='') and (endTimes == null or endTimes =='')">
+                and (p.start_time &gt;=#{startTimes} or (p.start_time &lt;=#{startTimes} and p.end_time &gt;=#{startTimes}))
+            </if>
+
+        </where>
+        order by p.create_time DESC
+    </select>
+    <!--根据id来查询指定的立项列表-->
+    <select id="selectEstablishById" parameterType="java.lang.Integer" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where p.establish_status IN (0,2) AND project_finishFlag ='0' AND p_id=#{id}
+    </select>
+    <!--根据项目名称关键字  模糊查询立项列表-->
+    <select id="selectProjectByTitle" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where p.establish_status IN (0,2) AND title like concat('%', #{title}, '%') order by p.start_time
+    </select>
+    <select id="selectProjectByStatus" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where p.establish_status IN (0,2) AND establish_status=#{status} order by p.start_time desc
+    </select>
+
+    <select id="selectProjectList" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        SELECT
+        p.title,s.login_name,d.dept_name,p.start_time,p.end_time,p.chargepeople_id,p.department_id,p.producetype_id
+        FROM project_table p,sys_user s,sys_dept d
+        WHERE p.chargepeople_id=s.user_id and p.department_id=d.dept_id and p.establish_status='1'
+        <if test="producetypeid != null ">and p.producetype_id=#{producetypeid}</if>
+        <if test="producetypeid == null ">and p.producetype_id is null</if>
+        order by p.start_time ;
+    </select>
+
+    <!--查询已经关闭项目的列表-->
+    <select id="endProject" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        <where>
+            p.project_cache = '0' AND
+            p.establish_status='1' AND
+            project_finishFlag IN ('2','1')
+        </where>
+        <if test="pages!=0">
+            order by p.start_time
+        </if>
+
+    </select>
+
+    <!--根据项目id,查询负责人id-->
+    <select id="getChargeIdById" parameterType="SysProjectTable" resultType="java.lang.Integer">
+        SELECT chargepeople_id,start_time FROM project_table WHERE p_id=#{pId}
+    </select>
+    <!--查询项目参与人list-->
+    <select id="selecParticipantsListById" parameterType="java.lang.Integer" resultMap="ParticipantsResult">
+        SELECT a.id,a.user_id,a.project_id,
+        (SELECT user_name  FROM sys_user  WHERE user_id=a.user_id) as user_name FROM participants_table a WHERE a.project_id=#{p_id};
+    </select>
+    <select id="selecApprovalRecordListByProjectId" parameterType="ResultApprovalRecord"
+            resultMap="ResultApprovalRecordResult">
+        select id,current_id,apply_id,audit_id,number,approval_user_id,approval_user_name,approval_state,approval_memo from result_approval_record where apply_id=#{p_id}
+    </select>
+
+    <select id="selecMarkStage" parameterType="Integer" resultMap="ProjectMarketStageResult">
+        select id,project_id,stage_type,charge_people,participants_people,work_period,device_list,tool_list,is_car,place,remind_state,
+        warn_state,partner,update_by,update_time
+        from project_market_stagetable where project_id=#{project_id}
+    </select>
+    <select id="selecMarkInfo" parameterType="Integer" resultMap="ProjectMarkTypeInfoResult">
+        select id,project_id,hardware_name,is_type,shiyong_all_count,shiyong_count
+        from project_marktype_infotable where project_id=#{project_id}
+    </select>
+    <!-- 添加项目 -->
+
+    <insert id="insertProject" parameterType="SysProjectTable" useGeneratedKeys="true" keyProperty="pId">
+        insert into project_table
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectType != null">project_type,</if>
+            <if test="inOrOut != null">in_or_out,</if>
+            <if test="title != null and title != ''">title,</if>
+            <if test="describeProject != null and describeProject != ''">describe_project,</if>
+            <if test="chargepeopleId != null and chargepeopleId != ''">chargepeople_id,</if>
+            <if test="businessParticipants != null and businessParticipants != ''">business_participants,</if>
+            <if test="period != null and period != ''">period,</if>
+            <if test="startTime != null">start_time,</if>
+            <if test="endTime != null">end_time,</if>
+            <if test="departmentId != null and departmentId != ''">department_id,</if>
+            <if test="establishTime != null">establish_time,</if>
+            <if test="producetypeid != null">producetype_id,</if>
+            <if test="createBy != null and createBy!= ''">create_by,</if>
+            create_time
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="inOrOut != null ">#{in_or_out},</if>
+            <if test="projectType != null ">#{projectType},</if>
+            <if test="title != null and title != ''">#{title},</if>
+            <if test="describeProject != null and describeProject != ''">#{describeProject},</if>
+            <if test="chargepeopleId != null and chargepeopleId != ''">#{chargepeopleId},</if>
+            <if test="businessParticipants != null and businessParticipants != ''">#{businessParticipants},</if>
+            <if test="period != null and period != ''">#{period},</if>
+            <if test="startTime != null">#{startTime},</if>
+            <if test="endTime != null">#{endTime},</if>
+            <if test="departmentId != null and departmentId != ''">#{departmentId},</if>
+            <if test="establishTime != null">#{establishTime},</if>
+            <if test="producetypeid != null">#{producetypeid},</if>
+            <if test="createBy != null and createBy!= ''">#{createBy},</if>
+            sysdate()
+        </trim>
+    </insert>
+    <update id="updateProject" parameterType="SysProjectTable">
+        update project_table
+        <set>
+            <if test="projectFinishFlag != null and projectFinishFlag !=''">project_finishFlag =#{projectFinishFlag},
+            </if>
+            <if test="establishStatus != null and establishStatus !=''">establish_status =#{establishStatus},</if>
+            <if test="planRate !=null">plan_rate=#{planRate},</if>
+            <if test="updateTime !=null">update_time=#{updateTime},</if>
+            <if test="stoptype != null and stoptype !=''">stop_type=#{stoptype},</if>
+            <if test="stopcause != null and stopcause !=''">stop_cause=#{stopcause},</if>
+            <if test="checktime != null and checktime !=''">check_time=#{checktime}</if>
+        </set>
+        where p_id=#{pId}
+    </update>
+
+    <update id="updateEstablishStatu" parameterType="SysProjectTable">
+        update project_table
+        <set>
+            <if test="establishStatus != null and establishStatus !=''">establish_status =#{establishStatus},</if>
+            <if test="projectFinishFlag !=null and projectFinishFlag !=''">project_finishFlag=#{projectFinishFlag},</if>
+            <if test="updateTime !=null">update_time=#{updateTime}</if>
+        </set>
+        where p_id=#{pId}
+    </update>
+    <!--根据id查询项目标题-->
+    <select id="selectProjectNameById" parameterType="Long" resultType="String">
+        select title from  project_table
+        where p_id = #{pId}
+    </select>
+    <!--根据id来更新数据库-->
+    <update id="updatePlan" parameterType="SysProjectTable">
+        update project_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="planRate != null">plan_rate = #{planRate}</if>
+        </trim>
+        where p_id=#{pId}
+    </update>
+    <!--根据id来更新用户关注状态-->
+    <update id="updateUserAttention" parameterType="SysProjectTable">
+        update project_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userAttention != null">user_attention = #{userAttention},</if>
+            <if test="updateTime != null">update_time = #{updateTime}</if>
+        </trim>
+        where p_id=#{pId}
+    </update>
+    <!--获得项目负责人-->
+    <select id="selectChargePeopleById" parameterType="java.lang.Integer" resultType="Integer">
+        select chargepeople_id from  project_table
+        where p_id = #{pId}
+    </select>
+    <!--获得项目完成标识-->
+    <select id="selectFinishByProjectId" parameterType="SysProjectTable" resultType="String">
+        select project_finishFlag from  project_table
+        where p_id = #{pId}
+    </select>
+    <!-- 获取所有存在里程碑的项目的id以及名称-->
+    <select id="selectExsitPlantProjet" resultMap="SysProjectTableResult">
+        SELECT project.`p_id`,project.`title` FROM project_table project,(SELECT DISTINCT(project_id) FROM `project_plantable` GROUP BY project_id)plan WHERE p_id=plan.project_id;
+    </select>
+
+    <update id="updateMarkProjectForDate" parameterType="SysProjectTable">
+        update project_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="endTime != null">end_time=#{endTime},</if>
+            <if test="period != null ">period=#{period},</if>
+            <if test="updateBy != null ">update_by=#{updateBy},</if>
+            <if test="updateTime != null ">update_time=#{updateTime}</if>
+        </trim>
+        where p_id=#{pId}
+    </update>
+    <!--修改科研项目内容-->
+    <update id="updateByProjectId" parameterType="SysProjectTable">
+        update project_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectType != null and projectType !=''">project_type=#{projectType},</if>
+            <if test="describeProject != null and describeProject !=''">describe_project=#{describeProject},</if>
+            <if test="title != null ">title=#{title},</if>
+            <if test="establishStatus != null ">establish_status=#{establishStatus},</if>
+            <if test="projectFinishFlag != null ">project_finishFlag=#{projectFinishFlag},</if>
+            <if test="planRate != null ">plan_rate=#{planRate},</if>
+            <if test="describeProject != null ">describe_project=#{describeProject},</if>
+            <if test="chargepeopleId != null and chargepeopleId != ''">chargepeople_id=#{chargepeopleId},</if>
+            <if test="businessParticipants != null and businessParticipants != ''">
+                business_participants=#{businessParticipants},
+            </if>
+            <if test="period != null ">period=#{period},</if>
+            <if test="startTime != null">start_time=#{startTime},</if>
+            <if test="endTime != null">end_time=#{endTime},</if>
+            <if test="departmentId != null and departmentId !=''">department_id=#{departmentId},</if>
+            <if test="establishTime != null">establish_time=#{establishTime},</if>
+            <if test="updateBy != null ">update_by=#{updateBy},</if>
+            <if test="updateTime != null ">update_time=#{updateTime}</if>
+        </trim>
+        where p_id=#{pId}
+    </update>
+    <update id="updatetimeById">
+        update project_table
+        <trim prefix="set" suffixOverrides=",">
+            <if test="checktime !=null and checktime !=''">check_time = #{checktime},</if>
+            <if test="finishMemo !=null and finishMemo !=''">finish_memo = #{finishMemo}</if>
+        </trim>
+        where p_id = #{id}
+    </update>
+    <select id="selectProjectById" parameterType="Long" resultMap="SysProjectTableResult">
+        <include refid="projectTablebVo"/>
+        where p_id=#{pid}
+    </select>
+
+    <select id="selectProjectInfoByTitle" parameterType="String" resultMap="SysProjectTableResult">
+        <include refid="projectTablebVo"/>
+        <where>
+            title like concat('%', #{title}, '%')
+        </where>
+    </select>
+    <select id="insertFailProject" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+       INSERT  INTO `project_table_fail`(`p_id`,`title`,`chargepeople_id`,`technique_people`,`project_type`,`establish_status`,
+       `project_finishFlag`,`period`,`start_time`,`end_time`,`plan_rate`,`establish_time`,`department_id`,`memo`,`customer_isestablish`,
+       `describe_project`,`build_period`,`expect_time`,`customer_isbudget`,`budget_amount`,`budget_time`,`budgettime_and_amcount`,`update_filepath`,
+       `client_highdirector_job`,`client_highdupdirector_job`,`client_midbranchleader_job`,`client_middupbranchleader_authority`,
+       `client_middupbranchleader_job`,`client_midcommissar_job`,`client_highdirector_authority`,`client_highdupdirector_authority`,
+       `client_midbranchleader_authority`,`client_midcommissar_anthority`,`client_highdirector_reporting`,`client_highdupdirector_reporting`,
+       `client_midbranchleader_reporting`,`client_middupbranchleader_reporting`,`client_midcommissar_reporting`,`client_highdirector_meet`,
+       `client_midbranchleader_meet`,`client_highdupdirector_meet`,`client_middupbranchleader_meet`,`client_midcommissar_meet`,
+       `client_highdirector_transmit`,`client_highdupdirector_transmit`,`client_midbranchleader_transmit`,`client_middupbranchleader_transmit`,
+       `client_midcommissar_transmit`,`client_highdirector_will`,`client_highdupdirector_will`,`client_midbranchleader_will`,
+       `client_middupbranchleader_will`,`client_midcommissar_will`,`client_lowinfluence`,`need_background`,`need_application`,`need_understand`,
+       `need_feasible`,`need_endTime`,`is_dianzi`,`dianzi_period`,advancedfunds_describe,estimated_buildperiod,estimated_buildperiod,`dianzi_money`,`is_shiyong`,`shiyong_period`,`risk_describe_business`,
+       `risk_solutions_business`,
+       `risk_describe_technique`,`risk_solutions_technique`,`create_by`,`create_time`,`update_by`,`update_time`)SELECT  * FROM  project_table WHERE p_id=#{pId}
+    </select>
+    <select id="selectInfosByProjectId" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        <where>
+            <if test="establishStatus !=null">and p.establish_status=#{establishStatus}</if>
+            <if test="projectFinishFlag !=null ">and p.project_finishFlag =#{projectFinishFlag}</if>
+            <if test="pId !=null">and p.p_id=#{pId}</if>
+            <if test="projectType !=null">and project_type=#{projectType}</if>
+        </where>
+        order by p.create_time desc
+    </select>
+
+    <select id="selectInfoByTitle" parameterType="String" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        where title=#{title}
+        order by create_time desc
+        limit 0,1
+    </select>
+
+    <delete id="deleteByIdEstablishProjectLinkUserProjectAttentionInfo" parameterType="java.util.List">
+        delete from user_project_attention
+        where
+        p_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByIdEstablishProjectLinkProjectPlanTableInfo" parameterType="java.util.List">
+        delete from project_plantable
+        where
+        project_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByIdEstablishProjectLinkParticipantsTableInfo" parameterType="java.util.List">
+        delete from participants_table
+        where
+        project_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByIdEstablishProjectLinkProjectTaskTableInfo" parameterType="java.util.List">
+        delete from project_task_table
+        where
+        type_id = 1
+        and
+        event_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <delete id="deleteByIdEstablishProject" parameterType="java.util.List">
+        delete from project_table
+        where
+        p_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectAuditCurrentIdByApplyId" parameterType="java.util.List" resultType="Integer">
+        select current_id from audit_flow_current
+        where apply_id=NULL
+        <foreach collection="list" item="id" separator=" ">
+            or apply_id=#{id}
+        </foreach>
+    </select>
+
+    <delete id="deleteByIdEstablishProjectLinkAuditFlowCurrentInfo" parameterType="java.util.List">
+        delete from audit_flow_current
+        where
+        current_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByIdEstablishProjectLinkAuditFlowNodeRoleInfo" parameterType="java.util.List">
+        delete from audit_flow_node_role
+        where
+        current_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByIdEstablishProjectLinkAuditFlowOperRecordInfo" parameterType="java.util.List">
+        delete from audit_flow_oper_record
+        where
+        current_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectAuditFlowCurrentByPid" parameterType="java.util.List" resultType="String">
+        SELECT current_id FROM `audit_flow_current`
+        WHERE
+        audit_id IN (3,7,10,11) AND
+        apply_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </select>
+
+    <delete id="deleteAuditFlowCurrentByPid" parameterType="java.util.List">
+        delete from audit_flow_current
+        where
+        audit_id IN (3,7,10,11) AND
+        apply_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+
+    <delete id="deleteByIdProjectInMsg" parameterType="java.util.List">
+        delete from msg_evt_info
+        where
+        event_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByIdProjectInMsgByType" parameterType="java.util.List">
+        delete from msg_evt_info
+        where type=5 or type=6 and
+        event_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByIdProjectInProjectMarketStageTable" parameterType="java.util.List">
+        delete from project_market_stagetable
+        where
+        project_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByIdProjectInProjectMarkTypeInfoTable" parameterType="java.util.List">
+        delete from project_marktype_infotable
+        where
+        project_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteByIdProjectInSysCompetitor" parameterType="java.util.List">
+        delete from sys_competitor
+        where
+        project_id IN
+        <foreach collection="list" item="id" separator="," open="(" close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <!-- 查询暂存项目-->
+    <select id="selectAllCacheProject" parameterType="SysProjectTable" resultMap="SysProjectTableResult">
+        <include refid="user_project_dept"/>
+        <where>
+            p.project_cache = '1'
+            <if test="establishStatus != null">
+                AND establish_status =#{establishStatus}
+            </if>
+            <if test="projectFinishFlag !=null ">AND p.project_finishFlag ='0'</if>
+            <if test="projectType !=null">AND project_type=#{projectType}</if>
+            <if test="departmentId != null">AND p.department_id =#{departmentId}</if>
+            <if test="title != null and title != ''">AND p.title like concat('%', #{title}, '%')</if>
+            <!--遍历peopleList中的值,查询负责人-->
+            <if test="peopleList !=null and peopleList.size()>0">
+                AND
+                p.chargepeople_id in
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="peopleList">
+                    #{item}
+                </foreach>
+                OR
+                p.technique_people IN
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="peopleList">
+                    #{item}
+                </foreach>
+            </if>
+            <!--时间查询-->
+            <if test="(startTimes != null and startTimes !='') and (endTimes != null and endTimes !='')">
+                AND ((p.start_time &lt;=#{endTimes} and p.end_time &gt;=#{endTimes}) OR
+                (p.start_time &gt;=#{startTimes} and p.end_time &lt;=#{endTimes}) OR
+                (p.start_time &lt;=#{startTimes} and p.end_time &gt;=#{startTimes}))
+            </if>
+            <if test="(endTimes != null and endTimes !='') and (startTimes == null or startTimes =='')">
+                AND (p.start_time &lt;=#{endTimes})
+            </if>
+            <if test="(startTimes != null and startTimes !='') and (endTimes == null or endTimes =='')">
+                AND (p.start_time &gt;=#{startTimes} OR (p.start_time &lt;=#{startTimes} AND p.end_time &gt;=#{startTimes}))
+            </if>
+
+        </where>
+        ORDER BY p.create_time DESC
+    </select>
+    <select id="selectUserIdsBypId" parameterType="java.lang.Integer" resultMap="SysProjectTableResult">
+        select p_id,chargepeople_id,technique_people,business_participants,create_by from project_table
+        where p_id=#{pId}
+    </select>
+
+    <select id="selectProjectCountByTitle" parameterType="java.lang.String" resultType="java.lang.Integer">
+        select count(*) from project_table where  AND title=#{title}
+    </select>
+
+    <select id="selectProjectInPlanList" parameterType="TaskProject" resultMap="SysProjectTableVoResult">
+        <include refid="projectTablebVo"/>
+        as pj
+        <where>
+            <trim suffixOverrides="and">
+                project_cache = '0'
+                AND project_finishFlag = '0'
+                <if test="pId !=null">and pj.p_id=#{pId}</if>
+                <if test="projectType !=null">and pj.project_type=#{projectType}</if>
+                <if test="chargepeopleId !=null">and pj.chargepeople_id=#{chargepeopleId}</if>
+                <if test="establishStatus !=null and establishStatus !=''">and pj.establish_status=#{establishStatus}
+                </if>
+                <if test="departmentId !=null ">and pj.department_id=#{departmentId}</if>
+                <if test="isPlan ==0">
+                    and pj.p_id IN (SELECT DISTINCT(pl.`project_id`) FROM `project_plantable` pl WHERE
+                    pl.`project_id`=pj.`p_id`)
+                </if>
+                <if test="title !=null and title != ''">and pj.title like concat('%', #{title,jdbcType=VARCHAR}, '%')
+                </if>
+                <!--时间查询-->
+                <if test="(startTimes != null and startTimes !='') and (endTimes != null and endTimes !='')">
+                    and ((pj.start_time &lt;=#{endTimes} and pj.end_time &gt;=#{endTimes}) OR
+                    (pj.start_time &gt;=#{startTimes} and pj.end_time &lt;=#{endTimes}) OR
+                    (pj.start_time &lt;=#{startTimes} and pj.end_time &gt;=#{startTimes}))
+                </if>
+                <if test="(endTimes != null and endTimes !='') and (startTimes == null or startTimes =='')">
+                    and (pj.start_time &lt;=#{endTimes})
+                </if>
+                <if test="(startTimes != null and startTimes !='') and (endTimes == null or endTimes =='')">
+                    and pj.start_time &gt;=#{startTimes} or (pj.start_time &lt;=#{startTimes} and pj.end_time &gt;=#{startTimes})
+                </if>
+            </trim>
+        </where>
+    </select>
+
+    <update id="quashProjectByIds" parameterType="String">
+        update project_table set establish_status = '4' where p_id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <delete id="deleteProjectByIds" parameterType="String">
+        delete from project_table where p_id in
+        <foreach collection="ids" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="querylist" resultMap="SysProjectTableResult">
+        SELECT
+        p.title,s.login_name,d.dept_name,p.start_time,p.end_time,p.chargepeople_id,p.department_id,p.producetype_id
+        FROM project_table p,sys_user s,sys_dept d
+        WHERE p.chargepeople_id=s.user_id and p.department_id=d.dept_id and p.establish_status='1'
+        <if test="keyword != null and keyword !='' ">and ((instr(p.title, #{keyword})>0) or instr(p.describe_project,
+            #{keyword})>0)
+        </if>
+        <if test="chargePeopleid != null and chargePeopleid !=''">and p.chargepeople_id=#{chargePeopleid}</if>
+        order by p.start_time ;
+    </select>
+
+    <select id="selectproductypelist" resultType="String">
+        SELECT DISTINCT producetype_id FROM project_table
+    </select>
+    <select id="querypIdByUid" parameterType="java.util.HashMap" resultType="java.lang.Integer">
+        select p_id from project_table
+        where establish_status='1'
+        and project_finishFlag in (0,-1,-2)
+        <if test="chargepeopleId !=null">
+            and chargepeople_id=#{chargepeopleId}
+        </if>
+        <if test="techniquePeople !=null">
+            and technique_people=#{techniquePeople}
+        </if>
+    </select>
+
+    <update id="updatestopcauseById">
+        update project_table
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="stoptype != null and stoptype !=''">stop_type=#{stoptype},</if>
+            <if test="stopcause != null and stopcause !=''">stop_cause=#{stopcause},</if>
+        </trim>
+        where p_id = #{id}
+    </update>
+    <select id="selectApprovalDetail" parameterType="com.ruoyi.web.domain.vo.AuditFlowCrurrentVo" resultType="Map">
+        select  p.*,
+        (select s.user_name from sys_user s where s.user_id = p.chargepeople_id) as charge_people_name,
+        (select s.user_name from sys_user s where s.user_id = p.technique_people)as technique_people_name,
+        (select d.dept_name from sys_dept d where d.dept_id = p.department_id)as department_name,
+        (select s.user_name from sys_user s where s.user_id = p.create_by)as create_by_name
+        from project_table p
+        where p.p_id = #{pId}
+    </select>
+    <select id="selectApplyName" parameterType="java.lang.Integer" resultType="java.lang.String">
+        select title from project_table  where p_id = #{id}
+    </select>
+    <select id="selectIdList" parameterType="java.lang.Long" resultType="java.lang.Integer">
+        select distinct p.p_id  from project_table p
+        left join participants_table a on p.p_id = a.project_id
+        where a.user_id = #{userId}
+        or p.chargepeople_id =#{userId}
+        or p.technique_people = #{userId}
+    </select>
+    <select id="selectChargeName" parameterType="java.lang.Integer" resultType="Map">
+        select p.chargepeople_id as chargepeopleId,p.technique_people as techniquePeopleId,p.project_type as projectType,
+        (select s.user_name from sys_user s where s.user_id = p.chargepeople_id) as chargePeopleName,
+        (select s.user_name from sys_user s where s.user_id = p.technique_people)as techniquePeopleName
+        from project_table p
+        where p.p_id = #{pId}
+    </select>
+    <delete id="deleteRelationProjectMsg" parameterType="java.lang.Integer">
+        delete a,b,c from project_table a
+        left join project_market_stagetable b on a.p_id = b.project_id
+        left join project_marktype_infotable c on a.p_id = c.project_id
+        where a.p_id=#{pId}
+    </delete>
+</mapper>

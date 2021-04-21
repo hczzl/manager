@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.SysCompetitorMapper">
+    <resultMap type="com.ruoyi.web.domain.SysCompetitor" id="CompetitorResult">
+        <id property="id" column="id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="competeName" column="compete_name"/>
+        <result property="competeDescribe" column="compete_describe"/>
+    </resultMap>
+
+    <select id="selectCompete" parameterType="SysCompetitor" resultMap="CompetitorResult">
+        select * from sys_competitor where project_id=#{projectId}
+    </select>
+    <insert id="insertCompetitor" parameterType="SysCompetitor" useGeneratedKeys="true" keyProperty="id">
+        insert into sys_competitor
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null ">project_id,</if>
+            <if test="competeName != null ">compete_name,</if>
+            <if test="competeDescribe != null ">compete_describe</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null ">#{projectId},</if>
+            <if test="competeName != null ">#{competeName},</if>
+            <if test="competeDescribe != null ">#{competeDescribe}</if>
+        </trim>
+    </insert>
+    <update id="updateCompete" parameterType="SysCompetitor">
+        update sys_competitor
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="projectId != null ">project_id = #{projectId},</if>
+            <if test="competeName != null ">compete_name = #{competeName},</if>
+            <if test="competeDescribe != null">compete_describe = #{competeDescribe}</if>
+        </trim>
+        where project_id = #{projectId}
+    </update>
+    <delete id="deleteCompete" parameterType="java.lang.Integer">
+        delete from sys_competitor where project_id = #{projectId}
+    </delete>
+</mapper>

@@ -1,0 +1,32 @@
+package com.ruoyi.web.mapper.item;
+
+import com.ruoyi.web.domain.ResultApprovalRecord;
+import org.apache.ibatis.annotations.Param;
+import org.springframework.security.core.parameters.P;
+
+import java.util.Date;
+import java.util.List;
+
+/**
+ * 里程碑mapper
+ */
+public interface ResultApprovalRecordMapper {
+
+    int insertApprovalRecord(ResultApprovalRecord resultApprovalRecord);
+
+    List<ResultApprovalRecord> selectApprovalRecord(ResultApprovalRecord resultApprovalRecord);
+
+    int updateApprovalRecord(ResultApprovalRecord resultApprovalRecord);
+
+    int deleteApprovalRecord(ResultApprovalRecord resultApprovalRecord);
+
+    List<ResultApprovalRecord> selectApprovalRecordByAuditId(ResultApprovalRecord resultApprovalRecord);
+
+    Integer selectNumber(ResultApprovalRecord r);
+
+    List<ResultApprovalRecord> selectApprovalInfo(ResultApprovalRecord r);
+
+    List<Integer> selectUserIdList(ResultApprovalRecord vo);
+
+
+}

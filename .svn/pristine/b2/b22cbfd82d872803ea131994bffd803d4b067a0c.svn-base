@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.TaskUserMapper">
+    <resultMap type="com.ruoyi.web.domain.TaskUser" id="TaskUserResult">
+        <id property="id" column="id"/>
+        <result property="tId"    column="t_id"    />
+        <result property="userId"    column="user_id"  />
+    </resultMap>
+
+    <sql id="selectTaskUserVo">
+        select t_id, user_id from task_user
+    </sql>
+    <select id="selectMyTask" parameterType="TaskUser" resultMap="TaskUserResult">
+    SELECT * from task_user  WHERE user_id=#{userId}
+    </select>
+    <select id="selectTaskUserList" parameterType="TaskUser" resultMap="TaskUserResult">
+        <include refid="selectTaskUserVo"/>
+        <where>
+          <if test="tId !=null">and t_id =#{tId}</if>
+        </where>
+    </select>
+    
+    <select id="selectTaskUserById" parameterType="Long" resultMap="TaskUserResult">
+        <include refid="selectTaskUserVo"/>
+        where t_id = #{tId}
+    </select>
+
+    <select id="selectAllUser" parameterType="TaskUser" resultMap="TaskUserResult">
+        select user_id from task_user
+    </select>
+        
+    <insert id="insertTaskUser" parameterType="TaskUser" useGeneratedKeys="true" keyProperty="id">
+        insert into task_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tId != null ">t_id,</if>
+            <if test="userId != null ">user_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tId != null ">#{tId},</if>
+            <if test="userId != null ">#{userId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaskUser" parameterType="TaskUser">
+        update task_user
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null ">user_id = #{userId},</if>
+        </trim>
+        where t_id = #{tId}
+    </update>
+
+    <delete id="deleteTaskUserById" parameterType="Long">
+        delete from task_user where t_id = #{tId}
+    </delete>
+
+    <delete id="deleteTaskUserByIds" parameterType="String">
+        delete from task_user where t_id in 
+        <foreach item="tId" collection="array" open="(" separator="," close=")">
+            #{tId}
+        </foreach>
+    </delete>
+    
+    <select id="getUserByTid" parameterType="Map" resultType="String">
+            select
+            	user_id userId
+            from 
+            	task_user
+            where
+            	t_id = #{tId}
+                <!--and user_id &lt;&gt; #{chargepeopleId},判断参与人用户不包括负责人-->
+    </select>
+    <select id="selectAllTid" parameterType="TaskUser" resultMap="TaskUserResult">
+       SELECT u.t_id FROM task_user u
+        LEFT JOIN task_table t ON u.t_id = t.t_id
+        WHERE u.user_id=#{userId}
+        AND t.task_finishFlag > -1
+    </select>
+</mapper>

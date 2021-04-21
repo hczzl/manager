@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.MsgEvtInfoMapper">
+    <resultMap type="MsgEvtInfo" id="MsgEvtInfoResult">
+        <result property="id" column="id"/>
+        <result property="type" column="type"/>
+        <result property="eventId" column="event_id"/>
+        <result property="auditId" column="audit_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="readMark" column="read_mark"/>
+        <result property="createApproval" column="create_approval"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+        <association property="userName" column="user_id" javaType="java.lang.String"
+                     select="com.ruoyi.system.mapper.SysUserMapper.selectUserNameById"/>
+        <association property="approvalTypeName" column="audit_id" javaType="java.lang.String"
+                     select="com.ruoyi.web.mapper.audit.AuditFlowMapper.selectFlowNameByFlowId"/>
+    </resultMap>
+
+    <sql id="selectAllMsg">
+            select id,event_id,type,audit_id,user_id,create_approval,read_mark,create_time,update_time from msg_evt_info
+    </sql>
+    <select id="selectMsgList" parameterType="MsgEvtInfo" resultMap="MsgEvtInfoResult">
+        <include refid="selectAllMsg"/>
+        <where>
+            user_id =#{userId}
+            <if test="readMark !=null ">and read_mark =#{readMark}</if><!--read_mark="0"未读，read_mark="1"已读-->
+            <if test="type !=null ">and type=#{type}</if><!--3是审批类型，4是任务提醒-->
+        </where>
+        order by create_time desc
+    </select>
+    <select id="selectMsgListByType" parameterType="MsgEvtInfo" resultMap="MsgEvtInfoResult">
+        select id,event_id,type,audit_id,user_id,create_approval,read_mark,create_time,update_time
+        from msg_evt_info
+        where user_id=#{userId}
+        and type in(0,1,2)
+        <if test="readMark !=null ">and read_mark =#{readMark}</if>
+        order by create_time desc
+    </select>
+    <select id="selectTaskName" parameterType="long" resultType="String">
+       select task_title from task_table t
+        left join msg_evt_info m on t.t_id=m.event_id
+        where
+        type in(0,1,2)
+        and event_id=#{event_id}
+    </select>
+    <select id="selectPorjectName" parameterType="long" resultType="String">
+       select title from project_table p
+        left join msg_evt_info m on p.p_id=m.event_id
+        where
+        type in(5,6)
+        and event_id=#{event_id}
+    </select>
+
+    <select id="selectMsgListByType1" parameterType="MsgEvtInfo" resultMap="MsgEvtInfoResult">
+        <include refid="selectAllMsg"/>
+        where
+        user_id=#{userId}
+        and type in(5,6)
+        <if test="readMark !=null ">and read_mark =#{readMark}</if>
+        order by create_time desc
+    </select>
+    <select id="selectTypeForTen" parameterType="MsgEvtInfo" resultMap="MsgEvtInfoResult">
+        <include refid="selectAllMsg"/>
+        where
+        user_id=#{userId}
+        and type in(8,9)
+        <if test="readMark !=null ">and read_mark =#{readMark}</if>
+        order by create_time desc
+    </select>
+    <select id="selectMarkRemindInfo" parameterType="MsgEvtInfo" resultMap="MsgEvtInfoResult">
+        <include refid="selectAllMsg"/>
+        where
+        user_id=#{userId}
+        and type in(5,6)
+        and event_id = #{eventId}
+    </select>
+    <select id="selectCountReadMark" parameterType="MsgEvtInfo" resultType="Integer">
+        select count(read_mark) from msg_evt_info where
+        read_mark=#{readMark}
+        and user_id=#{userId}
+    </select>
+    <select id="selectOneMsgList" parameterType="MsgEvtInfo" resultMap="MsgEvtInfoResult">
+        <include refid="selectAllMsg"/>
+        where user_id = #{userId}
+        and event_id=#{eventId}
+        and type=#{type}
+    </select>
+    <select id="selectCount" parameterType="MsgEvtInfo" resultType="java.lang.Integer">
+        select count(*) from msg_evt_info
+        where user_id = #{userId} and event_id=#{eventId} and type=#{type}
+    </select>
+    <select id="selectMsgForApproval" parameterType="MsgEvtInfo" resultMap="MsgEvtInfoResult">
+        <include refid="selectAllMsg"/>
+        where
+        type =#{type}
+        order by create_time desc
+    </select>
+    <select id="selectMsgById" parameterType="MsgEvtInfo" resultMap="MsgEvtInfoResult">
+        <include refid="selectAllMsg"/>
+        where id=#{id}
+    </select>
+    <update id="update" parameterType="MsgEvtInfo">
+        update msg_evt_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="readMark != null ">read_mark = #{readMark},</if>
+            <if test="updateTime != null ">update_time = #{updateTime}</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <insert id="insertMessageInfo" parameterType="MsgEvtInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into msg_evt_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="type != null">type,</if>
+            <if test="eventId != null">event_id,</if>
+            <if test="auditId != null">audit_id,</if>
+            <if test="userId != null ">user_id,</if>
+            <if test="createApproval != null ">create_approval,</if>
+            <if test=" createTime != null ">create_time</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="type != null">#{type},</if>
+            <if test="eventId != null">#{eventId},</if>
+            <if test="auditId != null">#{auditId},</if>
+            <if test="userId != null ">#{userId},</if>
+            <if test="createApproval != null ">#{createApproval},</if>
+            <if test="createTime != null ">#{createTime}</if>
+        </trim>
+    </insert>
+    <update id="updateMessageInfo" parameterType="MsgEvtInfo">
+        update msg_evt_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="type != null and type !=''">type=#{type},</if>
+            <if test="eventId != null and eventId !=''">event_id=#{eventId},</if>
+            <if test="auditId != null and auditId !=''">audit_id=#{auditId},</if>
+            <if test="userId != null  and userId !=''">user_id=#{userId},</if>
+            <if test="readMark != null and readMark !=''">read_mark=#{readMark},</if>
+            <if test="createApproval != null and createApproval !=''">create_approval=#{createApproval},</if>
+            <if test="updateTime != null ">update_time=#{updateTime}</if>
+        </trim>
+        <where>
+            <if test="id !=null and id !=''">and id =#{id}</if>
+            <if test="type !=null and type !=''">and type =#{type}</if>
+            <if test="eventId !=null  and eventId !=''">and event_id=#{eventId}</if>
+            <if test="userId !=null  and userId !=''">and user_id=#{userId}</if>
+            <if test="auditId !=null  and auditId !=''">and audit_id=#{auditId}</if>
+        </where>
+    </update>
+    <update id="updateMessageInfo2" parameterType="MsgEvtInfo">
+        update msg_evt_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="readMark != null and readMark !=''">read_mark=#{readMark},</if>
+            <if test="createApproval != null and createApproval !=''">create_approval=#{createApproval},</if>
+            <if test="updateTime != null ">update_time=#{updateTime}</if>
+        </trim>
+        <where>
+            <!--<if test="type !=null and type !=''">and type =#{type}</if>-->
+            <if test="eventId !=null  and eventId !=''">and event_id=#{eventId}</if>
+            <if test="userId !=null  and userId !=''">and user_id=#{userId}</if>
+            <if test="auditId !=null  and auditId !=''">and audit_id=#{auditId}</if>
+            <if test="typeList != null">
+                and type in
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="typeList">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </update>
+    <update id="updateInfoById" parameterType="MsgEvtInfo">
+        update msg_evt_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="readMark != null">read_mark=#{readMark},</if>
+            <if test="updateTime != null ">update_time=#{updateTime}</if>
+        </trim>
+        where id=#{id}
+    </update>
+    <update id="updateReadMark" parameterType="MsgEvtInfo">
+        update msg_evt_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="readMark != null ">read_mark=#{readMark},</if>
+            <if test="updateTime != null ">update_time=#{updateTime}</if>
+        </trim>
+        where
+        event_id=#{eventId} and user_id=#{userId} and type in (5,6) and audit_id=#{auditId}
+    </update>
+    <insert id="save" parameterType="Map">
+        insert into msg_evt_info(type,event_id,user_id,create_approval,create_time,update_time)
+        values
+        <foreach collection="userList" separator="," item="userId">
+            (#{type},#{eventId},#{userId},#{createApproval},#{createTime},#{updateTime})
+        </foreach>
+    </insert>
+    <delete id="deleteForMsg" parameterType="MsgEvtInfo">
+        delete from msg_evt_info
+        <where>
+            <if test="eventId !=null">and event_id=#{eventId}</if>
+            <if test="userId !=null">and user_id=#{userId}</if>
+            <if test="type !=null">and type=#{type}</if>
+            <if test="typeList != null">
+                and type in
+                <foreach item="item" index="index" open="(" separator="," close=")" collection="typeList">
+                    #{item}
+                </foreach>
+            </if>
+        </where>
+    </delete>
+    <select id="selectMsgLists" parameterType="MsgEvtInfo" resultMap="MsgEvtInfoResult">
+        <include refid="selectAllMsg"/>
+        <where>
+            <if test="eventId !=null and eventId !=0">and event_id=#{eventId}</if>
+            <if test="userId !=null">and user_id=#{userId}</if>
+            <if test="readMark !=null ">and read_mark =#{readMark}</if>
+            <if test="type !=null ">and type=#{type}</if>
+            <if test="auditId !=null  and auditId !=''">and audit_id=#{auditId}</if>
+        </where>
+        order by create_time desc
+    </select>
+    <delete id="deleteMsgEvt" parameterType="Map">
+        delete from msg_evt_info
+        where 1 = 1
+        and type = #{type}
+        and event_id=#{eventId}
+    </delete>
+</mapper>

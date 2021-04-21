@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.TaskStopMoneMapper">
+
+    <resultMap type="TaskStopMone" id="TaskStopMoneResult">
+        <id property="id" column="id"/>
+        <result property="tId" column="t_id"/>
+        <result property="stopMone" column="stop_mone"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <sql id="selectTaskStopMeon">
+        select id,t_id,stop_mone,create_by,create_time,update_by,update_time from task_stop_mone
+    </sql>
+    <select id="selectMax" parameterType="TaskStopMone" resultMap="TaskStopMoneResult">
+        SELECT * FROM task_stop_mone WHERE t_id=#{tId} AND id IN (SELECT MAX(id) FROM task_stop_mone WHERE t_id=#{tId})
+    </select>
+    <insert id="insertTaskStopMone" parameterType="TaskStopMone">
+        insert into task_stop_mone
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="tId != null ">t_id,</if>
+            <if test="stopMone != null">stop_mone,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="tId != null ">#{tId},</if>
+            <if test="stopMone != null">#{stopMone},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime}</if>
+        </trim>
+    </insert>
+
+    <update id="updateTaskStopMone" parameterType="TaskStopMone">
+        update task_stop_mone
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="tId != null ">t_id=#{tId},</if>
+            <if test="stopMone != null">stop_mone=#{stopMone},</if>
+            <if test="updateBy != null">update_by=#{updateBy},</if>
+            <if test="updateTime != null">update_time=#{updateTime}</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <select id="selectStopMemo" parameterType="java.lang.Long" resultType="java.lang.String">
+        select  stop_mone  from task_stop_mone
+        where t_id= #{tId}
+        order by create_time desc
+        limit 1
+    </select>
+
+</mapper>

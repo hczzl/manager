@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.SysCodeMapper">
+
+    <resultMap type="SysCode" id="SysCodeResult">
+        <id property="wxId" column="wx_id"/>
+        <result property="openId" column="open_id"/>
+    </resultMap>
+
+    <select id="selectCodes" parameterType="SysCode" resultMap="SysCodeResult">
+        select * from sys_code
+        <where>
+            <if test="wxId != null and wxId != '' ">and wx_id =#{wxId}</if>
+            <if test="openId != null and openId != '' ">and open_id = #{openId}</if>
+        </where>
+    </select>
+    <select id="selectwxId" parameterType="SysCode" resultType="String">
+        select open_id from sys_code
+        <where>
+            <if test="wxId != null and wxId != '' ">and wx_id =#{wxId}</if>
+            <if test="openId != null and openId != '' ">and open_id = #{openId}</if>
+        </where>
+    </select>
+    <insert id="insertCoded" parameterType="SysCode" useGeneratedKeys="true" keyProperty="wxId">
+        insert into sys_code(
+        <if test="wxId != null  and wxId !=''">wx_id,</if>
+        <if test="openId != null and openId != ''">open_id</if>
+        )values(
+        <if test="wxId != null and wxId !='' ">#{wxId},</if>
+        <if test="openId != null  and openId != ''">#{openId}</if>
+        )
+    </insert>
+    <update id="updateCode" parameterType="SysCode">
+        update sys_code
+        <set>
+            <if test="wxId != null and wxId !='' ">wx_id = #{wxId},</if>
+            <if test="openId != null  and openId != ''">open_id =#{openId}</if>
+        </set>
+        where wx_id = #{wxId}
+    </update>
+
+</mapper>

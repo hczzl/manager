@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.UserProjectAttentionMapper">
+
+    <resultMap type="UserProjectAttention" id="UserProjectAttentionResult">
+        <id     property="id" column="id"/>
+        <result property="userId"    column="user_id"    />
+        <result property="pId"    column="p_id" />
+        <result property="state"    column="state"  />
+        <!--<association property="userAttention" column="user_id" javaType="String" select=""/>-->
+    </resultMap>
+
+    <sql id="selectUserProjectAttentionVo">
+        select user_id, p_id,state from user_project_attention
+    </sql>
+
+    <select id="selectUserProjectAttentionList" parameterType="UserProjectAttention" resultMap="UserProjectAttentionResult">
+        <include refid="selectUserProjectAttentionVo"/>
+        <where>
+            <if test="userId!=null"> AND  user_id=#{userId}</if>
+            <if test="pId!=null"> AND  p_id=#{pId}</if>
+        </where>
+    </select>
+
+    <select id="selectUserProjectAttentionById" parameterType="Long" resultMap="UserProjectAttentionResult">
+        <include refid="selectUserProjectAttentionVo"/>
+        where user_id = #{userId}
+    </select>
+
+    <insert id="insertUserProjectAttention" parameterType="UserProjectAttention">
+        insert into user_project_attention
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="pId != null ">p_id,</if>
+            <if test="state != null ">state</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">#{userId},</if>
+            <if test="pId != null ">#{pId},</if>
+            <if test="state != null ">#{state}</if>
+        </trim>
+    </insert>
+    <delete id="deleteUserAttention" parameterType="UserProjectAttention">
+        delete from user_project_attention where user_id = #{userId} and p_id=#{pId}
+    </delete>
+</mapper>

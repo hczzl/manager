@@ -1,0 +1,104 @@
+package com.ruoyi.web.util.constant;
+
+/**
+ * 任务、项目、审批模块常量工具类
+ *
+ * @author zhongzhilong
+ * @date 2020/10/16 0016
+ */
+public class ManagerConstant {
+    /**
+     * 任务模块
+     */
+    public static final String TASK_TABLE = "task_table";
+    public static final String TASK_NAME = "TaskTable";
+    /**
+     * 任务完成标识,-1:提交,0:未完成,1:任务完成,2:任务中止,5:任务完成审批中,6:任务中止审批中,7:任务变更审批中,8:任务撤回
+     */
+    public static final String TASK_NOT_APPROVAL = "-1";
+    public static final String TASK_APPROVAL = "0";
+    public static final String TASK_FINISH = "1";
+    public static final String TASK_NOT_FINISH = "5";
+    public static final String TASK_STOP = "2";
+    public static final String TASK_NOT_STOP = "6";
+    public static final String TASK_CHANGE = "7";
+    public static final String TASK_RECALL = "8";
+    /**
+     * 无顺延
+     */
+    public static final String TASK_NOT_PUTOFF = "13";
+    /**
+     * 顺延
+     */
+    public static final String TASK_PUTOFF = "14";
+
+    /**
+     * 项目模块
+     */
+    public static final String PROJECT_TABLE = "project_table";
+    /**
+     * 已完成
+     */
+    public static final String PROJECT_FINISH = "1";
+    /**
+     * 完成审批中
+     */
+    public static final String PROJECT_NOT_FINISH = "-1";
+    /**
+     * 已中止
+     */
+    public static final String PROJECT_STOP = "2";
+    /**
+     * 中止审批中
+     */
+    public static final String PROJECT_NOT_STOP = "-2";
+
+    /**
+     * 审批模块
+     */
+    public static final String RESCINDED = "已撤销";
+    public static final String NOT_APPROVAL = "审批中";
+    /**
+     * 审核状态:1已提交,2审批中,3审批不通过，4审批通过,5审批全部通过，6转推中，7：已撤销,8:审批中
+     */
+    public static final Integer APPROVAL_UNDER_APPROVAL = 2;
+    public static final Integer APPROVAL_FAILURE = 3;
+    public static final Integer APPROVAL_PASS = 4;
+    public static final Integer APPROVAL_SUCCESS = 5;
+    public static final Integer APPROVAL_PUSH = 6;
+    public static final Integer APPROVAL_RESCINDED = 7;
+    public static final Integer APPROVAL_NOT_FINISH = 8;
+
+    /**
+     * 消息模块
+     */
+    /**
+     * 任务到期、逾期、未开始提醒
+     */
+    public static final Integer MSG_TASK = 4;
+    /**
+     * 审批提醒
+     */
+    public static final Integer MSG_APPROVAL = 3;
+    /**
+     * 填写通知提醒
+     */
+    public static final Integer MSG_WRITE = 7;
+    /**
+     * 拒批提醒
+     */
+    public static final Integer MSG_NOT_APPROVAL = 10;
+    /**
+     * 抄送提醒
+     */
+    public static final Integer MSG_COPY = 11;
+    /**
+     * 项目无进展提醒
+     */
+    public static final Integer MSG_NO_PROGRESS = 12;
+
+    /**
+     * 公共
+     */
+    public static final String IS_NULL = "";
+}

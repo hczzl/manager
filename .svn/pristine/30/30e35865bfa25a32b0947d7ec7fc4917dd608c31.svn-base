@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.ProblemFileInfoMapper">
+
+    <resultMap type="ProblemFileInfo" id="ProblemFileInfoResult">
+        <id property="fileid" column="file_id"/>
+        <result property="filename" column="file_name"/>
+        <result property="filepath" column="file_path"/>
+        <result property="week" column="week"/>
+        <result property="filetime" column="file_time"/>
+        <result property="username" column="user_name"/>
+    </resultMap>
+
+    <insert id="insertProblemFileInfo" parameterType="ProblemFileInfo" useGeneratedKeys="true" keyProperty="fileid">
+        insert into problem_file_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="filename != null  and filename != ''  ">file_name,</if>
+            <if test="filepath != null  and filepath != ''  ">file_path,</if>
+            <if test="week != null  and week != ''  ">week,</if>
+            <if test="filetime != null  and filetime != '' ">file_time,</if>
+            <if test="userid != null  and userid != '' ">user_id,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="filename != null  and filename != ''  ">#{filename},</if>
+            <if test="filepath != null  and filepath != ''  ">#{filepath},</if>
+            <if test="week != null  and week != ''  ">#{week},</if>
+            <if test="filetime != null  and filetime != ''  ">#{filetime},</if>
+            <if test="userid != null  and userid != ''  ">#{userid},</if>
+        </trim>
+    </insert>
+
+    <select id="selectFileInfoList"  parameterType="ProblemFileInfo" resultMap="ProblemFileInfoResult">
+        SELECT
+        t.file_id,t.file_name,t.file_path,t.week,t.file_time,u.user_name
+        FROM problem_file_info AS t
+        LEFT JOIN  sys_user AS u
+        ON t.user_id=u.user_id
+        <where>
+            <if test="filename != null  and filename != ''"> and t.file_name like concat('%', #{filename}, '%')</if>
+            <if test="starttime != null ">and t.file_time &gt;=#{starttime}</if>
+            <if test="endtime != null ">and t.file_time &lt;= #{endtime}</if>
+        </where>
+    </select>
+
+
+</mapper>

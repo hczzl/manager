@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.TaskUserFreeMapper">
+    <resultMap type="com.ruoyi.system.domain.TaskUserFree" id="TaskUserFreeResult">
+        <id property="id" column="id"/>
+        <result property="userId"    column="user_id"  />
+        <result property="freeTime"    column="free_time"  />
+        <result property="createTime"    column="create_time"  />
+        <result property="updateTime"    column="update_time"  />
+    </resultMap>
+
+    <sql id="selectTaskUserVo">
+        select id,user_id,free_time,create_time,update_time from task_user_free
+    </sql>
+    <!--根据用户id查询对应的空闲时间-->
+    <select id="selectUserFreeTime" parameterType="TaskUserFree" resultMap="TaskUserFreeResult">
+        SELECT * from task_user_free
+        <where>
+        user_id=#{userId}
+        <if test="freeTime != null ">and free_time = #{freeTime}</if>
+     </where>
+    </select>
+
+    <select id="selectUserFreeTimeByUserId" parameterType="TaskUserFree" resultMap="TaskUserFreeResult">
+        SELECT * from task_user_free
+        where
+        user_id=#{userId}
+    </select>
+    <insert id="insertTaskUserFree" parameterType="TaskUserFree" useGeneratedKeys="true" keyProperty="id">
+        insert into task_user_free
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">user_id,</if>
+            <if test="freeTime != null ">free_time,</if>
+            <if test="createTime != null ">create_time</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null ">#{userId},</if>
+            <if test="freeTime != null ">#{freeTime},</if>
+            <if test="createTime != null ">#{createTime}</if>
+         </trim>
+    </insert>
+
+    <update id="updateTaskUserFree" parameterType="TaskUserFree">
+        update task_user_free
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="userId != null ">user_id = #{userId},</if>
+            <if test="freeTime != null ">free_time = #{freeTime},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateTime != null ">update_time = #{updateTime}</if>
+        </trim>
+        where
+        user_id = #{userId}
+        and free_time = #{freeTime}
+    </update>
+    <delete id="deleteAllInfo" parameterType="TaskUserFree">
+        delete from task_user_free
+    </delete>
+    <delete id="deleteInfoById" parameterType="TaskUserFree">
+        delete from task_user_free where id=#{id}
+    </delete>
+</mapper>

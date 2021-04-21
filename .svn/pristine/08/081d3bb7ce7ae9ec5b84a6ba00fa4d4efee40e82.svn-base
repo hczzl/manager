@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+	<th:block th:include="include :: header('修改审批创建记录')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-auditFlowCurrent-edit" th:object="${auditFlowCurrent}">
+            <input id="currentId" name="currentId" th:field="*{currentId}"  type="hidden">
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">具体流程申请单id，如请假申请单：</label>
+				<div class="col-sm-8">
+					<input id="applyId" name="applyId" th:field="*{applyId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">所属审批流程id：</label>
+				<div class="col-sm-8">
+					<input id="auditId" name="auditId" th:field="*{auditId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">当前节点id：</label>
+				<div class="col-sm-8">
+					<input id="currentNodeId" name="currentNodeId" th:field="*{currentNodeId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">当前状态：1已提交,2审批中,3审批不通过，4审批通过：</label>
+				<div class="col-sm-8">
+					<input id="currentState" name="currentState" th:field="*{currentState}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">第一个审批人Id：</label>
+				<div class="col-sm-8">
+					<input id="firstUserId" name="firstUserId" th:field="*{firstUserId}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">添加时间：</label>
+				<div class="col-sm-8">
+					<input id="addTime" name="addTime" th:field="*{addTime}" class="form-control" type="text">
+				</div>
+			</div>
+			<div class="form-group">	
+				<label class="col-sm-3 control-label">状态：1有效，0无效，-1删除：</label>
+				<div class="col-sm-8">
+					<input id="state" name="state" th:field="*{state}" class="form-control" type="text">
+				</div>
+			</div>
+		</form>
+    </div>
+    <div th:include="include::footer"></div>
+    <script type="text/javascript">
+		var prefix = ctx + "system/auditFlowCurrent";
+		$("#form-auditFlowCurrent-edit").validate({
+			rules:{
+				xxxx:{
+					required:true,
+				},
+			},
+			focusCleanup: true
+		});
+		
+		function submitHandler() {
+	        if ($.validate.form()) {
+	            $.operate.save(prefix + "/edit", $('#form-auditFlowCurrent-edit').serialize());
+	        }
+	    }
+	</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+package com.ruoyi.system.service;
+
+import com.ruoyi.system.domain.SysUserWorks;
+
+import java.util.List;
+
+public interface ISysUserWorksService {
+    /**
+     * @param sysUserWorks
+     * @return
+     */
+    int insertUserWorks(SysUserWorks sysUserWorks);
+
+    /**
+     * @param sysUserWorks
+     * @return
+     */
+    int updateUserWorks(SysUserWorks sysUserWorks);
+
+    /**
+     * @param sysUserWorks
+     * @return
+     */
+    List<SysUserWorks> selectUserWorks(SysUserWorks sysUserWorks);
+}

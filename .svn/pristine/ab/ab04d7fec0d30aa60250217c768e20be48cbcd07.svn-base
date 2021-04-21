@@ -1,0 +1,52 @@
+package com.ruoyi.web.service.item.impl;
+
+
+import com.ruoyi.framework.util.ShiroUtils;
+import com.ruoyi.web.domain.SysUserWorks;
+import com.ruoyi.web.mapper.item.SysUserWorksMapper;
+import com.ruoyi.web.service.item.SysUserWorksService;
+import io.netty.util.collection.LongObjectHashMap;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@Service
+public class SysUserWorksServiceImpl implements SysUserWorksService {
+    @Autowired
+    private SysUserWorksMapper sysUserWorksMapper;
+
+    @Override
+    public int insertUserWorks(SysUserWorks sysUserWorks) {
+        return sysUserWorksMapper.insertUserWorks(sysUserWorks);
+    }
+
+    @Override
+    public int updateUserWorks(SysUserWorks sysUserWorks) {
+        return sysUserWorksMapper.updateUserWorks(sysUserWorks);
+    }
+
+    @Override
+    public List<SysUserWorks> selectUserWorks(SysUserWorks sysUserWorks) {
+        return sysUserWorksMapper.selectUserWorks(sysUserWorks);
+    }
+
+    @Override
+    public Integer selectWorkDays(Long startTime,Long userId) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String date = sdf.format(new Date(startTime));
+        String[] arr = date.split("-");
+        String year = arr[0];
+        String month = arr[1];
+        Map<String, Object> map = new HashMap<>();
+        map.put("userId", userId);
+        map.put("month", month);
+        map.put("year", year);
+        Integer period = sysUserWorksMapper.selectWorkDays(map);
+        return period;
+    }
+}

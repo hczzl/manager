@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.ProjectMemoMapper">
+
+    <resultMap type="ProjectMemo" id="ProjectMemoResult">
+        <id property="id" column="id"/>
+        <result property="projectId" column="project_id"/>
+        <result property="type" column="type"/>
+        <result property="memo" column="memo"/>
+        <result property="state" column="state"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+
+    <insert id="insertMemo" parameterType="ProjectMemo" useGeneratedKeys="true" keyProperty="id">
+        insert into project_memo
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="projectId != null and projectId != ''">project_id,</if>
+            <if test="type != null and type != ''">type,</if>
+            <if test="memo != null and memo != ''">memo,</if>
+            <if test="createTime != null ">create_time,</if><!---->
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="projectId != null and projectId != ''">#{projectId},</if>
+            <if test="type != null and type != ''">#{type},</if>
+            <if test="memo != null and memo != ''">#{memo},</if>
+            <if test="createTime != null ">#{createTime},</if><!---->
+        </trim>
+    </insert>
+    <select id="selectMaxId" parameterType="ProjectMemo" resultMap="ProjectMemoResult">
+        SELECT * FROM project_memo WHERE project_id=#{projectId} AND id IN (SELECT MAX(id) FROM task_stop_mone WHERE project_id=#{projectId})
+    </select>
+    <update id="updateState" parameterType="ProjectMemo">
+        update project_memo
+        <set>
+            <if test="state != null">state =#{state},</if>
+            <if test="type != null ">type=#{type},</if>
+            <if test="updateTime !=null">update_time=#{updateTime}</if>
+        </set>
+        where project_id=#{projectId}
+    </update>
+    <select id="selectByProjectId" parameterType="ProjectMemo" resultMap="ProjectMemoResult">
+        select * from project_memo
+        <where>
+            <if test="projectId != null and projectId != ''">and project_id=#{projectId}</if>
+            <if test="type != null and type != ''">and type=#{type}</if>
+            <if test="state != null">and state =#{state}</if>
+        </where>
+    </select>
+    <select id="selectEndMemo" parameterType="Integer" resultType="java.lang.String">
+        SELECT memo FROM project_memo
+        WHERE project_id=#{projectId}
+        AND type = 1
+        AND id IN (SELECT MAX(id) FROM task_stop_mone WHERE project_id=#{projectId})
+    </select>
+    <select id="selectFinishMemo" parameterType="Integer" resultType="java.lang.String">
+        SELECT memo FROM project_memo
+
+        where id IN (SELECT MAX(id) FROM project_memo WHERE project_id=#{projectId})
+
+    </select>
+    <select id="selectMemo" parameterType="ProjectMemo"  resultMap="ProjectMemoResult">
+        SELECT memo FROM project_memo
+        <where>
+            <if test="type !=null">AND type #{type}</if>
+            <if test="projectId !=null">AND id IN (SELECT MAX(id) FROM project_memo WHERE project_id=#{projectId})</if>
+            <if test="state !=null">AND state = #{state}</if>
+        </where>
+    </select>
+</mapper>

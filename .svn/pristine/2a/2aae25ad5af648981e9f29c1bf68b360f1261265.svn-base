@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.web.mapper.item.UserGroupMapper">
+
+    <resultMap type="com.ruoyi.web.domain.UserGroup" id="UserGroupResult">
+        <id property="groupId" column="dept_id"/>
+        <id property="groupId" column="group_id"/>
+        <result property="groupName"    column="dept_name"    />
+        <result property="userId"    column="user_id"  />
+    </resultMap>
+
+    <insert id="createdGroup" parameterType="UserGroup">
+        insert into sys_user_group(parent_id,ancestors,dept_name,create_time,create_by) values (110,'1,110',#{groupName},now(),#{createBy})
+    </insert>
+
+    <delete id="removeGroup" parameterType="UserGroup">
+        delete from sys_user_group where dept_id=#{groupId}
+    </delete>
+
+    <update id="upGroup" parameterType="UserGroup">
+        update sys_user_group set dept_name=#{groupName},update_time=now(),update_by=#{updateBy} where dept_id=#{groupId}
+    </update>
+
+    <select id="selectGroup" resultMap="UserGroupResult">
+        select dept_id,dept_name from sys_user_group where parent_id=110
+    </select>
+
+    <insert id="addUserGroup" parameterType="UserGroup">
+       REPLACE into user_group_info(group_id,user_id) values(#{groupId},#{userId})
+    </insert>
+
+    <select id="selectGroupInfoById" parameterType="Integer" resultMap="UserGroupResult">
+        SELECT dept_id,dept_name,user_id FROM user_group_info u,sys_user_group d WHERE u.`group_id`=d.`dept_id` and u.`group_id`=#{groupId}
+    </select>
+
+    <delete id="removeUserGroup" parameterType="UserGroup">
+        delete from user_group_info
+        <trim prefix="WHERE (" suffix=")" prefixOverrides="AND |OR ">
+            <if test="groupId != null">group_id=#{groupId}</if>
+            <if test="userId != null and userId != ''">and user_id=#{userId}</if>
+        </trim>
+    </delete>
+
+</mapper>

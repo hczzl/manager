@@ -1,0 +1,31 @@
+package com.ruoyi.system.service.impl;
+
+
+import com.ruoyi.system.domain.SysUserWorks;
+import com.ruoyi.system.mapper.SysUserWorksMapper;
+import com.ruoyi.system.service.ISysUserWorksService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public class SysUserWorksServiceImpl implements ISysUserWorksService {
+    @Autowired
+    private SysUserWorksMapper sysUserWorksMapper;
+
+    @Override
+    public int insertUserWorks(SysUserWorks sysUserWorks) {
+        return sysUserWorksMapper.insertUserWorks(sysUserWorks);
+    }
+
+    @Override
+    public int updateUserWorks(SysUserWorks sysUserWorks) {
+        return sysUserWorksMapper.updateUserWorks(sysUserWorks);
+    }
+
+    @Override
+    public List<SysUserWorks> selectUserWorks(SysUserWorks sysUserWorks) {
+        return sysUserWorksMapper.selectUserWorks(sysUserWorks);
+    }
+}

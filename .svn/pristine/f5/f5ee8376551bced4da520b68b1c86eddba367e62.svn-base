@@ -1,0 +1,80 @@
+package com.ruoyi.web.domain;
+
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * @author Suqz
+ * @version 1.0
+ * @date 2019/12/31 14:44
+ */
+public class TaskEcharQueryInfo implements Serializable {
+    private static final long serialVersionUID = 8844478401356990737L;
+    /**
+     * 用户id
+     */
+    private Long userId;
+
+    private Long startTimes;
+
+    private Long endTimes;
+    /**
+     * 开始时间
+     */
+    private Date startTime;
+    /**
+     * 结束时间
+     */
+    private Date endTime;
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public Long getStartTimes() {
+        return startTimes;
+    }
+
+    public void setStartTimes(Long startTimes) {
+        this.startTimes = startTimes;
+    }
+
+    public Long getEndTimes() {
+        return endTimes;
+    }
+
+    public void setEndTimes(Long endTimes) {
+        this.endTimes = endTimes;
+    }
+
+    public Date getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(Date startTime) {
+        this.startTime = startTime;
+    }
+
+    public Date getEndTime() {
+        return endTime;
+    }
+
+    public void setEndTime(Date endTime) {
+        this.endTime = endTime;
+    }
+
+    @Override
+    public String toString() {
+        return "TaskEcharQueryInfo{" +
+                "userId=" + userId +
+                ", startTimes=" + startTimes +
+                ", endTimes=" + endTimes +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                '}';
+    }
+}
